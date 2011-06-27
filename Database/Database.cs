@@ -16,7 +16,7 @@ namespace QuotePad
 
         public bool Connect()
         {
-            if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source=db.mdb;", true, false))
+            if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source=db.mdb;", true, true))
             {
                 connector.SetTrace(true, Application.StartupPath + @"\dberr.log", ItWorks.OleDb.TraceLevel.QueryWithMessage);
                 InitDb();
@@ -27,8 +27,7 @@ namespace QuotePad
 
         public void InitDb()
         {
-            //connector.SetTrace(false);
-            ClearDb();
+            connector.SetTrace(false);
 
             string tAuthor =
                 "CREATE TABLE tAUTHORS(" +
@@ -88,13 +87,15 @@ namespace QuotePad
         public Objects.Theme Theme_Get(int ThemeID)
         {
             Objects.Theme theme = new Objects.Theme();
-            string tname =  connector.SelectCell<string>("SELECT pNAME FROM tTHEMES WHERE pID = @id",
-                new OleDbParameter("@id", ThemeID));
-            if (tname != null)
+            string tname;
+            try
             {
+                tname = connector.SelectCell<string>("SELECT pNAME FROM tTHEMES WHERE pID = @id",
+                     new OleDbParameter("@id", ThemeID));
                 theme.ID = ThemeID;
                 theme.Name = tname;
             }
+            catch (IndexOutOfRangeException) { }
             return theme;
         }
 
@@ -158,8 +159,13 @@ namespace QuotePad
 
         public string Author_GetName(int AuthorID)
         {
-            return connector.SelectCell<string>("SELECT pNAME FROM tAUTHORS WHERE pID = @id",
-                new OleDbParameter("@id", AuthorID));
+            try
+            {
+                return connector.SelectCell<string>("SELECT pNAME FROM tAUTHORS WHERE pID = @id",
+                    new OleDbParameter("@id", AuthorID));
+            }
+            catch (IndexOutOfRangeException) { }
+            return null;
         }
 
         public bool Author_Create(string FIO, string About)
@@ -254,17 +260,61 @@ namespace QuotePad
 
         public Objects.Quote Quote_ReadNext(int QuoteID, bool FavoriteOnly)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            Objects.Quote quote = new Objects.Quote();
+            DataRow row;
+            if (!FavoriteOnly)
+            {
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID > @id",
+                  new OleDbParameter("@id", QuoteID));
+            }
+            else
+            {
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID > @id AND pFAVORITE = TRUE",
+                  new OleDbParameter("@id", QuoteID));
+            }
+            if (row != null)
+            {
+                quote.ID = (int)row.ItemArray[0];
+                quote.QuoteAuthor = Author_Get((int)row.ItemArray[1]);
+                quote.QuoteTheme = Theme_Get((int)row.ItemArray[2]);
+                quote.RTF = (string)row.ItemArray[3];
+                // ItemArray[4] is a Quote saved in text format
+                quote.IsFavorite = (bool)row.ItemArray[5];
+                quote.WhenCreated = (DateTime)row.ItemArray[6];
+            }
+            return quote;
         }
 
         public Objects.Quote Quote_ReadPrevious(int QuoteID, bool FavoriteOnly)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            Objects.Quote quote = new Objects.Quote();
+            DataRow row;
+            if (!FavoriteOnly)
+            {
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID < @id",
+                  new OleDbParameter("@id", QuoteID));
+            }
+            else
+            {
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID < @id AND pFAVORITE = TRUE",
+                  new OleDbParameter("@id", QuoteID));
+            }
+            if (row != null)
+            {
+                quote.ID = (int)row.ItemArray[0];
+                quote.QuoteAuthor = Author_Get((int)row.ItemArray[1]);
+                quote.QuoteTheme = Theme_Get((int)row.ItemArray[2]);
+                quote.RTF = (string)row.ItemArray[3];
+                // ItemArray[4] is a Quote saved in text format
+                quote.IsFavorite = (bool)row.ItemArray[5];
+                quote.WhenCreated = (DateTime)row.ItemArray[6];
+            }
+            return quote;
         }
 
         #region Random Read
         
-        public int BufferSize = 20; // In persents
+        public double BufferSize = 0.2; // In persents
         public bool IsReady = false; // Is Buffer has been initialized and etc.
 
         private Random rnd = new Random();
@@ -275,8 +325,9 @@ namespace QuotePad
 
         private void RandomInit()
         {
-            Max = connector.SelectCell<Int32>("SELECT MAX(*) FROM tQUOTES");
-            Buffer = new Int32[(int)(Max * (BufferSize / 100))];
+            Int32 RecordsCount = connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
+            Buffer = new Int32[(Int32)(RecordsCount * BufferSize)];
+            Max = connector.SelectCell<Int32>("SELECT MAX(pID) FROM tQUOTES");
         
             // Init Buffer
             for (int a = 0; a < Buffer.Length; a++)
@@ -316,8 +367,13 @@ namespace QuotePad
 
         public Objects.Quote Quote_RandomRead()
         {
+            if (!IsReady)
+            {
+                RandomInit();
+                IsReady = !IsReady;
+            }
             RandomQuote = new Objects.Quote();
-            while (RandomQuote.ID == null)
+            while (RandomQuote.ID == 0)
             {
                 Random_FindNext();
             }
@@ -348,77 +404,93 @@ namespace QuotePad
         {
             DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pAUTHOR = @author",
                 new OleDbParameter("@author", AuthorID));
-            Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
-            for (int a=0;a<found.Rows.Count;a++)
+            if (found != null)
             {
-                result[a] = new Objects.Quote();
-                result[a].ID = (int)found.Rows[a].ItemArray[0];
-                result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
-                result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
-                result[a].RTF = (string)found.Rows[a].ItemArray[3];
-                // ItemArray[4] is a Quote saved in text format
-                result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
-                result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+                Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
+                for (int a = 0; a < found.Rows.Count; a++)
+                {
+                    result[a] = new Objects.Quote();
+                    result[a].ID = (int)found.Rows[a].ItemArray[0];
+                    result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
+                    result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
+                    result[a].RTF = (string)found.Rows[a].ItemArray[3];
+                    // ItemArray[4] is a Quote saved in text format
+                    result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
+                    result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+                }
+                return result;
             }
-            return result;
+            else return new Objects.Quote[0];
         }
 
         public Objects.Quote[] Quote_FindByTheme(int ThemeID)
         {
             DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pTHEME = @theme",
                 new OleDbParameter("@theme", ThemeID));
-            Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
-            for (int a = 0; a < found.Rows.Count; a++)
+            if (found != null)
             {
-                result[a] = new Objects.Quote();
-                result[a].ID = (int)found.Rows[a].ItemArray[0];
-                result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
-                result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
-                result[a].RTF = (string)found.Rows[a].ItemArray[3];
-                // ItemArray[4] is a Quote saved in text format
-                result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
-                result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+                Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
+                for (int a = 0; a < found.Rows.Count; a++)
+                {
+                    result[a] = new Objects.Quote();
+                    result[a].ID = (int)found.Rows[a].ItemArray[0];
+                    result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
+                    result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
+                    result[a].RTF = (string)found.Rows[a].ItemArray[3];
+                    // ItemArray[4] is a Quote saved in text format
+                    result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
+                    result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+                }
+                return result;
             }
-            return result;
+            else return new Objects.Quote[0];
         }
 
         public Objects.Quote[] Quote_FindByText(string Text)
         {
-            DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE ptxtQUOTE LIKE %@text%",
+            DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE ucase(ptxtQUOTE) LIKE \"*@text*\"",
                 new OleDbParameter("@text", Text));
-            Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
-            for (int a = 0; a < found.Rows.Count; a++)
+            if (found != null)
             {
-                result[a] = new Objects.Quote();
-                result[a].ID = (int)found.Rows[a].ItemArray[0];
-                result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
-                result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
-                result[a].RTF = (string)found.Rows[a].ItemArray[3];
-                // ItemArray[4] is a Quote saved in text format
-                result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
-                result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+                Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
+                for (int a = 0; a < found.Rows.Count; a++)
+                {
+                    result[a] = new Objects.Quote();
+                    result[a].ID = (int)found.Rows[a].ItemArray[0];
+                    result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
+                    result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
+                    result[a].RTF = (string)found.Rows[a].ItemArray[3];
+                    // ItemArray[4] is a Quote saved in text format
+                    result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
+                    result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+                }
+                return result;
             }
-            return result;
+            else return new Objects.Quote[0];
         }
 
         public Objects.Quote[] Quote_FindByDate(DateTime From, DateTime To)
         {
             DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pDT >= @from and pDT <= @to",
-                new OleDbParameter("@from", From),
-                new OleDbParameter("@to", To));
-            Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
-            for (int a = 0; a < found.Rows.Count; a++)
+                new OleDbParameter("@from", From.ToString()),
+                new OleDbParameter("@to", To.ToString()));
+            if (found != null)
             {
-                result[a] = new Objects.Quote();
-                result[a].ID = (int)found.Rows[a].ItemArray[0];
-                result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
-                result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
-                result[a].RTF = (string)found.Rows[a].ItemArray[3];
-                // ItemArray[4] is a Quote saved in text format
-                result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
-                result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+                Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
+                for (int a = 0; a < found.Rows.Count; a++)
+                {
+                    result[a] = new Objects.Quote();
+                    result[a].ID = (int)found.Rows[a].ItemArray[0];
+                    result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
+                    result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
+                    result[a].RTF = (string)found.Rows[a].ItemArray[3];
+                    // ItemArray[4] is a Quote saved in text format
+                    result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
+                    result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+                }
+                return result;
             }
-            return result;
+            else return new Objects.Quote[0];
         }
         #endregion
     }

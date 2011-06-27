@@ -99,8 +99,6 @@ namespace QuotePad.GUI
             pWorkingArea.Controls.Add(editor.RtfTextBox);
             pWorkingArea.Controls.Add(editor.RtfToolBar);
             this.Controls.Add(pWorkingArea);
-
-            this.Load +=new EventHandler(MainForm_Load);
         }
 
         Panel ToolBox()
@@ -248,13 +246,6 @@ namespace QuotePad.GUI
             }
             else
                 isFirst = true;
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            Database db = new Database();
-            if (!db.Connect()) MessageBox.Show("not connected");
-            db.Theme_GetList();
         }
     }
 }
