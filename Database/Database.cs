@@ -12,12 +12,10 @@ namespace QuotePad
 {
     public class Database
     {
-        // Instance of the OleDbQuery class
         public ItWorks.OleDb connector = new ItWorks.OleDb();
 
         public bool Connect()
         {
-            // Connect to the database
             if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source=db.mdb;", true, false))
             {
                 connector.SetTrace(true, Application.StartupPath + @"\dberr.log", ItWorks.OleDb.TraceLevel.QueryWithMessage);
@@ -29,9 +27,9 @@ namespace QuotePad
 
         public void InitDb()
         {
-            connector.SetTrace(false); ;
+            //connector.SetTrace(false);
+            ClearDb();
 
-            // Create tables and set trace enabled for queries
             string tAuthor =
                 "CREATE TABLE tAUTHORS(" +
                 "pID COUNTER CONSTRAINT pkTYPE PRIMARY KEY," +
@@ -45,18 +43,26 @@ namespace QuotePad
             string tQuotes =
                 "CREATE TABLE tQUOTES (" +
                 "pID COUNTER PRIMARY KEY," +
-                "pAUTHOR INT NOT NULL CONSTRAINT fktAUTHORS REFERENCES tAUTHORS(pID)," +
-                "THEME INT NOT NULL CONSTRAINT fktTHEMES REFERENCES tTHEMES(pID)," +
+                "pAUTHOR INTEGER NOT NULL CONSTRAINT fktAUTHORS REFERENCES tAUTHORS(pID)," +
+                "pTHEME INTEGER NOT NULL CONSTRAINT fktTHEMES REFERENCES tTHEMES(pID)," +
                 "prtfQUOTE MEMO NOT NULL," +
                 "ptxtQUOTE MEMO NOT NULL," +
-                "pFAVORITE BIT NOT NULL DEFAULT -1," +
+                "pFAVORITE LOGICAL NOT NULL DEFAULT FALSE," +
                 "pDT DATETIME NOT NULL);";
+                ;
 
             connector.ChangeData(tAuthor);
             connector.ChangeData(tThemes);
             connector.ChangeData(tQuotes);
 
             connector.SetTrace(true);
+        }
+
+        private void ClearDb()
+        {
+            connector.ChangeData("DROP TABLE tQUOTES");
+            connector.ChangeData("DROP TABLE tTHEMES");
+            connector.ChangeData("DROP TABLE tAUTHORS");
         }
 
         public string GetError()
@@ -67,7 +73,6 @@ namespace QuotePad
 
         public Objects.Theme[] Theme_GetList()
         {
-            // Read all themes
             DataTable themes = connector.SelectTable("SELECT * FROM tTHEMES");
             if (themes == null) return new Objects.Theme[0];
             Objects.Theme[] list = new Objects.Theme[themes.Rows.Count];
@@ -80,10 +85,17 @@ namespace QuotePad
             return list;
         }
 
-        public string Theme_GetName(int ThemeID)
+        public Objects.Theme Theme_Get(int ThemeID)
         {
-            return connector.SelectCell<string>("SELECT pNAME FROM tTHEMES WHERE pID = @id",
+            Objects.Theme theme = new Objects.Theme();
+            string tname =  connector.SelectCell<string>("SELECT pNAME FROM tTHEMES WHERE pID = @id",
                 new OleDbParameter("@id", ThemeID));
+            if (tname != null)
+            {
+                theme.ID = ThemeID;
+                theme.Name = tname;
+            }
+            return theme;
         }
 
         public bool Theme_Create(string Theme)
@@ -114,7 +126,6 @@ namespace QuotePad
 
         public Objects.Author[] Author_GetList()
         {
-            // Read all authors
             DataTable themes = connector.SelectTable("SELECT * FROM tAUTHORS");
             if (themes == null) return new Objects.Author[0];
             Objects.Author[] list = new Objects.Author[themes.Rows.Count];
@@ -184,34 +195,61 @@ namespace QuotePad
 
         #region Quote
 
-        public int Quote_GetCount()
+        public Int32 Quote_GetCount()
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            return connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
         }
 
         public bool Quote_Create(int AuthorID, int ThemeID, string RTFQuote, string TXTQuote, bool IsFavorite)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            if (connector.ChangeData("INSERT INTO tQUOTES (pAUTHOR, pTHEME, prtfQUOTE, ptxtQUOTE, pFAVORITE, pDT) " +
+                "VALUES (@author, @theme, @rtf, @txt, @favorite, @datetime)",
+                new OleDbParameter("@author", AuthorID),
+                new OleDbParameter("@theme", ThemeID),
+                new OleDbParameter("@rtf", RTFQuote),
+                new OleDbParameter("@txt", TXTQuote),
+                new OleDbParameter("@favorite", IsFavorite),
+                new OleDbParameter("@datetime", DateTime.Now.ToString())) >= 0)
+                return true;
+            else return false;
         }
 
         public bool Quote_Modify(int QuoteID, int newAuthorID, int newThemeID, string newRTFQuote, string newTXTQuote, bool IsFavorite)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            if (connector.ChangeData("UPDATE tQUOTES SET pAUTHOR=@author, pTHEME=@theme, prtfQUOTE = @rtf, "+
+                "ptxtQUOTE = @txt, pFAVORITE = @favorite, pDT = @datetime) WHERE pID = @id",
+                new OleDbParameter("@author", newAuthorID),
+                new OleDbParameter("@theme", newThemeID),
+                new OleDbParameter("@rtf", newRTFQuote),
+                new OleDbParameter("@txt", newTXTQuote),
+                new OleDbParameter("@favorite", IsFavorite),
+                new OleDbParameter("@id", QuoteID)) >= 0)
+                return true;
+            else return false;
         }
 
         public bool Quote_Remove(int QuoteID)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            if (connector.ChangeData("DELETE FROM tQUOTES WHERE pID = @id",
+                new OleDbParameter("@id", QuoteID)) >= 0)
+                return true;
+            else return false;
         }
 
         public bool Quote_SetAsFavorite(int QuoteID)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            if (connector.ChangeData("UPDATE tQUOTES SET pFAVORITE = TRUE WHERE pID = @id",
+                new OleDbParameter("@id", QuoteID)) >= 0)
+                return true;
+            else return false;
         }
 
         public bool Quote_UnsetFavorite(int QuoteID)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            if (connector.ChangeData("UPDATE tQUOTES SET pFAVORITE = FALSE WHERE pID = @id",
+                new OleDbParameter("@id", QuoteID)) >= 0)
+                return true;
+            else return false;
         }
 
         public Objects.Quote Quote_ReadNext(int QuoteID, bool FavoriteOnly)
@@ -224,34 +262,163 @@ namespace QuotePad
             throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
         }
 
-        public Objects.Quote Quote_RandomRead(bool FavoriteOnly)
+        #region Random Read
+        
+        public int BufferSize = 20; // In persents
+        public bool IsReady = false; // Is Buffer has been initialized and etc.
+
+        private Random rnd = new Random();
+        private Int32[] Buffer;
+        private Int32 Max;
+        private Int32 RandomValue;
+        private Objects.Quote RandomQuote;
+
+        private void RandomInit()
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            Max = connector.SelectCell<Int32>("SELECT MAX(*) FROM tQUOTES");
+            Buffer = new Int32[(int)(Max * (BufferSize / 100))];
+        
+            // Init Buffer
+            for (int a = 0; a < Buffer.Length; a++)
+            {
+                Buffer[a] = 0;
+            }
         }
 
-        public Objects.Quote[] Quote_FindByID(int QuoteID)
+        private void UpdateBuffer(Int32 value)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            for (int a = 1; a < Buffer.Length; a++)
+            {
+                Buffer[a - 1] = Buffer[a];
+            }
+            Buffer[Buffer.Length - 1] = value;
+        }
+
+        private bool IsValueInBuffer(Int32 value)
+        {
+            foreach (Int32 v in Buffer)
+            {
+                if (v == value) return true;
+            }
+            return false;
+        }
+
+        private void Random_FindNext()
+        {
+            RandomValue = rnd.Next(1, Max);
+            while (IsValueInBuffer(RandomValue))
+            {
+                RandomValue = rnd.Next(1, Max);
+            }
+            UpdateBuffer(RandomValue);
+            RandomQuote = Quote_FindByID(RandomValue);
+        }
+
+        public Objects.Quote Quote_RandomRead()
+        {
+            RandomQuote = new Objects.Quote();
+            while (RandomQuote.ID == null)
+            {
+                Random_FindNext();
+            }
+            return RandomQuote;
+        }
+
+        #endregion
+
+        public Objects.Quote Quote_FindByID(int QuoteID)
+        {
+            Objects.Quote quote = new Objects.Quote();
+            DataRow row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID = @id",
+                new OleDbParameter("@id", QuoteID));
+            if (row != null)
+            {
+                quote.ID = (int)row.ItemArray[0];
+                quote.QuoteAuthor = Author_Get((int)row.ItemArray[1]);
+                quote.QuoteTheme = Theme_Get((int)row.ItemArray[2]);
+                quote.RTF = (string)row.ItemArray[3];
+                // ItemArray[4] is a Quote saved in text format
+                quote.IsFavorite = (bool)row.ItemArray[5];
+                quote.WhenCreated = (DateTime)row.ItemArray[6];
+            }
+            return quote;
         }
 
         public Objects.Quote[] Quote_FindByAuthor(int AuthorID)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pAUTHOR = @author",
+                new OleDbParameter("@author", AuthorID));
+            Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
+            for (int a=0;a<found.Rows.Count;a++)
+            {
+                result[a] = new Objects.Quote();
+                result[a].ID = (int)found.Rows[a].ItemArray[0];
+                result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
+                result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
+                result[a].RTF = (string)found.Rows[a].ItemArray[3];
+                // ItemArray[4] is a Quote saved in text format
+                result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
+                result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+            }
+            return result;
         }
 
         public Objects.Quote[] Quote_FindByTheme(int ThemeID)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pTHEME = @theme",
+                new OleDbParameter("@theme", ThemeID));
+            Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
+            for (int a = 0; a < found.Rows.Count; a++)
+            {
+                result[a] = new Objects.Quote();
+                result[a].ID = (int)found.Rows[a].ItemArray[0];
+                result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
+                result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
+                result[a].RTF = (string)found.Rows[a].ItemArray[3];
+                // ItemArray[4] is a Quote saved in text format
+                result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
+                result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+            }
+            return result;
         }
 
         public Objects.Quote[] Quote_FindByText(string Text)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE ptxtQUOTE LIKE %@text%",
+                new OleDbParameter("@text", Text));
+            Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
+            for (int a = 0; a < found.Rows.Count; a++)
+            {
+                result[a] = new Objects.Quote();
+                result[a].ID = (int)found.Rows[a].ItemArray[0];
+                result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
+                result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
+                result[a].RTF = (string)found.Rows[a].ItemArray[3];
+                // ItemArray[4] is a Quote saved in text format
+                result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
+                result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+            }
+            return result;
         }
 
         public Objects.Quote[] Quote_FindByDate(DateTime From, DateTime To)
         {
-            throw new Exception("Method is NOT implemented yet in QuotePad.Database.");
+            DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pDT >= @from and pDT <= @to",
+                new OleDbParameter("@from", From),
+                new OleDbParameter("@to", To));
+            Objects.Quote[] result = new Objects.Quote[found.Rows.Count];
+            for (int a = 0; a < found.Rows.Count; a++)
+            {
+                result[a] = new Objects.Quote();
+                result[a].ID = (int)found.Rows[a].ItemArray[0];
+                result[a].QuoteAuthor = Author_Get((int)found.Rows[a].ItemArray[1]);
+                result[a].QuoteTheme = Theme_Get((int)found.Rows[a].ItemArray[2]);
+                result[a].RTF = (string)found.Rows[a].ItemArray[3];
+                // ItemArray[4] is a Quote saved in text format
+                result[a].IsFavorite = (bool)found.Rows[a].ItemArray[5];
+                result[a].WhenCreated = (DateTime)found.Rows[a].ItemArray[6];
+            }
+            return result;
         }
         #endregion
     }
