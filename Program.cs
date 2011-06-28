@@ -32,8 +32,7 @@ namespace QuotePad
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                GUI.MainForm mainForm = new GUI.MainForm();
-                Application.Run(new GUI.MainForm());
+                Application.Run(new GUI.MainForm2());
             }
             else
             {

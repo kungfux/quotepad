@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{179C8741-6932-45D4-B1B7-27D9253537C2}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QuotePad</RootNamespace>
     <AssemblyName>QuotePad</AssemblyName>
@@ -73,10 +73,16 @@
   <PropertyGroup>
     <ApplicationIcon>1297098121_notebook_boy.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="ClientParams.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="GUI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MainForm2.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Objects.cs" />
@@ -87,8 +93,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Skins.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>_dependency\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="ItWorks.OleDb">
       <HintPath>_dependency\ItWorks.OleDb.dll</HintPath>
     </Reference>
@@ -105,9 +115,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GUI\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
