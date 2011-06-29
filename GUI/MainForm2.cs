@@ -17,7 +17,7 @@ namespace QuotePad.GUI
         void MainForm2_Load(object sender, EventArgs e)
         {
             Skins skins = new Skins();
-            skins.ApplySkin("test", this);
+            skins.ApplySkin("TestSkin", this);
         }
     }
 }

@@ -11,8 +11,11 @@ namespace QuotePad
     public class Skins
     {
         public string[] SkinsAvailable;
-        private string RuntimeFolder = Application.StartupPath + @"\runtime";
-        private string SkinsFolder = Application.StartupPath + @"\skins";
+        private string RuntimeFolder = Application.StartupPath + @"\runtime\";
+        private string SkinsFolder = Application.StartupPath + @"\skins\";
+        private List<SkinInfo.EventImage.cLeft> EvL = new List<SkinInfo.EventImage.cLeft>();
+        private List<SkinInfo.EventImage.cTop> EvT = new List<SkinInfo.EventImage.cTop>();
+
 
         public Skins()
         {
@@ -48,7 +51,7 @@ namespace QuotePad
 
             try
             {
-                z.ExtractZip(SkinsFolder + @"\" + SkinName + ".zip", RuntimeFolder, ICSharpCode.SharpZipLib.Zip.FastZip.Overwrite.Always,
+                z.ExtractZip(SkinsFolder + SkinName + ".zip", RuntimeFolder, ICSharpCode.SharpZipLib.Zip.FastZip.Overwrite.Always,
                      null, null, null, false);
             }
             catch (DirectoryNotFoundException)
@@ -63,39 +66,157 @@ namespace QuotePad
             if (PrepareSkin(SkinName))
             {
                 ItWorks.XML xml = new ItWorks.XML();
-                SkinInfo skin = xml.DeserializeClass<SkinInfo>(RuntimeFolder+@"\SkinInfo.xml");
+                SkinInfo skin = xml.DeserializeClass<SkinInfo>(RuntimeFolder + "SkinInfo.xml");
                 return skin;
             }
             else return null;
         }
 
-        public void SaveSkin(SkinInfo skin)
-        {
-            ItWorks.XML xml = new ItWorks.XML();
-            xml.SerializeClass<SkinInfo>(skin, RuntimeFolder+@"\SkinInfo.xml");
-        }
-
         public void ApplySkin(string SkinName, Control Control)
         {
             SkinInfo skin = ReadSkin(SkinName);
-            foreach (SkinInfo.ImagePanel panel in skin.ImagePanels)
+            EvL.Clear();
+            EvT.Clear();
+            if (skin != null)
             {
-                Panel p = new Panel();
-                p.Size = panel.Size;
-                p.BackgroundImage = Image.FromFile(Application.StartupPath + @"\runtime\" + panel.BackImage);
-                Control.Controls.Add(p);
+                if (skin.BackImages != null)
+                {
+                    foreach (SkinInfo.BackImage image in skin.BackImages)
+                    {
+                        if (File.Exists(RuntimeFolder + image.Image))
+                        {
+                            PictureBox p = new PictureBox();
+                            p.Location = image.Location;
+                            p.Size = image.Size;
+                            p.Dock = image.DockStyle;
+                            p.BackgroundImage = Image.FromFile(RuntimeFolder + image.Image);
+                            p.BackgroundImageLayout = image.ImageLayout;
+                            Control.Controls.Add(p);
+                            p.BringToFront();
+                        }
+                        else DisplayError(image.Image);
+                    }
+                }
+
+                if (skin.EventImages != null)
+                {
+                    foreach (SkinInfo.EventImage ev in skin.EventImages)
+                    {
+                        if (File.Exists(RuntimeFolder + ev.Image))
+                        {
+                            PictureBox p = new PictureBox();
+                            p.Name = EvL.Count.ToString();
+                            p.Image = Image.FromFile(RuntimeFolder + ev.Image);
+                            EvL.Add(ev.Left);
+                            EvT.Add(ev.Top);
+                            p.Size = ev.Size;
+                            Control.Resize += new EventHandler(c_Resize);
+                            Control.Controls.Add(p);
+                            p.BringToFront();
+                            c_Resize(Control, null);
+                        }
+                        else DisplayError(ev.Image);
+                    }
+                }
+
+                Control.MinimumSize = skin.MinimalSkinSize;
+            }
+            else DisplayError("");
+        }
+
+        private void DisplayError(string text)
+        {
+            if (text != "") text = "\r\nФайл " + text + " не найден!";
+            MessageBox.Show("Ошибка загрузки обложки!" + text,
+                About.AssemblyName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void c_Resize(object sender, EventArgs e)
+        {
+            if (sender is Control)
+            {
+                Control c = (Control)sender;
+                foreach (PictureBox p in c.Controls)
+                {
+                    if (p.Name != "")
+                    {
+                        int pi = Convert.ToInt16(p.Name);
+                        if (EvL[pi].Calculate)
+                        {
+                            p.Left = c.ClientSize.Width * EvL[pi].Persents / 100;
+                            switch (EvL[pi].SelfMinus)
+                            {
+                                case SkinInfo.EventImage.CalculateSize.Full:
+                                    p.Left -= p.Width;
+                                    break;
+                                case SkinInfo.EventImage.CalculateSize.Half:
+                                    p.Left -= p.Width / 2;
+                                    break;
+                            }
+                        }
+                        if (EvT[pi].Calculate)
+                        {
+                            p.Top = c.ClientSize.Height * EvT[pi].Persents / 100;
+                            switch (EvT[pi].SelfMinus)
+                            {
+                                case SkinInfo.EventImage.CalculateSize.Full:
+                                    p.Top -= p.Height;
+                                    break;
+                                case SkinInfo.EventImage.CalculateSize.Half:
+                                    p.Top -= p.Height / 2;
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Skin Information structure
+    /// </summary>
     public class SkinInfo
     {
-        public ImagePanel[] ImagePanels;
+        public BackImage[] BackImages;
+        public EventImage[] EventImages;
+        public Size MinimalSkinSize;
 
-        public class ImagePanel
+        /// <summary>
+        /// PictureBox
+        /// </summary>
+        public class BackImage
+        {
+            public DockStyle DockStyle;
+            public Point Location;
+            public Size Size;
+            public string Image;
+            public ImageLayout ImageLayout;
+        }
+
+        public class EventImage
         {
             public Size Size;
-            public string BackImage;
+            public string Image;
+            public cTop Top = new cTop();
+            public cLeft Left = new cLeft();
+
+            public class cTop
+            {
+                public bool Calculate = false;
+                public CalculateSize SelfMinus = CalculateSize.None;
+                public int Persents = 0;
+            }
+
+            public class cLeft
+            {
+                public bool Calculate = false;
+                public CalculateSize SelfMinus = CalculateSize.None;
+                public int Persents = 0;
+            }
+
+            public enum CalculateSize { None, Full, Half }
+
         }
     }
 }
