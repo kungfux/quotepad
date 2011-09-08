@@ -16,21 +16,21 @@ namespace QuotePad
             InitializeComponent();
         }
 
-        TabControlPrototype tb;
-        ToolStripPrototype toolbar;
-        mainMenu menu;
+        TabControlPrototype tabControl;
+        ToolStripPrototype toolBar;
+        mainMenu mainMenu;
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            tb = new TabControlPrototype();
-            toolbar = new ToolStripPrototype();
-            menu = new mainMenu(ref tb);
-            tb.toolStrip = toolbar;
+            tabControl = new TabControlPrototype();
+            toolBar = new ToolStripPrototype(tabControl);
+            mainMenu = new mainMenu(tabControl);
+            tabControl.toolStrip = toolBar;
 
-            tb.Dock = DockStyle.Fill;
-            this.Controls.Add(tb);
-            this.Controls.Add(toolbar);
-            this.Controls.Add(menu);
+            tabControl.Dock = DockStyle.Fill;
+            this.Controls.Add(tabControl);
+            this.Controls.Add(toolBar);
+            this.Controls.Add(mainMenu);
 
         }
 

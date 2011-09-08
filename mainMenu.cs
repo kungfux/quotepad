@@ -13,16 +13,17 @@ namespace QuotePad
     {
         private TabControlPrototype tabcontrol;
 
-        public mainMenu(ref TabControlPrototype tabControl)
+        public mainMenu(TabControlPrototype tabControl)
         {
             tabcontrol = tabControl;
             ToolStripMenuItem quote = new ToolStripMenuItem("Цитата");
-            ToolStripMenuItem quote_view = new ToolStripMenuItem("Просмотр");
+            ToolStripMenuItem quote_view = new ToolStripMenuItem("Просмотр", Resources._1315511677_old_edit_find);
             quote_view.Click += new EventHandler(quote_view_Click);
-            ToolStripMenuItem quote_add = new ToolStripMenuItem("Добавить");
+            ToolStripMenuItem quote_add = new ToolStripMenuItem("Добавить", Resources._1315515285_Add);
             quote_add.Click += new EventHandler(quote_add_Click);
             quote_add.Tag = this.adminTag;
-            ToolStripMenuItem quote_quit = new ToolStripMenuItem("Выход");
+            ToolStripMenuItem quote_quit = new ToolStripMenuItem("Выход", Resources._1315515375_quit);
+            quote_quit.Click += new EventHandler(quote_quit_Click);
             quote.DropDownItems.Add(quote_view);
             quote.DropDownItems.Add(quote_add);
             quote.DropDownItems.Add(quote_quit);
@@ -60,6 +61,12 @@ namespace QuotePad
             this.Items.Add(search);
             this.Items.Add(settings);
             this.Items.Add(help);
+        }
+
+        void quote_quit_Click(object sender, EventArgs e)
+        {
+            // Needs to send manually close all page before (to save job before exit)
+            Application.Exit();
         }
 
         void quote_add_Click(object sender, EventArgs e)

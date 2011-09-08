@@ -9,10 +9,10 @@ namespace QuotePad
     {
         public pageQuoteEditor()
         {
-            this.Text = "Редактирование";
-            ToolStripButtonPrototype test = new ToolStripButtonPrototype("2");
-            test.isForSupervisorOnly = true;
-            this.AddToolStripItem(test);
+            //this.Text = "Редактирование";
+            //ToolStripButtonPrototype test = new ToolStripButtonPrototype("2", null);
+            //test.isForSupervisorOnly = true;
+            //this.AddToolStripItem(test);
         }
     }
 }

@@ -29,14 +29,37 @@ namespace QuotePad
         {
             if (toolStrip != null)
             {
-                toolStrip.Items.Clear();
+                RemoveRedundantItems();
                 if (this.TabPages.Count > 0)
                 {
+                    ToolStripSeparator separator = new ToolStripSeparator();
+                    separator.Tag = "separator";
+                    toolStrip.Items.Add(separator);
                     // Add items on toolstrip for selected tab
                     TabPagePrototype page = tabPages.Find(p => p.Tag == this.SelectedTab.Tag);
                     foreach (ToolStripButtonPrototype item in page.toolStripItems)
                     {
                         toolStrip.Items.Add(item);
+                    }
+                }
+            }
+        }
+
+        private void RemoveRedundantItems()
+        {
+            bool done = false;
+            while (!done)
+            {
+                for (int a = 0; a < toolStrip.Items.Count; a++)
+                {
+                    if (toolStrip.Items[a].Tag != null)
+                    {
+                        toolStrip.Items.RemoveAt(a);
+                        break;
+                    }
+                    if (a == toolStrip.Items.Count - 1)
+                    {
+                        done = true;
                     }
                 }
             }

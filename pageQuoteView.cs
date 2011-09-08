@@ -10,7 +10,7 @@ namespace QuotePad
         public pageQuoteView()
         {
             this.Text = "Просмотр";
-            this.AddToolStripItem(new ToolStripButtonPrototype("1"));
+            this.AddToolStripItem(new ToolStripButtonPrototype("Редактировать цитату", Resources._1315515132_edit));
         }
     }
 }
