@@ -35,7 +35,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>1297098121_notebook_boy.ico</ApplicationIcon>
+    <ApplicationIcon>dep\1297098121_notebook_boy.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="assembly.cs" />
