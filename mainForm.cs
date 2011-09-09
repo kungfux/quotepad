@@ -22,6 +22,9 @@ namespace QuotePad
 
         private void mainForm_Load(object sender, EventArgs e)
         {
+            assembly about = new assembly();
+            this.Text = about.AssemblyProduct;
+
             tabControl = new TabControlPrototype();
             toolBar = new ToolStripPrototype(tabControl);
             mainMenu = new mainMenu(tabControl);
