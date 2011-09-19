@@ -67,6 +67,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="assembly.cs" />
+    <Compile Include="Authorization.cs" />
+    <Compile Include="RegistryOperations.cs" />
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
