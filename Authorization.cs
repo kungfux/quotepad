@@ -16,8 +16,8 @@ namespace QuotePad
 
     class Authorization
     {
-        public string PasswordRegistryPath = "Software\\ItWorks\\QuotePad";
-        public string PasswordRegistryKey = "Password";
+        private string PasswordRegistryPath = "Software\\ItWorks\\QuotePad";
+        private string PasswordRegistryKey = "Password";
 
         public void SetNewPassword(string NewPassword)
         {
@@ -63,7 +63,7 @@ namespace QuotePad
             }
         }
 
-        public string GetPasswordFromRegistry()
+        private string GetPasswordFromRegistry()
         {
             //getting hash value of password from registry
             RegistryOperations r1 = new RegistryOperations();
