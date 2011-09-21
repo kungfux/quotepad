@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -30,7 +29,9 @@ namespace QuotePad
             ToolStripMenuItem edit = new ToolStripMenuItem("Правка");
             edit.Tag = this.adminTag;
             ToolStripMenuItem edit_theme = new ToolStripMenuItem("Темы");
+            edit_theme.Click += new EventHandler(edit_theme_Click);
             ToolStripMenuItem edit_author = new ToolStripMenuItem("Автора");
+            edit_author.Click += new EventHandler(edit_author_Click);
             ToolStripMenuItem edit_quote = new ToolStripMenuItem("Цитаты");
             edit.DropDownItems.Add(edit_theme);
             edit.DropDownItems.Add(edit_author);
@@ -61,6 +62,16 @@ namespace QuotePad
             this.Items.Add(search);
             this.Items.Add(settings);
             this.Items.Add(help);
+        }
+
+        void edit_author_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void edit_theme_Click(object sender, EventArgs e)
+        {
+            tabcontrol.AddPage(new ThemeManager());
         }
 
         void quote_quit_Click(object sender, EventArgs e)
