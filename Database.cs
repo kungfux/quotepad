@@ -9,6 +9,12 @@ namespace QuotePad
 {
     public class Database
     {
+        public Database()
+        {
+            connector.SetTrace(true, "db.err", ItWorks.OleDb.TraceLevel.QueryWithMessage);
+            this.Connect();
+        }
+
         public static ItWorks.OleDb connector = new ItWorks.OleDb();
 
         public bool IsConnected { get { return connector.IsActiveConnection(); } }
@@ -181,6 +187,13 @@ namespace QuotePad
             if (connector.ChangeData("UPDATE tAUTHORS SET pNAME=@name, pINFO = @info WHERE pID = @id",
                 new OleDbParameter("@name", newFIO),
                 new OleDbParameter("@info", newAbout),
+                new OleDbParameter("@id", AuthorID)) >= 0) return true;
+            else return false;
+        }
+
+        public bool Author_Remove(int AuthorID)
+        {
+            if (connector.ChangeData("DELETE FROM tAUTHORS WHERE pID = @id",
                 new OleDbParameter("@id", AuthorID)) >= 0) return true;
             else return false;
         }

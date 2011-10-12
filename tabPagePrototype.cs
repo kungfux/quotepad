@@ -11,6 +11,7 @@ namespace QuotePad
     public class TabPagePrototype : TabPage
     {
         public readonly List<ToolStripButtonPrototype> toolStripItems = new List<ToolStripButtonPrototype>();
+        public readonly List<ToolStripComboBoxPrototype> toolStripItemsC = new List<ToolStripComboBoxPrototype>();
         public bool cancelClosing = false; // Flag which disable Dispose() method once
         private string tagText = "text";
 
@@ -35,6 +36,12 @@ namespace QuotePad
         {
             item.Tag = tagText;
             toolStripItems.Add(item);
+        }
+
+        public void AddToolStripItem(ToolStripComboBoxPrototype item)
+        {
+            item.Tag = tagText;
+            toolStripItemsC.Add(item);
         }
     }
 }

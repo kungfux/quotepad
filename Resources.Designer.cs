@@ -87,5 +87,40 @@ namespace QuotePad {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap error {
+            get {
+                object obj = ResourceManager.GetObject("error", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap toolbar_add {
+            get {
+                object obj = ResourceManager.GetObject("toolbar_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap toolbar_delete {
+            get {
+                object obj = ResourceManager.GetObject("toolbar_delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap toolbar_edit {
+            get {
+                object obj = ResourceManager.GetObject("toolbar_edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap toolbar_save {
+            get {
+                object obj = ResourceManager.GetObject("toolbar_save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

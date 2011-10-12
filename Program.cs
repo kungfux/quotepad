@@ -24,7 +24,7 @@ namespace QuotePad
             }
         }
 
-
+        [STAThread]
         public static void Main(string[] args)
         {
             if (IsNew())

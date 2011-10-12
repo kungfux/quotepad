@@ -63,7 +63,8 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>1297098121_notebook_boy.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="assembly.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="AuthorManager.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ConfigToolStrip.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Objects.cs" />
     <Compile Include="RegistryOperations.cs" />
@@ -129,7 +131,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1297098121_notebook_boy.ico" />
     <None Include="dep\1315515375_quit.png" />
     <None Include="dep\1315515285_Add.png" />
     <None Include="dep\1315515132_edit.png" />
@@ -165,6 +166,33 @@
       <ProductName>Установщик Windows 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1303582509_DeleteRed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1301004223_001_06.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1301004227_001_45.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1301004262_001_01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dep\1303582509_DeleteRed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dep\1301004223_001_06.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dep\1301004227_001_45.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dep\1301004262_001_01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dep\error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

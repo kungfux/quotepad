@@ -71,6 +71,14 @@ namespace QuotePad
                         item2.Visible = isSuperUser;
                     }
                 }
+                if (item is ToolStripComboBoxPrototype)
+                {
+                    ToolStripComboBoxPrototype item2 = (ToolStripComboBoxPrototype)item;
+                    if (item2.isForSupervisorOnly)
+                    {
+                        item2.Visible = isSuperUser;
+                    }
+                }
             }
         }
     }

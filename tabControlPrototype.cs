@@ -40,6 +40,10 @@ namespace QuotePad
                     {
                         toolStrip.Items.Add(item);
                     }
+                    foreach (ToolStripComboBoxPrototype item in page.toolStripItemsC)
+                    {
+                        toolStrip.Items.Add(item);
+                    }
                 }
             }
         }

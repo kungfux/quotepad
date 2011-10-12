@@ -17,4 +17,9 @@ namespace QuotePad
 
         public bool isForSupervisorOnly = false;
     }
+
+    public class ToolStripComboBoxPrototype : ToolStripComboBox
+    {
+        public bool isForSupervisorOnly = false;
+    }
 }

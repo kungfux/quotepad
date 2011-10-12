@@ -66,7 +66,7 @@ namespace QuotePad
 
         void edit_author_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            tabcontrol.AddPage(new AuthorManager());
         }
 
         void edit_theme_Click(object sender, EventArgs e)
