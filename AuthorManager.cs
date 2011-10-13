@@ -20,11 +20,12 @@ namespace QuotePad
         {
             this.Text = "Автора";
             author.MaxLength = 50;
-            author.Width = 400;
+            author.Multiline = true;
+            author.Dock = DockStyle.Fill;
+            //author.Width = 400;
             about.MaxLength = 1000;
             about.Multiline = true;
-            about.Size = new System.Drawing.Size(400, 200);
-            about.Top = author.Top + author.Height + 5;
+            about.Dock = DockStyle.Fill;
             photo.Dock = DockStyle.Right;
             photo.SizeMode = PictureBoxSizeMode.AutoSize;
             photo.BackColor = this.BackColor;
@@ -54,9 +55,19 @@ namespace QuotePad
             clear_photo.Click += new EventHandler(clear_photo_Click);
             this.AddToolStripItem(clear_photo);
             this.AddToolStripItem(comboBox);
-            this.Controls.Add(author);
-            this.Controls.Add(about);
-            this.Controls.Add(photo);
+            SplitContainer s1 = new SplitContainer();
+            SplitContainer s2 = new SplitContainer();
+            s1.Dock = DockStyle.Fill;
+            s2.Dock = DockStyle.Fill;
+            s2.Orientation = Orientation.Horizontal;
+            s1.Panel1.Controls.Add(s2);
+            s1.Panel2.Controls.Add(photo);
+            s2.Panel1.Controls.Add(author);
+            s2.Panel2.Controls.Add(about);
+            //this.Controls.Add(author);
+            //this.Controls.Add(about);
+            //this.Controls.Add(photo);
+            this.Controls.Add(s1);
         }
 
         void clear_photo_Click(object sender, EventArgs e)

@@ -17,6 +17,12 @@ namespace QuotePad
 
         ~Database()
         {
+            if (connector != null)
+            connector.Disconnect();
+        }
+
+        public void Disconnect()
+        {
             connector.Disconnect();
         }
 

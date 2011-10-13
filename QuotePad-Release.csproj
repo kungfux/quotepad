@@ -116,6 +116,9 @@
     <None Include="dep\1301004227_001_45.gif" />
     <None Include="dep\1301004262_001_01.png" />
     <None Include="dep\error.png" />
+	<Content Include="db.mdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mainForm.resx">
@@ -127,11 +130,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <Content Include="db.mdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
- <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 и x64%29</ProductName>

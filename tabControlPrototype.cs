@@ -78,6 +78,7 @@ namespace QuotePad
             tabPages.Add(Page);
             this.TabPages.Add(tabPages[tabPages.Count - 1]);
             TabControlPrototype_Selected(this, null);
+            this.SelectedIndex = tabPages.Count-1;
         }
 
         /// <summary>

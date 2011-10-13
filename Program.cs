@@ -33,6 +33,7 @@ namespace QuotePad
                 Application.SetCompatibleTextRenderingDefault(false);
                 Database db = new Database();
                 db.InitDb();
+                db.Disconnect();
                 Application.Run(new QuotePad.mainForm());
             }
             else

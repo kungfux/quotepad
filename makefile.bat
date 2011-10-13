@@ -10,11 +10,17 @@ if param==Release goto Release
 
 :Release
 echo Building Release...
-%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe QuotePad-Release.csproj
+%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe QuotePad-Release.csproj 
+IF EXIST .\bin\Release\QuotePad.exe GOTO Setup
 goto end
 
 :Build
 :: Here is we should make build of project
+goto end
+
+:Setup
+echo Building installation file...
+"C:\Program Files\Inno Setup 5\Compil32.exe" /cc setup.iss
 goto end
 	
 :end
