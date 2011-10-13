@@ -15,6 +15,11 @@ namespace QuotePad
             this.Connect();
         }
 
+        ~Database()
+        {
+            connector.Disconnect();
+        }
+
         public static ItWorks.OleDb connector = new ItWorks.OleDb();
 
         public bool IsConnected { get { return connector.IsActiveConnection(); } }

@@ -26,6 +26,8 @@ namespace QuotePad
             about.Size = new System.Drawing.Size(400, 200);
             about.Top = author.Top + author.Height + 5;
             photo.Dock = DockStyle.Right;
+            photo.SizeMode = PictureBoxSizeMode.AutoSize;
+            photo.BackColor = this.BackColor;
             comboBox = new ToolStripComboBoxPrototype();
             comboBox.AutoSize = false;
             comboBox.Width = 400;
@@ -75,11 +77,31 @@ namespace QuotePad
                 of.ShowDialog();
                 if (of.FileName != "")
                 {
-                    if (!db.Author_SetImage(autors_ids[comboBox.SelectedIndex], of.FileName))
+                    if (TestImage(of.FileName) && !db.Author_SetImage(autors_ids[comboBox.SelectedIndex], of.FileName))
                     {
-                        MessageBox.Show("err");
+                        MessageBox.Show("Упс! Это ошибка! Сообщите разработчику.");
                     }
                 }
+            }
+        }
+
+        private bool TestImage(string file)
+        {
+            PictureBox test = new PictureBox();
+            try
+            {
+                test.Load(file);
+                return true;
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show("Выбранный файл не может использоваться в качестве фото!", "Фото автора", MessageBoxButtons.OK
+                    , MessageBoxIcon.Error);
+                return false;
+            }
+            finally
+            {
+                test.Dispose();
             }
         }
 
