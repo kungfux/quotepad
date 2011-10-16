@@ -11,23 +11,39 @@ namespace QuotePad
         ConfigToolStrip confToolStrip;
         ToolStripComboBoxPrototype comboBox;
         int[] autors_ids;
-        Database db = new Database();
         TextBox author = new TextBox();
         TextBox about = new TextBox();
         PictureBox photo = new PictureBox();
+        ToolStripButtonPrototype change_photo;
+        ToolStripButtonPrototype clear_photo;
 
         public AuthorManager()
         {
-            this.Text = "Автора";
+            this.Text = "Авторы";
+            GroupBox g1 = new GroupBox();
+            GroupBox g2 = new GroupBox();
+            GroupBox g3 = new GroupBox();
+            g1.Text = " ФИО автора";
+            g2.Text = " Об авторе ";
+            g3.Text = " Фото автора ";
+            g1.Dock = DockStyle.Fill;
+            g2.Dock = DockStyle.Fill;
+            g3.Dock = DockStyle.Fill;
             author.MaxLength = 50;
+            author.Name = "author";
             author.Multiline = true;
             author.Dock = DockStyle.Fill;
+            author.Enabled = false;
             //author.Width = 400;
             about.MaxLength = 1000;
             about.Multiline = true;
+            about.ScrollBars = ScrollBars.Vertical;
             about.Dock = DockStyle.Fill;
+            about.Enabled = false;
+            about.Name = "about";
             photo.Dock = DockStyle.Right;
-            photo.SizeMode = PictureBoxSizeMode.AutoSize;
+            photo.Dock = DockStyle.Fill;
+            photo.SizeMode = PictureBoxSizeMode.Zoom;
             photo.BackColor = this.BackColor;
             comboBox = new ToolStripComboBoxPrototype();
             comboBox.AutoSize = false;
@@ -40,7 +56,7 @@ namespace QuotePad
                 ConfigToolStrip.toolStripButtons.Save | 
                 ConfigToolStrip.toolStripButtons.Delete);
             confToolStrip.textboxesParent = this;
-            confToolStrip.RequiredFields = new Control[] { author };
+            confToolStrip.RequiredFields = new Control[] { author, about };
             confToolStrip.toolStripSave.Click += new EventHandler(toolStripSave_Click);
             confToolStrip.toolStripAdd.Click += new EventHandler(toolStripAdd_Click);
             confToolStrip.toolStripDelete.Click += new EventHandler(toolStripDelete_Click);
@@ -48,10 +64,10 @@ namespace QuotePad
             this.AddToolStripItem(confToolStrip.toolStripEdit);
             this.AddToolStripItem(confToolStrip.toolStripSave);
             this.AddToolStripItem(confToolStrip.toolStripDelete);
-            ToolStripButtonPrototype change_photo = new ToolStripButtonPrototype("Изменить фото", Resources._1315515132_edit);
+            change_photo = new ToolStripButtonPrototype("Изменить фото", Resources._1315515132_edit);
             change_photo.Click += new EventHandler(change_photo_Click);
             this.AddToolStripItem(change_photo);
-            ToolStripButtonPrototype clear_photo = new ToolStripButtonPrototype("Удалить фото", Resources._1315515132_edit);
+            clear_photo = new ToolStripButtonPrototype("Удалить фото", Resources._1315515132_edit);
             clear_photo.Click += new EventHandler(clear_photo_Click);
             this.AddToolStripItem(clear_photo);
             this.AddToolStripItem(comboBox);
@@ -60,10 +76,13 @@ namespace QuotePad
             s1.Dock = DockStyle.Fill;
             s2.Dock = DockStyle.Fill;
             s2.Orientation = Orientation.Horizontal;
+            g1.Controls.Add(author);
+            g2.Controls.Add(about);
+            g3.Controls.Add(photo);
             s1.Panel1.Controls.Add(s2);
-            s1.Panel2.Controls.Add(photo);
-            s2.Panel1.Controls.Add(author);
-            s2.Panel2.Controls.Add(about);
+            s1.Panel2.Controls.Add(g3);
+            s2.Panel1.Controls.Add(g1);
+            s2.Panel2.Controls.Add(g2);
             //this.Controls.Add(author);
             //this.Controls.Add(about);
             //this.Controls.Add(photo);
@@ -75,7 +94,7 @@ namespace QuotePad
             if (comboBox.SelectedIndex != -1 &&
                 MessageBox.Show("Удалить фото этого автора?", "Фото автора", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                db.Author_ClearImage(autors_ids[comboBox.SelectedIndex]);
+                Database.Author_ClearImage(autors_ids[comboBox.SelectedIndex]);
             }
         }
 
@@ -88,7 +107,7 @@ namespace QuotePad
                 of.ShowDialog();
                 if (of.FileName != "")
                 {
-                    if (TestImage(of.FileName) && !db.Author_SetImage(autors_ids[comboBox.SelectedIndex], of.FileName))
+                    if (TestImage(of.FileName) && !Database.Author_SetImage(autors_ids[comboBox.SelectedIndex], of.FileName))
                     {
                         MessageBox.Show("Упс! Это ошибка! Сообщите разработчику.");
                     }
@@ -120,7 +139,7 @@ namespace QuotePad
         {
             if (MessageBox.Show(string.Format("Удалить автора {0}?", comboBox.Text),"Удаление автора", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (db.Author_Remove(autors_ids[comboBox.SelectedIndex]))
+                if (Database.Author_Remove(autors_ids[comboBox.SelectedIndex]))
                 {
                     confToolStrip.DeleteExternalMethod();
                 }
@@ -137,11 +156,11 @@ namespace QuotePad
         {
             if (comboBox.SelectedIndex == -1)
             {
-                if (db.Author_Create(author.Text, about.Text)) confToolStrip.SaveExternalMethod();
+                if (Database.Author_Create(author.Text, about.Text)) confToolStrip.SaveExternalMethod();
             }
             else
             {
-                if (db.Author_Modify(autors_ids[comboBox.SelectedIndex], author.Text, about.Text)) confToolStrip.SaveExternalMethod();
+                if (Database.Author_Modify(autors_ids[comboBox.SelectedIndex], author.Text, about.Text)) confToolStrip.SaveExternalMethod();
             }
         }
 
@@ -153,6 +172,14 @@ namespace QuotePad
                 author.Text = comboBox.Text;
                 about.Text = autorsFound[comboBox.SelectedIndex].About;
                 photo.Image = autorsFound[comboBox.SelectedIndex].Photo;
+                change_photo.Enabled = true;
+                if (photo.Image != null) clear_photo.Enabled = true;
+                else clear_photo.Enabled = false;
+            }
+            else
+            {
+                change_photo.Enabled = false;
+                clear_photo.Enabled = false;
             }
         }
 
@@ -161,7 +188,7 @@ namespace QuotePad
         void comboBox_DropDown(object sender, EventArgs e)
         {
             comboBox.Items.Clear();
-            autorsFound = db.Author_GetList();
+            autorsFound = Database.Author_GetList();
             autors_ids = new int[autorsFound.Length];
             for (int a=0;a<autorsFound.Length;a++)
             {

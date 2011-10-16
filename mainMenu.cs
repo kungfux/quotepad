@@ -30,13 +30,15 @@ namespace QuotePad
             edit.Tag = this.adminTag;
             ToolStripMenuItem edit_theme = new ToolStripMenuItem("Темы");
             edit_theme.Click += new EventHandler(edit_theme_Click);
-            ToolStripMenuItem edit_author = new ToolStripMenuItem("Автора");
+            ToolStripMenuItem edit_author = new ToolStripMenuItem("Авторы");
             edit_author.Click += new EventHandler(edit_author_Click);
             ToolStripMenuItem edit_quote = new ToolStripMenuItem("Цитаты");
+            edit_quote.Visible = false; //// TEMPORARY
             edit.DropDownItems.Add(edit_theme);
             edit.DropDownItems.Add(edit_author);
             edit.DropDownItems.Add(edit_quote);
             ToolStripMenuItem search = new ToolStripMenuItem("Поиск");
+            search.Visible = false; //// TEMPORARY
             ToolStripMenuItem search_author = new ToolStripMenuItem("По автору");
             ToolStripMenuItem search_theme = new ToolStripMenuItem("По теме");
             ToolStripMenuItem search_text = new ToolStripMenuItem("По тексту");
@@ -46,6 +48,7 @@ namespace QuotePad
             search.DropDownItems.Add(search_text);
             search.DropDownItems.Add(search_date);
             ToolStripMenuItem settings = new ToolStripMenuItem("Параметры");
+            settings.Visible = false; //// TEMPORARY
             ToolStripMenuItem settings_config = new ToolStripMenuItem("Настройка");
             settings_config.Tag = this.adminTag;
             ToolStripMenuItem settings_export = new ToolStripMenuItem("Экспорт");
@@ -55,6 +58,7 @@ namespace QuotePad
             settings.DropDownItems.Add(settings_login);
             ToolStripMenuItem help = new ToolStripMenuItem("Справка");
             ToolStripMenuItem help_about = new ToolStripMenuItem("О программе");
+            help_about.Click += new EventHandler(help_about_Click);
             help.DropDownItems.Add(help_about);
 
             this.Items.Add(quote);
@@ -62,6 +66,12 @@ namespace QuotePad
             this.Items.Add(search);
             this.Items.Add(settings);
             this.Items.Add(help);
+        }
+
+        void help_about_Click(object sender, EventArgs e)
+        {
+            assembly a = new assembly();
+            MessageBox.Show(a.AssemblyProduct + " " + a.AssemblyVersion + "\nby " + a.AssemblyCopyright, a.AssemblyProduct);
         }
 
         void edit_author_Click(object sender, EventArgs e)

@@ -155,18 +155,23 @@ namespace QuotePad
             {
                 foreach (Control c in RequiredFields)
                 {
-                    IEnumerator i = textboxesParent.Controls.GetEnumerator();
-                    while (i.MoveNext())
+                    //IEnumerator i = textboxesParent.Controls.GetEnumerator();
+                    //while (i.MoveNext())
+                    //{
+                    //    Control co = (Control)i.Current;
+                    //    if (co.Tag == c.Tag)
+                    //    {
+                    //        if (c.Text == "")
+                    //        {
+                    //            MarkErrors();
+                    //            return false;
+                    //        }
+                    //    }
+                    //}
+                    if (c.Text == "")
                     {
-                        Control co = (Control)i.Current;
-                        if (co.Tag == c.Tag)
-                        {
-                            if (c.Text == "")
-                            {
-                                MarkErrors();
-                                return false;
-                            }
-                        }
+                        MarkErrors();
+                        return false;
                     }
                 }
                 MarkErrors();
@@ -178,23 +183,33 @@ namespace QuotePad
         {
             foreach (Control rC in RequiredFields)
             {
-                IEnumerator i = textboxesParent.Controls.GetEnumerator();
-                while (i.MoveNext())
+                //IEnumerator i = textboxesParent.Controls.GetEnumerator();
+                //while (i.MoveNext())
+                //{
+                //    Control co = (Control)i.Current;
+                //    if (co.Name == rC.Name)
+                //    {
+                //        if (rC.Text == "")
+                //        {
+                //            ApplyHighlight(rC);
+                //            ApplyWarningImage(rC);
+                //        }
+                //        else
+                //        {
+                //            ClearHighlight(rC);
+                //            ClearWarningImage(rC);
+                //        }
+                //    }
+                //}
+                if (rC.Text == "")
                 {
-                    Control co = (Control)i.Current;
-                    if (co.Name == rC.Name)
-                    {
-                        if (rC.Text == "")
-                        {
-                            ApplyHighlight(rC);
-                            ApplyWarningImage(rC);
-                        }
-                        else
-                        {
-                            ClearHighlight(rC);
-                            ClearWarningImage(rC);
-                        }
-                    }
+                    ApplyHighlight(rC);
+                    ApplyWarningImage(rC);
+                }
+                else
+                {
+                    ClearHighlight(rC);
+                    ClearWarningImage(rC);
                 }
             }
         }
@@ -238,17 +253,20 @@ namespace QuotePad
             {
                 foreach (Control c in RequiredFields)
                 {
-                    IEnumerator i = textboxesParent.Controls.GetEnumerator();
-                    while (i.MoveNext())
-                    {
-                        Control co = (Control)i.Current;
-                        if (co.Name == c.Name)
-                        {
-                            co.Text = "";
-                            ClearHighlight(co);
-                            ClearWarningImage(co);
-                        }
-                    }
+                    //IEnumerator i = textboxesParent.Controls.GetEnumerator();
+                    //while (i.MoveNext())
+                    //{
+                    //    Control co = (Control)i.Current;
+                    //    if (co.Name == c.Name)
+                    //    {
+                    //        co.Text = "";
+                    //        ClearHighlight(co);
+                    //        ClearWarningImage(co);
+                    //    }
+                    //}
+                    c.Text = "";
+                    ClearHighlight(c);
+                    ClearWarningImage(c);
                 }
             }
 
@@ -256,13 +274,14 @@ namespace QuotePad
             {
                 foreach (Control c in NonRequiredFields)
                 {
-                    IEnumerator i = textboxesParent.Controls.GetEnumerator();
-                    while (i.MoveNext())
-                    {
-                        Control co = (Control)i.Current;
-                        if (co.Name == c.Name)
-                            co.Text = "";
-                    }
+                    //IEnumerator i = textboxesParent.Controls.GetEnumerator();
+                    //while (i.MoveNext())
+                    //{
+                    //    Control co = (Control)i.Current;
+                    //    if (co.Name == c.Name)
+                    //        co.Text = "";
+                    //}
+                    c.Text = "";
                 }
             }
         }
@@ -273,15 +292,16 @@ namespace QuotePad
             {
                 foreach (Control c in RequiredFields)
                 {
-                    IEnumerator i = textboxesParent.Controls.GetEnumerator();
-                    while (i.MoveNext())
-                    {
-                        Control co = (Control)i.Current;
-                        if (co.Name == c.Name)
-                        {
-                            co.Enabled = true;
-                        }
-                    }
+                    //IEnumerator i = textboxesParent.Controls.GetEnumerator();
+                    //while (i.MoveNext())
+                    //{
+                    //    Control co = (Control)i.Current;
+                    //    if (co.Name == c.Name)
+                    //    {
+                    //        co.Enabled = true;
+                    //    }
+                    //}
+                    c.Enabled = true;
                 }
             }
 
@@ -289,15 +309,16 @@ namespace QuotePad
             {
                 foreach (Control c in NonRequiredFields)
                 {
-                    IEnumerator i = textboxesParent.Controls.GetEnumerator();
-                    while (i.MoveNext())
-                    {
-                        Control co = (Control)i.Current;
-                        if (co.Name == c.Name)
-                        {
-                            co.Enabled = true;
-                        }
-                    }
+                    //IEnumerator i = textboxesParent.Controls.GetEnumerator();
+                    //while (i.MoveNext())
+                    //{
+                    //    Control co = (Control)i.Current;
+                    //    if (co.Name == c.Name)
+                    //    {
+                    //        co.Enabled = true;
+                    //    }
+                    //}
+                    c.Enabled = true;
                 }
             }
         }
@@ -308,15 +329,16 @@ namespace QuotePad
             {
                 foreach (Control c in RequiredFields)
                 {
-                    IEnumerator i = textboxesParent.Controls.GetEnumerator();
-                    while (i.MoveNext())
-                    {
-                        Control co = (Control)i.Current;
-                        if (co.Name == c.Name)
-                        {
-                            co.Enabled = false;
-                        }
-                    }
+                    //IEnumerator i = textboxesParent.Controls.GetEnumerator();
+                    //while (i.MoveNext())
+                    //{
+                    //    Control co = (Control)i.Current;
+                    //    if (co.Name == c.Name)
+                    //    {
+                    //        co.Enabled = false;
+                    //    }
+                    //}
+                    c.Enabled = false;
                 }
             }
 
@@ -324,15 +346,16 @@ namespace QuotePad
             {
                 foreach (Control c in NonRequiredFields)
                 {
-                    IEnumerator i = textboxesParent.Controls.GetEnumerator();
-                    while (i.MoveNext())
-                    {
-                        Control co = (Control)i.Current;
-                        if (co.Name == c.Name)
-                        {
-                            co.Enabled = false;
-                        }
-                    }
+                    //IEnumerator i = textboxesParent.Controls.GetEnumerator();
+                    //while (i.MoveNext())
+                    //{
+                    //    Control co = (Control)i.Current;
+                    //    if (co.Name == c.Name)
+                    //    {
+                    //        co.Enabled = false;
+                    //    }
+                    //}
+                    c.Enabled = false;
                 }
             }
         }

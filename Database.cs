@@ -7,32 +7,26 @@ using System.Data.OleDb;
 
 namespace QuotePad
 {
-    public class Database
+    public static class Database
     {
-        public Database()
+        static Database()
         {
             connector.SetTrace(true, "db.err", ItWorks.OleDb.TraceLevel.QueryWithMessage);
-            this.Connect();
+            Database.Connect();
         }
 
-        ~Database()
-        {
-            if (connector != null)
-            connector.Disconnect();
-        }
-
-        public void Disconnect()
+        public static void Disconnect()
         {
             connector.Disconnect();
         }
 
         public static ItWorks.OleDb connector = new ItWorks.OleDb();
 
-        public bool IsConnected { get { return connector.IsActiveConnection(); } }
+        public static bool IsConnected { get { return connector.IsActiveConnection(); } }
 
-        public bool Connect()
+        public static bool Connect()
         {
-            if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source=db.mdb;", true, true))
+            if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source="+Application.StartupPath+"\\db.mdb;", true, false))
             {
                 connector.SetTrace(true, Application.StartupPath + @"\dberr.log", ItWorks.OleDb.TraceLevel.QueryWithMessage);
                 InitDb();
@@ -41,7 +35,7 @@ namespace QuotePad
             else return false;
         }
 
-        public void InitDb()
+        public static void InitDb()
         {
             connector.SetTrace(false);
 
@@ -73,21 +67,21 @@ namespace QuotePad
             connector.SetTrace(true);
         }
 
-        private void ClearDb()
+        private static void ClearDb()
         {
             connector.ChangeData("DROP TABLE tQUOTES");
             connector.ChangeData("DROP TABLE tTHEMES");
             connector.ChangeData("DROP TABLE tAUTHORS");
         }
 
-        public string GetError()
+        public static string GetError()
         {
             return connector.LastErrorMessage;
         }
 
         #region Theme
 
-        public Objects.Theme[] Theme_GetList()
+        public static Objects.Theme[] Theme_GetList()
         {
             DataTable themes = connector.SelectTable("SELECT * FROM tTHEMES");
             if (themes == null) return new Objects.Theme[0];
@@ -101,7 +95,7 @@ namespace QuotePad
             return list;
         }
 
-        public Objects.Theme Theme_Get(int ThemeID)
+        public static Objects.Theme Theme_Get(int ThemeID)
         {
             Objects.Theme theme = new Objects.Theme();
             string tname;
@@ -116,14 +110,14 @@ namespace QuotePad
             return theme;
         }
 
-        public bool Theme_Create(string Theme)
+        public static bool Theme_Create(string Theme)
         {
             if (connector.ChangeData("INSERT INTO tTHEMES (pNAME) VALUES (@name)",
                 new OleDbParameter("@name", Theme)) >= 0) return true;
             else return false;
         }
 
-        public bool Theme_Modify(int ThemeID, string newName)
+        public static bool Theme_Modify(int ThemeID, string newName)
         {
             if (connector.ChangeData("UPDATE tTHEMES SET pNAME=@name WHERE pID = @id",
                 new OleDbParameter("@name", newName),
@@ -131,7 +125,7 @@ namespace QuotePad
             else return false;
         }
 
-        public bool Theme_Remove(int ThemeID)
+        public static bool Theme_Remove(int ThemeID)
         {
             if (connector.ChangeData("DELETE FROM tTHEMES WHERE pID = @id",
                 new OleDbParameter("@id", ThemeID)) >= 0) return true;
@@ -142,7 +136,7 @@ namespace QuotePad
 
         #region Author
 
-        public Objects.Author[] Author_GetList()
+        public static Objects.Author[] Author_GetList()
         {
             DataTable themes = connector.SelectTable("SELECT * FROM tAUTHORS");
             if (themes == null) return new Objects.Author[0];
@@ -160,7 +154,7 @@ namespace QuotePad
             return list;
         }
 
-        public Objects.Author Author_Get(int AuthorID)
+        public static Objects.Author Author_Get(int AuthorID)
         {
             DataRow author = connector.SelectRow("SELECT * FROM tAUTHORS WHERE pID = @id",
                 new OleDbParameter("@id", AuthorID));
@@ -174,7 +168,7 @@ namespace QuotePad
             return item;
         }
 
-        public string Author_GetName(int AuthorID)
+        public static string Author_GetName(int AuthorID)
         {
             try
             {
@@ -185,7 +179,7 @@ namespace QuotePad
             return null;
         }
 
-        public bool Author_Create(string FIO, string About)
+        public static bool Author_Create(string FIO, string About)
         {
             if (connector.ChangeData("INSERT INTO tAUTHORS (pNAME, pINFO) VALUES (@name, @info)",
                 new OleDbParameter("@name", FIO),
@@ -193,7 +187,7 @@ namespace QuotePad
             else return false;
         }
 
-        public bool Author_Modify(int AuthorID, string newFIO, string newAbout)
+        public static bool Author_Modify(int AuthorID, string newFIO, string newAbout)
         {
             if (connector.ChangeData("UPDATE tAUTHORS SET pNAME=@name, pINFO = @info WHERE pID = @id",
                 new OleDbParameter("@name", newFIO),
@@ -202,20 +196,20 @@ namespace QuotePad
             else return false;
         }
 
-        public bool Author_Remove(int AuthorID)
+        public static bool Author_Remove(int AuthorID)
         {
             if (connector.ChangeData("DELETE FROM tAUTHORS WHERE pID = @id",
                 new OleDbParameter("@id", AuthorID)) >= 0) return true;
             else return false;
         }
 
-        public bool Author_SetImage(int AuthorID, string Photo)
+        public static bool Author_SetImage(int AuthorID, string Photo)
         {
             return connector.PutFile(Photo, "UPDATE tAUTHORS SET pPHOTO = @file WHERE pID = @id",
                 new OleDbParameter("@id", AuthorID));
         }
 
-        public bool Author_ClearImage(int AuthorID)
+        public static bool Author_ClearImage(int AuthorID)
         {
             if (connector.ChangeData("UPDATE tAUTHORS SET pPHOTO = null WHERE pID = @id",
                 new OleDbParameter("@id", AuthorID)) >= 0) return true;
@@ -225,12 +219,12 @@ namespace QuotePad
 
         #region Quote
 
-        public Int32 Quote_GetCount()
+        public static Int32 Quote_GetCount()
         {
             return connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
         }
 
-        public bool Quote_Create(int AuthorID, int ThemeID, string RTFQuote, string TXTQuote, bool IsFavorite)
+        public static bool Quote_Create(int AuthorID, int ThemeID, string RTFQuote, string TXTQuote, bool IsFavorite)
         {
             if (connector.ChangeData("INSERT INTO tQUOTES (pAUTHOR, pTHEME, prtfQUOTE, ptxtQUOTE, pFAVORITE, pDT) " +
                 "VALUES (@author, @theme, @rtf, @txt, @favorite, @datetime)",
@@ -244,7 +238,7 @@ namespace QuotePad
             else return false;
         }
 
-        public bool Quote_Modify(int QuoteID, int newAuthorID, int newThemeID, string newRTFQuote, string newTXTQuote, bool IsFavorite)
+        public static bool Quote_Modify(int QuoteID, int newAuthorID, int newThemeID, string newRTFQuote, string newTXTQuote, bool IsFavorite)
         {
             if (connector.ChangeData("UPDATE tQUOTES SET pAUTHOR=@author, pTHEME=@theme, prtfQUOTE = @rtf, " +
                 "ptxtQUOTE = @txt, pFAVORITE = @favorite, pDT = @datetime) WHERE pID = @id",
@@ -258,7 +252,7 @@ namespace QuotePad
             else return false;
         }
 
-        public bool Quote_Remove(int QuoteID)
+        public static bool Quote_Remove(int QuoteID)
         {
             if (connector.ChangeData("DELETE FROM tQUOTES WHERE pID = @id",
                 new OleDbParameter("@id", QuoteID)) >= 0)
@@ -266,7 +260,7 @@ namespace QuotePad
             else return false;
         }
 
-        public bool Quote_SetAsFavorite(int QuoteID)
+        public static bool Quote_SetAsFavorite(int QuoteID)
         {
             if (connector.ChangeData("UPDATE tQUOTES SET pFAVORITE = TRUE WHERE pID = @id",
                 new OleDbParameter("@id", QuoteID)) >= 0)
@@ -274,7 +268,7 @@ namespace QuotePad
             else return false;
         }
 
-        public bool Quote_UnsetFavorite(int QuoteID)
+        public static bool Quote_UnsetFavorite(int QuoteID)
         {
             if (connector.ChangeData("UPDATE tQUOTES SET pFAVORITE = FALSE WHERE pID = @id",
                 new OleDbParameter("@id", QuoteID)) >= 0)
@@ -282,7 +276,7 @@ namespace QuotePad
             else return false;
         }
 
-        public Objects.Quote Quote_ReadNext(int QuoteID, bool FavoriteOnly = false)
+        public static Objects.Quote Quote_ReadNext(int QuoteID, bool FavoriteOnly = false)
         {
             Objects.Quote quote = new Objects.Quote();
             DataRow row;
@@ -309,7 +303,7 @@ namespace QuotePad
             return quote;
         }
 
-        public Objects.Quote Quote_ReadPrevious(int QuoteID, bool FavoriteOnly = false)
+        public static Objects.Quote Quote_ReadPrevious(int QuoteID, bool FavoriteOnly = false)
         {
             Objects.Quote quote = new Objects.Quote();
             DataRow row;
@@ -338,16 +332,16 @@ namespace QuotePad
 
         #region Random Read
 
-        public double BufferSize = 0.2; // In persents
-        public bool IsReady = false; // Is Buffer has been initialized and etc.
+        public static double BufferSize = 0.2; // In persents
+        public static bool IsReady = false; // Is Buffer has been initialized and etc.
 
-        private Random rnd = new Random();
-        private Int32[] Buffer;
-        private Int32 Max;
-        private Int32 RandomValue;
-        private Objects.Quote RandomQuote;
+        private static Random rnd = new Random();
+        private static Int32[] Buffer;
+        private static Int32 Max;
+        private static Int32 RandomValue;
+        private static Objects.Quote RandomQuote;
 
-        private void RandomInit()
+        private static void RandomInit()
         {
             Int32 RecordsCount = connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
             Buffer = new Int32[(Int32)(RecordsCount * BufferSize)];
@@ -362,7 +356,7 @@ namespace QuotePad
             }
         }
 
-        private void UpdateBuffer(Int32 value)
+        private static void UpdateBuffer(Int32 value)
         {
             if (Buffer.Length > 0)
             {
@@ -374,7 +368,7 @@ namespace QuotePad
             }
         }
 
-        private bool IsValueInBuffer(Int32 value)
+        private static bool IsValueInBuffer(Int32 value)
         {
             foreach (Int32 v in Buffer)
             {
@@ -383,7 +377,7 @@ namespace QuotePad
             return false;
         }
 
-        private void Random_FindNext()
+        private static void Random_FindNext()
         {
             RandomValue = rnd.Next(1, Max + 1);
             while (IsValueInBuffer(RandomValue))
@@ -394,7 +388,7 @@ namespace QuotePad
             RandomQuote = Quote_FindByID(RandomValue);
         }
 
-        public Objects.Quote Quote_RandomRead()
+        public static Objects.Quote Quote_RandomRead()
         {
             if (!IsReady)
             {
@@ -415,7 +409,7 @@ namespace QuotePad
 
         #endregion
 
-        public Objects.Quote Quote_FindByID(int QuoteID)
+        public static Objects.Quote Quote_FindByID(int QuoteID)
         {
             Objects.Quote quote = new Objects.Quote();
             DataRow row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID = @id",
@@ -433,7 +427,7 @@ namespace QuotePad
             return quote;
         }
 
-        public Objects.Quote[] Quote_FindByAuthor(int AuthorID)
+        public static Objects.Quote[] Quote_FindByAuthor(int AuthorID)
         {
             DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pAUTHOR = @author",
                 new OleDbParameter("@author", AuthorID));
@@ -456,7 +450,7 @@ namespace QuotePad
             else return new Objects.Quote[0];
         }
 
-        public Objects.Quote[] Quote_FindByTheme(int ThemeID)
+        public static Objects.Quote[] Quote_FindByTheme(int ThemeID)
         {
             DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pTHEME = @theme",
                 new OleDbParameter("@theme", ThemeID));
@@ -479,7 +473,7 @@ namespace QuotePad
             else return new Objects.Quote[0];
         }
 
-        public Objects.Quote[] Quote_FindByText(string Text)
+        public static Objects.Quote[] Quote_FindByText(string Text)
         {
             DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE ucase(ptxtQUOTE) LIKE \"*@text*\"",
                 new OleDbParameter("@text", Text));
@@ -502,7 +496,7 @@ namespace QuotePad
             else return new Objects.Quote[0];
         }
 
-        public Objects.Quote[] Quote_FindByDate(DateTime From, DateTime To)
+        public static Objects.Quote[] Quote_FindByDate(DateTime From, DateTime To)
         {
             DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE pDT >= @from and pDT <= @to",
                 new OleDbParameter("@from", From.ToString()),
