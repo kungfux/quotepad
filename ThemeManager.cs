@@ -66,11 +66,17 @@ namespace QuotePad
         {
             if (comboBox.SelectedIndex == -1)
             {
-                if (Database.Theme_Create(theme.Text)) confToolStrip.SaveExternalMethod();
+                if (confToolStrip.IsRequiredFilled())
+                {
+                    if (Database.Theme_Create(theme.Text)) confToolStrip.SaveExternalMethod();
+                }
             }
             else
             {
-                if (Database.Theme_Modify(theme_ids[comboBox.SelectedIndex], theme.Text)) confToolStrip.SaveExternalMethod();
+                if (confToolStrip.IsRequiredFilled())
+                {
+                    if (Database.Theme_Modify(theme_ids[comboBox.SelectedIndex], theme.Text)) confToolStrip.SaveExternalMethod();
+                }
             }
         }
 

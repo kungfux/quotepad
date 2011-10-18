@@ -12,7 +12,7 @@ Compression=lzma
 SolidCompression=yes
 UninstallDisplayIcon={app}\quotepad.exe
 OutputDir=.\bin\Release
-OutputBaseFilename=setup.exe
+OutputBaseFilename=setup
 
 [Languages]
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"

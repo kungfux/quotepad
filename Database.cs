@@ -163,8 +163,10 @@ namespace QuotePad
             item.ID = (int)author.ItemArray[0];
             item.FIO = (string)author.ItemArray[1];
             item.About = (string)author.ItemArray[2];
+            connector.SetTrace(false);
             item.Photo = connector.GetImage("SELECT pPHOTO FROM tAUTHORS WHERE pID = " +
                     AuthorID);
+            connector.SetTrace(true);
             return item;
         }
 
@@ -282,12 +284,12 @@ namespace QuotePad
             DataRow row;
             if (!FavoriteOnly)
             {
-                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID > @id",
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID > @id", 0,
                   new OleDbParameter("@id", QuoteID));
             }
             else
             {
-                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID > @id AND pFAVORITE = TRUE",
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID > @id AND pFAVORITE = TRUE", 0,
                   new OleDbParameter("@id", QuoteID));
             }
             if (row != null)
@@ -309,12 +311,12 @@ namespace QuotePad
             DataRow row;
             if (!FavoriteOnly)
             {
-                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID < @id",
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID < @id ORDER BY pID DESC", 0,
                   new OleDbParameter("@id", QuoteID));
             }
             else
             {
-                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID < @id AND pFAVORITE = TRUE",
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID < @id AND pFAVORITE = TRUE ORDER BY pID DESC", 0,
                   new OleDbParameter("@id", QuoteID));
             }
             if (row != null)

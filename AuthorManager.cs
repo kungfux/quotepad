@@ -56,7 +56,8 @@ namespace QuotePad
                 ConfigToolStrip.toolStripButtons.Save | 
                 ConfigToolStrip.toolStripButtons.Delete);
             confToolStrip.textboxesParent = this;
-            confToolStrip.RequiredFields = new Control[] { author, about };
+            confToolStrip.RequiredFields = new Control[] { author };
+            confToolStrip.NonRequiredFields = new Control[] { about };
             confToolStrip.toolStripSave.Click += new EventHandler(toolStripSave_Click);
             confToolStrip.toolStripAdd.Click += new EventHandler(toolStripAdd_Click);
             confToolStrip.toolStripDelete.Click += new EventHandler(toolStripDelete_Click);
@@ -156,11 +157,17 @@ namespace QuotePad
         {
             if (comboBox.SelectedIndex == -1)
             {
-                if (Database.Author_Create(author.Text, about.Text)) confToolStrip.SaveExternalMethod();
+                if (confToolStrip.IsRequiredFilled())
+                {
+                    if (Database.Author_Create(author.Text, about.Text)) confToolStrip.SaveExternalMethod();
+                }
             }
             else
             {
-                if (Database.Author_Modify(autors_ids[comboBox.SelectedIndex], author.Text, about.Text)) confToolStrip.SaveExternalMethod();
+                if (confToolStrip.IsRequiredFilled())
+                {
+                    if (Database.Author_Modify(autors_ids[comboBox.SelectedIndex], author.Text, about.Text)) confToolStrip.SaveExternalMethod();
+                }
             }
         }
 

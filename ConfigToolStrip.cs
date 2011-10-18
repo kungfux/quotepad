@@ -45,6 +45,7 @@ namespace QuotePad
             if ((int)selectedButtons != 0)
             {
                 char[] _pattern = Convert.ToString((int)selectedButtons, 2).ToCharArray();
+                Array.Reverse(_pattern);
                 int index = 0;
                 while (index < _pattern.Length)
                 {
@@ -106,6 +107,11 @@ namespace QuotePad
             save_Click(this, null);
         }
 
+        public bool IsRequiredFilled()
+        {
+            return CheckRequired();
+        }
+
         private void save_Click(object sender, EventArgs e)
         {
             if (CheckRequired())
@@ -142,10 +148,10 @@ namespace QuotePad
         {
             switch(key)
             {
-                case "Создать": toolStripAdd.Enabled = enable; break;
-                case "Изменить": toolStripEdit.Enabled = enable; break;
-                case "Сохранить": toolStripSave.Enabled = enable; break;
-                case "Удалить": toolStripDelete.Enabled = enable; break;
+                case "Создать": if (toolStripAdd != null) toolStripAdd.Enabled = enable; break;
+                case "Изменить": if (toolStripEdit != null) toolStripEdit.Enabled = enable; break;
+                case "Сохранить": if (toolStripSave != null) toolStripSave.Enabled = enable; break;
+                case "Удалить": if (toolStripDelete != null) toolStripDelete.Enabled = enable; break;
             }
         }
 
