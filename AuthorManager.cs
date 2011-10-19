@@ -47,7 +47,7 @@ namespace QuotePad
             photo.BackColor = this.BackColor;
             comboBox = new ToolStripComboBoxPrototype();
             comboBox.AutoSize = false;
-            comboBox.Width = 400;
+            comboBox.Width = 320;
             comboBox.DropDown += new EventHandler(comboBox_DropDown);
             comboBox.SelectedIndexChanged += new EventHandler(comboBox_SelectedIndexChanged);
             comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -65,6 +65,8 @@ namespace QuotePad
             this.AddToolStripItem(confToolStrip.toolStripEdit);
             this.AddToolStripItem(confToolStrip.toolStripSave);
             this.AddToolStripItem(confToolStrip.toolStripDelete);
+            this.AddToolStripItem(new ToolStripSeparatorPrototype());
+            this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные авторы:"));
             change_photo = new ToolStripButtonPrototype("Изменить фото", Resources._1315515132_edit);
             change_photo.Click += new EventHandler(change_photo_Click);
             this.AddToolStripItem(change_photo);
@@ -112,6 +114,7 @@ namespace QuotePad
                     {
                         MessageBox.Show("Упс! Это ошибка! Сообщите разработчику.");
                     }
+                    else comboBox_SelectedIndexChanged(this, null);
                 }
             }
         }

@@ -36,14 +36,24 @@ namespace QuotePad
                     toolStrip.Items.Add(separator);
                     // Add items on toolstrip for selected tab
                     TabPagePrototype page = tabPages.Find(p => p.Tag == this.SelectedTab.Tag);
-                    foreach (ToolStripButtonPrototype item in page.toolStripItems)
+
+                    foreach (ToolStripButtonPrototype item in page.toolStripItemsB)
                     {
                         toolStrip.Items.Add(item);
                     }
+                    foreach (ToolStripSeparatorPrototype item in page.toolStripItemsS)
+                    {
+                        toolStrip.Items.Add(item);
+                    }
+                    foreach (ToolStripLabelPrototype item in page.toolStripItemsL)
+                    {
+                        toolStrip.Items.Add(item);
+                    }
+                    
                     foreach (ToolStripComboBoxPrototype item in page.toolStripItemsC)
                     {
                         toolStrip.Items.Add(item);
-                    }
+                    }                   
                 }
             }
         }
@@ -77,8 +87,8 @@ namespace QuotePad
             Page.Tag = sequenceNumber++.ToString(); // Define unique number of page
             tabPages.Add(Page);
             this.TabPages.Add(tabPages[tabPages.Count - 1]);
+            this.SelectedIndex = tabPages.Count - 1;
             TabControlPrototype_Selected(this, null);
-            this.SelectedIndex = tabPages.Count-1;
         }
 
         /// <summary>

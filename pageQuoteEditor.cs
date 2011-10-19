@@ -13,8 +13,10 @@ namespace QuotePad
         ToolStripComboBoxPrototype cThemes;
         int[] theme_ids;
         int[] autors_ids;
+        bool editMode = false;
+        int quoteID = 0;
 
-        public pageQuoteEditor()
+        public pageQuoteEditor(int editQuote = -1)
         {
             this.Text = "Редактор";
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
@@ -38,8 +40,25 @@ namespace QuotePad
             this.Controls.Add(rtfed.StatusBar);
             this.AddToolStripItem(confToolStrip.toolStripAdd);
             this.AddToolStripItem(confToolStrip.toolStripSave);
+            this.AddToolStripItem(new ToolStripSeparatorPrototype());
+            this.AddToolStripItem(new ToolStripLabelPrototype("Укажите автора и тему"));
             this.AddToolStripItem(cAuthors);
             this.AddToolStripItem(cThemes);
+
+            if (editQuote != -1)
+            {
+                editMode = true;
+                Objects.Quote quote = Database.Quote_FindByID(editQuote);
+                if (quote.ID != 0)
+                {
+                    quoteID = quote.ID;
+                    cAuthors_DropDown(this, null);
+                    cThemes_DropDown(this, null);
+                    cAuthors.Text = quote.QuoteAuthor.FIO;
+                    cThemes.Text = quote.QuoteTheme.Name;
+                    rtfed.RtfTextBox.Rtf = quote.RTF;
+                }
+            }
         }
 
         void toolStripAdd_Click(object sender, EventArgs e)
@@ -79,6 +98,17 @@ namespace QuotePad
                 {
                     if (confToolStrip.IsRequiredFilled())
                     {
+                        if (editMode)
+                        {
+                            if (Database.Quote_Modify(quoteID, autors_ids[cAuthors.SelectedIndex], theme_ids[cThemes.SelectedIndex],
+                            rtfed.RtfTextBox.Rtf, rtfed.RtfTextBox.Text, false))
+                            {
+                                confToolStrip.SaveExternalMethod();
+                                editMode = false;
+                                quoteID = 0;
+                            }
+                        }
+                        else
                         if (Database.Quote_Create(autors_ids[cAuthors.SelectedIndex], theme_ids[cThemes.SelectedIndex],
                             rtfed.RtfTextBox.Rtf, rtfed.RtfTextBox.Text, false))
                         {

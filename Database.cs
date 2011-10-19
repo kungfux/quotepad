@@ -12,7 +12,8 @@ namespace QuotePad
         static Database()
         {
             connector.SetTrace(true, "db.err", ItWorks.OleDb.TraceLevel.QueryWithMessage);
-            Database.Connect();
+            if (!Database.Connect()) MessageBox.Show("Не удалось установить соединение с базой данных!",
+                "Цитатник", MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
         public static void Disconnect()
@@ -207,7 +208,7 @@ namespace QuotePad
 
         public static bool Author_SetImage(int AuthorID, string Photo)
         {
-            return connector.PutFile(Photo, "UPDATE tAUTHORS SET pPHOTO = @file WHERE pID = @id",
+            return connector.PutFileSpecifically(Photo, "UPDATE tAUTHORS SET pPHOTO = @file WHERE pID = @id", 1,
                 new OleDbParameter("@id", AuthorID));
         }
 
@@ -243,12 +244,13 @@ namespace QuotePad
         public static bool Quote_Modify(int QuoteID, int newAuthorID, int newThemeID, string newRTFQuote, string newTXTQuote, bool IsFavorite)
         {
             if (connector.ChangeData("UPDATE tQUOTES SET pAUTHOR=@author, pTHEME=@theme, prtfQUOTE = @rtf, " +
-                "ptxtQUOTE = @txt, pFAVORITE = @favorite, pDT = @datetime) WHERE pID = @id",
+                "ptxtQUOTE = @txt, pFAVORITE = @favorite, pDT = @datetime WHERE pID = @id",
                 new OleDbParameter("@author", newAuthorID),
                 new OleDbParameter("@theme", newThemeID),
                 new OleDbParameter("@rtf", newRTFQuote),
                 new OleDbParameter("@txt", newTXTQuote),
                 new OleDbParameter("@favorite", IsFavorite),
+                new OleDbParameter("@datetime", DateTime.Now.ToString()),
                 new OleDbParameter("@id", QuoteID)) >= 0)
                 return true;
             else return false;

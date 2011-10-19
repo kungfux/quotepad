@@ -10,8 +10,10 @@ namespace QuotePad
     /// </summary>
     public class TabPagePrototype : TabPage
     {
-        public readonly List<ToolStripButtonPrototype> toolStripItems = new List<ToolStripButtonPrototype>();
+        public readonly List<ToolStripButtonPrototype> toolStripItemsB = new List<ToolStripButtonPrototype>();
         public readonly List<ToolStripComboBoxPrototype> toolStripItemsC = new List<ToolStripComboBoxPrototype>();
+        public readonly List<ToolStripLabelPrototype> toolStripItemsL = new List<ToolStripLabelPrototype>();
+        public readonly List<ToolStripSeparatorPrototype> toolStripItemsS = new List<ToolStripSeparatorPrototype>();
         public bool cancelClosing = false; // Flag which disable Dispose() method once
         private string tagText = "text";
 
@@ -35,13 +37,25 @@ namespace QuotePad
         public void AddToolStripItem(ToolStripButtonPrototype item)
         {
             item.Tag = tagText;
-            toolStripItems.Add(item);
+            toolStripItemsB.Add(item);
         }
 
         public void AddToolStripItem(ToolStripComboBoxPrototype item)
         {
             item.Tag = tagText;
             toolStripItemsC.Add(item);
+        }
+
+        public void AddToolStripItem(ToolStripLabelPrototype item)
+        {
+            item.Tag = tagText;
+            toolStripItemsL.Add(item);
+        }
+
+        public void AddToolStripItem(ToolStripSeparatorPrototype item)
+        {
+            item.Tag = tagText;
+            toolStripItemsS.Add(item);
         }
     }
 }

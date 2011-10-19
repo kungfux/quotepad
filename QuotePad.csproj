@@ -168,18 +168,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1303582509_DeleteRed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1301004223_001_06.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1301004227_001_45.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1301004262_001_01.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="dep\1303582509_DeleteRed.png" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +186,10 @@
     <Content Include="db.mdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="dep\infoAuthor.png" />
+    <None Include="dep\arrowRight.png" />
+    <None Include="dep\arrowLeft.png" />
+    <None Include="dep\refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

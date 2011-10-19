@@ -97,7 +97,7 @@ namespace QuotePad
 
         private void quote_view_Click(object sender, EventArgs e)
         {
-            tabcontrol.AddPage(new pageQuoteView());
+            tabcontrol.AddPage(new pageQuoteView(tabcontrol));
         }
     }
 }

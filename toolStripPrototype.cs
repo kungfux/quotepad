@@ -47,7 +47,7 @@ namespace QuotePad
 
         void viewQuote_Click(object sender, EventArgs e)
         {
-            tabControl.AddPage(new pageQuoteView());
+            tabControl.AddPage(new pageQuoteView(tabControl));
         }
 
         // Perform setting correct visibility on load
@@ -71,14 +71,33 @@ namespace QuotePad
                         item2.Visible = isSuperUser;
                     }
                 }
-                if (item is ToolStripComboBoxPrototype)
-                {
-                    ToolStripComboBoxPrototype item2 = (ToolStripComboBoxPrototype)item;
-                    if (item2.isForSupervisorOnly)
+                else
+                    if (item is ToolStripComboBoxPrototype)
                     {
-                        item2.Visible = isSuperUser;
+                        ToolStripComboBoxPrototype item2 = (ToolStripComboBoxPrototype)item;
+                        if (item2.isForSupervisorOnly)
+                        {
+                            item2.Visible = isSuperUser;
+                        }
                     }
-                }
+                    else
+                        if (item is ToolStripLabelPrototype)
+                        {
+                            ToolStripLabelPrototype item2 = (ToolStripLabelPrototype)item;
+                            if (item2.isForSupervisorOnly)
+                            {
+                                item2.Visible = isSuperUser;
+                            }
+                        }
+                        else
+                            if (item is ToolStripSeparatorPrototype)
+                            {
+                                ToolStripSeparatorPrototype item2 = (ToolStripSeparatorPrototype)item;
+                                if (item2.isForSupervisorOnly)
+                                {
+                                    item2.Visible = isSuperUser;
+                                }
+                            }
             }
         }
     }

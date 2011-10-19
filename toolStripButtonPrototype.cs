@@ -22,4 +22,20 @@ namespace QuotePad
     {
         public bool isForSupervisorOnly = false;
     }
+
+    public class ToolStripSeparatorPrototype : ToolStripSeparator
+    {
+        public bool isForSupervisorOnly = false;
+    }
+
+    public class ToolStripLabelPrototype : ToolStripLabel
+    {
+        public ToolStripLabelPrototype(string text)
+        {
+            this.Text = text;
+            this.DisplayStyle = ToolStripItemDisplayStyle.Text;
+        }
+
+        public bool isForSupervisorOnly = false;
+    }
 }
