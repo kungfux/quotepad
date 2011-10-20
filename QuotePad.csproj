@@ -67,6 +67,7 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AskPassword.cs" />
     <Compile Include="assembly.cs" />
     <Compile Include="Authorization.cs" />
     <Compile Include="AuthorManager.cs">

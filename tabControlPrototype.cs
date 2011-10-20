@@ -29,7 +29,7 @@ namespace QuotePad
             if (toolStrip != null)
             {
                 RemoveRedundantItems();
-                if (this.TabPages.Count > 0)
+                if (this.TabPages.Count > 0 && this.SelectedTab != null)
                 {
                     ToolStripSeparator separator = new ToolStripSeparator();
                     separator.Tag = "separator";

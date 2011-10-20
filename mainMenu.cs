@@ -66,6 +66,21 @@ namespace QuotePad
             this.Items.Add(search);
             this.Items.Add(settings);
             this.Items.Add(help);
+
+            tabcontrol.VisibleChanged += new EventHandler(tabcontrol_VisibleChanged);
+        }
+
+        void tabcontrol_VisibleChanged(object sender, EventArgs e)
+        {
+            if (tabcontrol.Visible)
+            {
+                this.Enabled = true;
+                this.SetVisibility();
+            }
+            else
+            {
+                this.Enabled = false;
+            }
         }
 
         void help_about_Click(object sender, EventArgs e)

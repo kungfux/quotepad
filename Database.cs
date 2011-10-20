@@ -13,7 +13,7 @@ namespace QuotePad
         {
             connector.SetTrace(true, "db.err", ItWorks.OleDb.TraceLevel.QueryWithMessage);
             if (!Database.Connect()) MessageBox.Show("Не удалось установить соединение с базой данных!",
-                "Цитатник", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
         public static void Disconnect()
@@ -412,6 +412,17 @@ namespace QuotePad
         }
 
         #endregion
+
+        public static bool Quote_FindByID_IsExist(int QuoteID)
+        {
+            DataRow row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID = @id",
+                new OleDbParameter("@id", QuoteID));
+            if (row != null)
+            {
+                return true;
+            }
+            else return false;
+        }
 
         public static Objects.Quote Quote_FindByID(int QuoteID)
         {

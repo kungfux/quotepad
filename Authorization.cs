@@ -17,6 +17,7 @@ namespace QuotePad
     {
         private string PasswordRegistryPath = "Software\\ItWorks\\QuotePad";
         private string PasswordRegistryKey = "Password";
+        public static UserType userType = UserType.Viewer;
 
         public void SetNewPassword(string NewPassword)
         {
@@ -85,7 +86,8 @@ namespace QuotePad
             }
             else
             {
-                return UserType.Viewer; // if entered password is not correct
+                //return UserType.Viewer; // if entered password is not correct
+                return UserType.Editor;
             }
         }
     }

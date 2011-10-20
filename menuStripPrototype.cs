@@ -22,7 +22,7 @@ namespace QuotePad
         // Set Visible property for each item in main menu
         public void SetVisibility()
         {
-            bool isSuperUser = true; // Here is should be external call to check isAdminLoggedIn?
+            bool isSuperUser = (Authorization.userType == UserType.Editor);
             foreach (ToolStripMenuItem item in this.Items)
             {
                 if (item.Tag != null && item.Tag.ToString() == adminTag)

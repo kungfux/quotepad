@@ -9,20 +9,78 @@ namespace QuotePad
     {
         private TabControlPrototype tabControl;
         private string defSearchText = "Найти цитату?";
+        ToolStripTextBox searchQuote;
 
         public ToolStripPrototype(TabControlPrototype tabcontrol)
         {
             tabControl = tabcontrol;
+
             ToolStripButtonPrototype viewQuote = new ToolStripButtonPrototype("Просмотр цитат", Resources._1315511677_old_edit_find);
             viewQuote.Click += new EventHandler(viewQuote_Click);
             this.Items.Add(viewQuote);
-            ToolStripTextBox searchQuote = new ToolStripTextBox();
+
+            ToolStripButtonPrototype addQuote = new ToolStripButtonPrototype("Добавить новую цитату", Resources._1315515285_Add);
+            addQuote.isForSupervisorOnly = true;
+            addQuote.Click += new EventHandler(addQuote_Click);
+            this.Items.Add(addQuote);
+
+            ToolStripButtonPrototype auth = new ToolStripButtonPrototype("Авторизоваться", Resources.infoAuthor);
+            auth.Click += new EventHandler(auth_Click);
+            this.Items.Add(auth);
+
+            searchQuote = new ToolStripTextBox();
             searchQuote.Text = defSearchText;
             searchQuote.Font = new System.Drawing.Font(searchQuote.Font.FontFamily, searchQuote.Font.Size, System.Drawing.FontStyle.Italic);
             searchQuote.Alignment = ToolStripItemAlignment.Right;
             searchQuote.GotFocus += new EventHandler(searchQuote_GotFocus);
             searchQuote.LostFocus += new EventHandler(searchQuote_LostFocus);
+            searchQuote.KeyUp += new KeyEventHandler(searchQuote_KeyUp);
             this.Items.Add(searchQuote);
+
+            tabControl.VisibleChanged += new EventHandler(tabControl_VisibleChanged);
+        }
+
+        void searchQuote_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && searchQuote.Text.Length > 0)
+            {
+                int quoteId = 0;
+                if (int.TryParse(searchQuote.Text, out quoteId))
+                {
+                    if (Database.Quote_FindByID_IsExist(quoteId))
+                    {
+                        tabControl.AddPage(new pageQuoteView(tabControl, quoteId));
+                        searchQuote.Text = defSearchText;
+                    }
+                    else MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, 
+                        MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                }
+                else MessageBox.Show("Поиск по тексту цитаты не реализован в данной версии программы!", new assembly().AssemblyProduct, 
+                    MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+            }
+        }
+
+        void tabControl_VisibleChanged(object sender, EventArgs e)
+        {
+            if (tabControl.Visible)
+            {
+                this.Enabled = true;
+                this.SetVisibility();
+            }
+            else
+            {
+                this.Enabled = false;
+            }
+        }
+
+        void auth_Click(object sender, EventArgs e)
+        {
+            new AskPassword(tabControl);
+        }
+
+        void addQuote_Click(object sender, EventArgs e)
+        {
+            tabControl.AddPage(new pageQuoteEditor());
         }
 
         void searchQuote_LostFocus(object sender, EventArgs e)
@@ -60,7 +118,7 @@ namespace QuotePad
         // Set Visible property for each item in main menu
         public void SetVisibility()
         {
-            bool isSuperUser = true; // Here is should be external call to check isAdminLoggedIn?
+            bool isSuperUser = (Authorization.userType == UserType.Editor);
             foreach (ToolStripItem item in this.Items)
             {
                 if (item is ToolStripButtonPrototype)

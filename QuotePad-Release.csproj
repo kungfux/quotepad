@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="assembly.cs" />
     <Compile Include="Authorization.cs" />
+	<Compile Include="AskPassword.cs" />
     <Compile Include="AuthorManager.cs">
       <SubType>Component</SubType>
     </Compile>
