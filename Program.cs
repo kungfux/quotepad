@@ -31,9 +31,9 @@ namespace QuotePad
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Database.InitDb();
+                //Database.InitDb();
                 Application.Run(new QuotePad.mainForm());
-                Database.Disconnect();
+                //Database.Disconnect();
             }
             else
             {

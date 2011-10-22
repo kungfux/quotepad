@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7032E130-8F44-49F5-92C0-3443CE581AB5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -15,6 +15,7 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -90,8 +91,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ItWorks.OleDb, Version=1.0.1.2, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ItWorks.OleDb">
       <HintPath>dep\ItWorks.OleDb.dll</HintPath>
     </Reference>
     <Reference Include="ItWorks.RTFed">

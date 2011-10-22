@@ -11,15 +11,15 @@ namespace QuotePad
     {
         static Database()
         {
-            connector.SetTrace(true, "db.err", ItWorks.OleDb.TraceLevel.QueryWithMessage);
+            //connector.SetTrace(true, "db.err", ItWorks.OleDb.TraceLevel.QueryWithMessage);
             if (!Database.Connect()) MessageBox.Show("Не удалось установить соединение с базой данных!",
                 new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
-        public static void Disconnect()
-        {
-            connector.Disconnect();
-        }
+        //public static void Disconnect()
+        //{
+        //    connector.Disconnect();
+        //}
 
         public static ItWorks.OleDb connector = new ItWorks.OleDb();
 

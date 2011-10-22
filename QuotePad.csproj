@@ -123,7 +123,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dep\ItWorks.OleDb.dll</HintPath>
     </Reference>
-    <Reference Include="ItWorks.RTFed">
+    <Reference Include="ItWorks.RTFed, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>dep\ItWorks.RTFed.dll</HintPath>
     </Reference>
     <Reference Include="System" />

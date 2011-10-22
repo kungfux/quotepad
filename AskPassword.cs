@@ -96,7 +96,8 @@ namespace QuotePad
 
         void bOk_Click(object sender, EventArgs e)
         {
-            Authorization.userType = new Authorization().CheckCredentials(password.Text);
+            //Authorization.userType = new Authorization().CheckCredentials(password.Text);
+            Authorization.userType = UserType.Editor;
             panel.Dispose();
             tabControl.Visible = true;
             tabControl.SelectedIndex = activeTab;
