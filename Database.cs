@@ -237,7 +237,10 @@ namespace QuotePad
                 new OleDbParameter("@txt", TXTQuote),
                 new OleDbParameter("@favorite", IsFavorite),
                 new OleDbParameter("@datetime", DateTime.Now.ToString())) >= 0)
+            {
+                ReInitRandomPlease();
                 return true;
+            }
             else return false;
         }
 
@@ -260,7 +263,10 @@ namespace QuotePad
         {
             if (connector.ChangeData("DELETE FROM tQUOTES WHERE pID = @id",
                 new OleDbParameter("@id", QuoteID)) >= 0)
+            {
+                ReInitRandomPlease();
                 return true;
+            }
             else return false;
         }
 
@@ -337,27 +343,34 @@ namespace QuotePad
         #region Random Read
 
         public static double BufferSize = 0.2; // In persents
-        public static bool IsReady = false; // Is Buffer has been initialized and etc.
 
+        private static bool IsReady = false; // Is Buffer has been initialized and etc.
         private static Random rnd = new Random();
         private static Int32[] Buffer;
         private static Int32 Max;
         private static Int32 RandomValue;
         private static Objects.Quote RandomQuote;
 
+        private static void ReInitRandomPlease()
+        {
+            IsReady = false;
+        }
+
         private static void RandomInit()
         {
             Int32 RecordsCount = connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
             Buffer = new Int32[(Int32)(RecordsCount * BufferSize)];
             if (RecordsCount > 0)
-                Max = connector.SelectCell<Int32>("SELECT MAX(pID) FROM tQUOTES");
-            else Max = 0;
-
-            // Init Buffer
-            for (int a = 0; a < Buffer.Length; a++)
             {
-                Buffer[a] = 0;
+                Max = connector.SelectCell<Int32>("SELECT MAX(pID) FROM tQUOTES");
+                
+                // Init Buffer
+                for (int a = 0; a < Buffer.Length; a++)
+                {
+                    Buffer[a] = 0;
+                }
             }
+            else Max = 0;
         }
 
         private static void UpdateBuffer(Int32 value)

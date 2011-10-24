@@ -34,13 +34,13 @@ namespace QuotePad
             searchQuote.Alignment = ToolStripItemAlignment.Right;
             searchQuote.GotFocus += new EventHandler(searchQuote_GotFocus);
             searchQuote.LostFocus += new EventHandler(searchQuote_LostFocus);
-            searchQuote.KeyUp += new KeyEventHandler(searchQuote_KeyUp);
+            searchQuote.KeyDown += new KeyEventHandler(searchQuote_KeyDown);
             this.Items.Add(searchQuote);
 
             tabControl.VisibleChanged += new EventHandler(tabControl_VisibleChanged);
         }
 
-        void searchQuote_KeyUp(object sender, KeyEventArgs e)
+        void searchQuote_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && searchQuote.Text.Length > 0)
             {
@@ -52,11 +52,11 @@ namespace QuotePad
                         tabControl.AddPage(new pageQuoteView(tabControl, quoteId));
                         searchQuote.Text = defSearchText;
                     }
-                    else MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, 
-                        MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                    else MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct,
+                        MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
-                else MessageBox.Show("Поиск по тексту цитаты не реализован в данной версии программы!", new assembly().AssemblyProduct, 
-                    MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                else MessageBox.Show("Поиск по тексту цитаты не реализован в данной версии программы!", new assembly().AssemblyProduct,
+                    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 

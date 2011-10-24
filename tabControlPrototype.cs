@@ -87,7 +87,8 @@ namespace QuotePad
             Page.Tag = sequenceNumber++.ToString(); // Define unique number of page
             tabPages.Add(Page);
             this.TabPages.Add(tabPages[tabPages.Count - 1]);
-            this.SelectedIndex = tabPages.Count - 1;
+            //this.SelectedIndex = tabPages.Count - 1;
+            this.SelectedIndex = this.TabPages.Count - 1;
             TabControlPrototype_Selected(this, null);
         }
 

@@ -91,10 +91,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ItWorks.OleDb">
+    <Reference Include="ItWorks.OleDb, Version=1.0.1.2, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>dep\ItWorks.OleDb.dll</HintPath>
     </Reference>
-    <Reference Include="ItWorks.RTFed">
+    <Reference Include="ItWorks.RTFed, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>dep\ItWorks.RTFed.dll</HintPath>
     </Reference>
     <Reference Include="System" />

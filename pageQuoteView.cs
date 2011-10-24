@@ -144,6 +144,10 @@ namespace QuotePad
                 editQuote.Enabled = false;
                 infoAuthor.Enabled = false;
                 deleteQuote.Enabled = false;
+                rtfed.RtfTextBox.Rtf = "";
+                g.Text = " Текст цитаты ";
+                authorImage.Image = null;
+                quoteInfo.Text = "";
                 MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
                      MessageBoxIcon.Information);
             }
