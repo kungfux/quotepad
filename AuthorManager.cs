@@ -66,11 +66,11 @@ namespace QuotePad
             this.AddToolStripItem(confToolStrip.toolStripSave);
             this.AddToolStripItem(confToolStrip.toolStripDelete);
             this.AddToolStripItem(new ToolStripSeparatorPrototype());
-            this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные авторы:"));
-            change_photo = new ToolStripButtonPrototype("Изменить фото", Resources._1315515132_edit);
+            //this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные авторы:"));
+            change_photo = new ToolStripButtonPrototype("Изменить фото", Resources.addPhoto_64);
             change_photo.Click += new EventHandler(change_photo_Click);
             this.AddToolStripItem(change_photo);
-            clear_photo = new ToolStripButtonPrototype("Удалить фото", Resources._1315515132_edit);
+            clear_photo = new ToolStripButtonPrototype("Удалить фото", Resources.clearPhoto_64);
             clear_photo.Click += new EventHandler(clear_photo_Click);
             this.AddToolStripItem(clear_photo);
             this.AddToolStripItem(comboBox);

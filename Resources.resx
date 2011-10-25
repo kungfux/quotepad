@@ -118,43 +118,46 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="error" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\error.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="addPhoto_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\addPhoto.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolbar_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\1301004262_001_01.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="add_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\add.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolbar_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\1303582509_DeleteRed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="apply_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\apply.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolbar_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\1301004227_001_45.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="authorize_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\authorize.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolbar_save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\1301004223_001_06.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="clearPhoto_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\clearPhoto.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_1315511677_old_edit_find" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\1315511677_old-edit-find.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="createNew_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\createNew.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_1315515132_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\1315515132_edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="delete_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\delete.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_1315515285_Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\1315515285_Add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="edit_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\edit.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_1315515375_quit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\1315515375_quit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="info_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\info.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="arrowLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\arrowLeft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="next_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\next.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="arrowRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\arrowRight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="noPhoto_128" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\noPhoto.128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="infoAuthor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\infoAuthor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="previous_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\previous.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="random_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\random.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="viewQuotes_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\viewQuotes.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

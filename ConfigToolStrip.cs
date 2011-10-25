@@ -54,24 +54,24 @@ namespace QuotePad
                         switch (index)
                         {
                             case 0:
-                                toolStripAdd = new ToolStripButtonPrototype(s_add, Resources.toolbar_add);
+                                toolStripAdd = new ToolStripButtonPrototype(s_add, Resources.add_64);
                                 toolStripAdd.Click += new EventHandler(add_Click);
                                 //toolStrip.Items.Add(toolStripAdd);
                                 break;
                             case 1:
-                                toolStripEdit = new ToolStripButtonPrototype(s_edit, Resources.toolbar_edit);
+                                toolStripEdit = new ToolStripButtonPrototype(s_edit, Resources.edit_64);
                                 toolStripEdit.Click += new EventHandler(edit_Click);
                                 toolStripEdit.Enabled = false;
                                 //toolStrip.Items.Add(toolStripEdit);
                                 break;
                             case 2:
-                                toolStripSave = new ToolStripButtonPrototype(s_save, Resources.toolbar_save);
+                                toolStripSave = new ToolStripButtonPrototype(s_save, Resources.apply_64);
                                 //toolStripSave.Click += new EventHandler(save_Click);
                                 toolStripSave.Enabled = false;
                                 //toolStrip.Items.Add(toolStripSave);
                                 break;
                             case 3:
-                                toolStripDelete = new ToolStripButtonPrototype(s_delete, Resources.toolbar_delete);
+                                toolStripDelete = new ToolStripButtonPrototype(s_delete, Resources.delete_64);
                                 toolStripDelete.Enabled = false;
                                 //toolStrip.Items.Add(toolStripDelete);
                                 break;
@@ -232,14 +232,14 @@ namespace QuotePad
 
         private void ApplyWarningImage(Control c)
         {
-            if (UseWarningImages)
-            {
-                PictureBox w = new PictureBox();
-                w.Image = Resources.error;
-                w.Name = "WarningImage_" + c.Name;
-                w.Location = new Point(c.Left + c.Width + 1, c.Top + ((c.Height - Resources.error.Height) / 2));
-                c.Parent.Controls.Add(w);
-            }
+            //if (UseWarningImages)
+            //{
+            //    PictureBox w = new PictureBox();
+            //    w.Image = Resources.error;
+            //    w.Name = "WarningImage_" + c.Name;
+            //    w.Location = new Point(c.Left + c.Width + 1, c.Top + ((c.Height - Resources.error.Height) / 2));
+            //    c.Parent.Controls.Add(w);
+            //}
         }
 
         private void ClearWarningImage(Control c)

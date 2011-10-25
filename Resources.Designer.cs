@@ -60,93 +60,100 @@ namespace QuotePad {
             }
         }
         
-        internal static System.Drawing.Bitmap _1315511677_old_edit_find {
+        internal static System.Drawing.Bitmap add_64 {
             get {
-                object obj = ResourceManager.GetObject("_1315511677_old_edit_find", resourceCulture);
+                object obj = ResourceManager.GetObject("add_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap _1315515132_edit {
+        internal static System.Drawing.Bitmap addPhoto_64 {
             get {
-                object obj = ResourceManager.GetObject("_1315515132_edit", resourceCulture);
+                object obj = ResourceManager.GetObject("addPhoto_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap _1315515285_Add {
+        internal static System.Drawing.Bitmap apply_64 {
             get {
-                object obj = ResourceManager.GetObject("_1315515285_Add", resourceCulture);
+                object obj = ResourceManager.GetObject("apply_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap _1315515375_quit {
+        internal static System.Drawing.Bitmap authorize_64 {
             get {
-                object obj = ResourceManager.GetObject("_1315515375_quit", resourceCulture);
+                object obj = ResourceManager.GetObject("authorize_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap arrowLeft {
+        internal static System.Drawing.Bitmap clearPhoto_64 {
             get {
-                object obj = ResourceManager.GetObject("arrowLeft", resourceCulture);
+                object obj = ResourceManager.GetObject("clearPhoto_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap arrowRight {
+        internal static System.Drawing.Bitmap createNew_64 {
             get {
-                object obj = ResourceManager.GetObject("arrowRight", resourceCulture);
+                object obj = ResourceManager.GetObject("createNew_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap error {
+        internal static System.Drawing.Bitmap delete_64 {
             get {
-                object obj = ResourceManager.GetObject("error", resourceCulture);
+                object obj = ResourceManager.GetObject("delete_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap infoAuthor {
+        internal static System.Drawing.Bitmap edit_64 {
             get {
-                object obj = ResourceManager.GetObject("infoAuthor", resourceCulture);
+                object obj = ResourceManager.GetObject("edit_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap refresh {
+        internal static System.Drawing.Bitmap info_64 {
             get {
-                object obj = ResourceManager.GetObject("refresh", resourceCulture);
+                object obj = ResourceManager.GetObject("info_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap toolbar_add {
+        internal static System.Drawing.Bitmap next_64 {
             get {
-                object obj = ResourceManager.GetObject("toolbar_add", resourceCulture);
+                object obj = ResourceManager.GetObject("next_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap toolbar_delete {
+        internal static System.Drawing.Bitmap noPhoto_128 {
             get {
-                object obj = ResourceManager.GetObject("toolbar_delete", resourceCulture);
+                object obj = ResourceManager.GetObject("noPhoto_128", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap toolbar_edit {
+        internal static System.Drawing.Bitmap previous_64 {
             get {
-                object obj = ResourceManager.GetObject("toolbar_edit", resourceCulture);
+                object obj = ResourceManager.GetObject("previous_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap toolbar_save {
+        internal static System.Drawing.Bitmap random_64 {
             get {
-                object obj = ResourceManager.GetObject("toolbar_save", resourceCulture);
+                object obj = ResourceManager.GetObject("random_64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap viewQuotes_64 {
+            get {
+                object obj = ResourceManager.GetObject("viewQuotes_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

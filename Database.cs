@@ -148,9 +148,11 @@ namespace QuotePad
                 list[theme].ID = (int)themes.Rows[theme].ItemArray[0];
                 list[theme].FIO = (string)themes.Rows[theme].ItemArray[1];
                 list[theme].About = (string)themes.Rows[theme].ItemArray[2];
+                connector.SetTrace(false);
                 list[theme].Photo =
                     connector.GetImage("SELECT pPHOTO FROM tAUTHORS WHERE pID = " +
                     themes.Rows[theme].ItemArray[0]);
+                connector.SetTrace(true);
             }
             return list;
         }

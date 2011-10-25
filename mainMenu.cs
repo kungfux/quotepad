@@ -16,12 +16,12 @@ namespace QuotePad
         {
             tabcontrol = tabControl;
             ToolStripMenuItem quote = new ToolStripMenuItem("Цитата");
-            ToolStripMenuItem quote_view = new ToolStripMenuItem("Просмотр", Resources._1315511677_old_edit_find);
+            ToolStripMenuItem quote_view = new ToolStripMenuItem("Просмотр");
             quote_view.Click += new EventHandler(quote_view_Click);
-            ToolStripMenuItem quote_add = new ToolStripMenuItem("Добавить", Resources._1315515285_Add);
+            ToolStripMenuItem quote_add = new ToolStripMenuItem("Добавить");
             quote_add.Click += new EventHandler(quote_add_Click);
             quote_add.Tag = this.adminTag;
-            ToolStripMenuItem quote_quit = new ToolStripMenuItem("Выход", Resources._1315515375_quit);
+            ToolStripMenuItem quote_quit = new ToolStripMenuItem("Выход");
             quote_quit.Click += new EventHandler(quote_quit_Click);
             quote.DropDownItems.Add(quote_view);
             quote.DropDownItems.Add(quote_add);

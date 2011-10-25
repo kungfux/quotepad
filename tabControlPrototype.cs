@@ -20,6 +20,8 @@ namespace QuotePad
         /// </summary>
         public TabControlPrototype()
         {
+            this.ItemSize = new Size(this.ItemSize.Width, 20);
+            this.Font = new Font(this.Font.FontFamily, 10);
             this.MouseUp += new MouseEventHandler(tabControl_MouseUp);
             this.Selected += new TabControlEventHandler(TabControlPrototype_Selected);
         }

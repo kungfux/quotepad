@@ -13,24 +13,28 @@ namespace QuotePad
 
         public ToolStripPrototype(TabControlPrototype tabcontrol)
         {
+            this.AutoSize = false;
+            this.Height = 68;
             tabControl = tabcontrol;
 
-            ToolStripButtonPrototype viewQuote = new ToolStripButtonPrototype("Просмотр цитат", Resources._1315511677_old_edit_find);
+            ToolStripButtonPrototype viewQuote = new ToolStripButtonPrototype("Просмотр цитат", Resources.viewQuotes_64);
             viewQuote.Click += new EventHandler(viewQuote_Click);
             this.Items.Add(viewQuote);
 
-            ToolStripButtonPrototype addQuote = new ToolStripButtonPrototype("Добавить новую цитату", Resources._1315515285_Add);
+            ToolStripButtonPrototype addQuote = new ToolStripButtonPrototype("Добавить новую цитату", Resources.createNew_64);
             addQuote.isForSupervisorOnly = true;
             addQuote.Click += new EventHandler(addQuote_Click);
             this.Items.Add(addQuote);
 
-            ToolStripButtonPrototype auth = new ToolStripButtonPrototype("Авторизоваться", Resources.infoAuthor);
+            ToolStripButtonPrototype auth = new ToolStripButtonPrototype("Авторизоваться", Resources.authorize_64);
             auth.Click += new EventHandler(auth_Click);
             this.Items.Add(auth);
 
             searchQuote = new ToolStripTextBox();
+            searchQuote.Visible = false;
+            searchQuote.Width = 220;
             searchQuote.Text = defSearchText;
-            searchQuote.Font = new System.Drawing.Font(searchQuote.Font.FontFamily, searchQuote.Font.Size, System.Drawing.FontStyle.Italic);
+            searchQuote.Font = new System.Drawing.Font(searchQuote.Font.FontFamily, 14, System.Drawing.FontStyle.Italic);
             searchQuote.Alignment = ToolStripItemAlignment.Right;
             searchQuote.GotFocus += new EventHandler(searchQuote_GotFocus);
             searchQuote.LostFocus += new EventHandler(searchQuote_LostFocus);

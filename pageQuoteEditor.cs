@@ -41,7 +41,7 @@ namespace QuotePad
             this.AddToolStripItem(confToolStrip.toolStripAdd);
             this.AddToolStripItem(confToolStrip.toolStripSave);
             this.AddToolStripItem(new ToolStripSeparatorPrototype());
-            this.AddToolStripItem(new ToolStripLabelPrototype("Укажите автора и тему"));
+            //this.AddToolStripItem(new ToolStripLabelPrototype("Укажите автора и тему"));
             this.AddToolStripItem(cAuthors);
             this.AddToolStripItem(cThemes);
 

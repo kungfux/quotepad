@@ -34,6 +34,7 @@ namespace QuotePad
             this.Controls.Add(toolBar);
             this.Controls.Add(mainMenu);
 
+            tabControl.AddPage(new pageQuoteView(tabControl));
         }
 
     }

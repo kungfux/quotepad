@@ -134,14 +134,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dep\1315515375_quit.png" />
-    <None Include="dep\1315515285_Add.png" />
-    <None Include="dep\1315515132_edit.png" />
-    <None Include="dep\1315511677_old-edit-find.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -171,28 +166,23 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="dep\1303582509_DeleteRed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dep\1301004223_001_06.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dep\1301004227_001_45.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dep\1301004262_001_01.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dep\error.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="db.mdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="dep\infoAuthor.png" />
-    <None Include="dep\arrowRight.png" />
-    <None Include="dep\arrowLeft.png" />
-    <None Include="dep\refresh.png" />
+    <None Include="dep\viewQuotes.64.png" />
+    <None Include="dep\random.64.png" />
+    <None Include="dep\previous.64.png" />
+    <None Include="dep\next.64.png" />
+    <None Include="dep\info.64.png" />
+    <None Include="dep\edit.64.png" />
+    <None Include="dep\delete.64.png" />
+    <None Include="dep\createNew.64.png" />
+    <None Include="dep\clearPhoto.64.png" />
+    <None Include="dep\authorize.64.png" />
+    <None Include="dep\apply.64.png" />
+    <None Include="dep\addPhoto.64.png" />
+    <None Include="dep\add.64.png" />
+    <None Include="dep\noPhoto.128.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -42,7 +42,7 @@ namespace QuotePad
             this.AddToolStripItem(confToolStrip.toolStripDelete);
             this.AddToolStripItem(comboBox);
             this.AddToolStripItem(new ToolStripSeparatorPrototype());
-            this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные темы:"));
+            //this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные темы:"));
             g.Controls.Add(theme);
             this.Controls.Add(g);
         }
