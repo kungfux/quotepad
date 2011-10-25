@@ -80,6 +80,7 @@ namespace QuotePad
             bCancel.Click += new EventHandler(bCancel_Click);
             bOk.Click += new EventHandler(bOk_Click);
             password.TextChanged += new EventHandler(password_TextChanged);
+            password.Select();
         }
 
         void password_TextChanged(object sender, EventArgs e)

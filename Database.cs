@@ -27,7 +27,7 @@ namespace QuotePad
 
         public static bool Connect()
         {
-            if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source="+Application.StartupPath+"\\db.mdb;", true, false))
+            if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source="+Application.StartupPath+"\\db.mdb;", true, true))
             {
                 connector.SetTrace(true, Application.StartupPath + @"\dberr.log", ItWorks.OleDb.TraceLevel.QueryWithMessage);
                 InitDb();

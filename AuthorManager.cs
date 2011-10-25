@@ -14,8 +14,10 @@ namespace QuotePad
         TextBox author = new TextBox();
         TextBox about = new TextBox();
         PictureBox photo = new PictureBox();
-        ToolStripButtonPrototype change_photo;
-        ToolStripButtonPrototype clear_photo;
+        //ToolStripButtonPrototype change_photo;
+        //ToolStripButtonPrototype clear_photo;
+        Button change_photo;
+        Button clear_photo;
 
         public AuthorManager()
         {
@@ -66,13 +68,33 @@ namespace QuotePad
             this.AddToolStripItem(confToolStrip.toolStripSave);
             this.AddToolStripItem(confToolStrip.toolStripDelete);
             this.AddToolStripItem(new ToolStripSeparatorPrototype());
+
             //this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные авторы:"));
-            change_photo = new ToolStripButtonPrototype("Изменить фото", Resources.addPhoto_64);
+            //change_photo = new ToolStripButtonPrototype("Изменить фото", Resources.addPhoto_64);
+            //change_photo.Click += new EventHandler(change_photo_Click);
+            //this.AddToolStripItem(change_photo);
+            //clear_photo = new ToolStripButtonPrototype("Удалить фото", Resources.clearPhoto_64);
+            //clear_photo.Click += new EventHandler(clear_photo_Click);
+            //this.AddToolStripItem(clear_photo);
+
+            change_photo = new Button();
             change_photo.Click += new EventHandler(change_photo_Click);
-            this.AddToolStripItem(change_photo);
-            clear_photo = new ToolStripButtonPrototype("Удалить фото", Resources.clearPhoto_64);
+            change_photo.Size = new System.Drawing.Size(65, 65);
+            change_photo.Location = new Point(20, 20);
+            change_photo.Image = Resources.addPhoto_64;
+            change_photo.FlatStyle = FlatStyle.Standard;
+
+            clear_photo = new Button();
             clear_photo.Click += new EventHandler(clear_photo_Click);
-            this.AddToolStripItem(clear_photo);
+            clear_photo.Size = new System.Drawing.Size(65, 65);
+            clear_photo.Location = new Point(20, 20);
+            clear_photo.Image = Resources.clearPhoto_64;
+            change_photo.Visible = false;
+            clear_photo.Visible = false;
+            g3.Controls.Add(change_photo);
+            g3.Controls.Add(clear_photo);
+            clear_photo.Left = change_photo.Left + change_photo.Width + 3;
+
             this.AddToolStripItem(comboBox);
             SplitContainer s1 = new SplitContainer();
             SplitContainer s2 = new SplitContainer();
@@ -98,13 +120,15 @@ namespace QuotePad
                 MessageBox.Show("Удалить фото этого автора?", "Фото автора", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Database.Author_ClearImage(autors_ids[comboBox.SelectedIndex]);
+                int x = comboBox.SelectedIndex;
+                comboBox_DropDown(this, null);
+                if (comboBox.Items.Count > x) comboBox.SelectedIndex = x;
             }
         }
 
         void change_photo_Click(object sender, EventArgs e)
         {
-            if (comboBox.SelectedIndex != -1 &&
-                MessageBox.Show("Добавить новое фото для автора?", "Фото автора", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (comboBox.SelectedIndex != -1)
             {
                 OpenFileDialog of = new OpenFileDialog();
                 of.ShowDialog();
@@ -114,7 +138,12 @@ namespace QuotePad
                     {
                         MessageBox.Show("Упс! Это ошибка! Сообщите разработчику.");
                     }
-                    else comboBox_SelectedIndexChanged(this, null);
+                    else
+                    {
+                        int x = comboBox.SelectedIndex;
+                        comboBox_DropDown(this, null);
+                        if (comboBox.Items.Count > x) comboBox.SelectedIndex = x;
+                    }
                 }
             }
         }
@@ -179,17 +208,18 @@ namespace QuotePad
             if (comboBox.SelectedIndex != -1)
             {
                 confToolStrip.OpenExternalMethod();
-                author.Text = comboBox.Text;
+                author.Text = autorsFound[comboBox.SelectedIndex].FIO;
                 about.Text = autorsFound[comboBox.SelectedIndex].About;
                 photo.Image = autorsFound[comboBox.SelectedIndex].Photo;
-                change_photo.Enabled = true;
-                if (photo.Image != null) clear_photo.Enabled = true;
-                else clear_photo.Enabled = false;
+                change_photo.Visible = true;
+                if (photo.Image != null) clear_photo.Visible = true;
+                else clear_photo.Visible = false;
             }
             else
             {
-                change_photo.Enabled = false;
-                clear_photo.Enabled = false;
+                photo.Image = null;
+                change_photo.Visible = false;
+                clear_photo.Visible = false;
             }
         }
 

@@ -8,32 +8,49 @@ namespace QuotePad
     public class pageQuoteView : TabPagePrototype
     {
         ItWorks.RTFed rtfed = new ItWorks.RTFed();
-        Objects.Quote currentQuote;
+        Objects.Quote currentQuote = new Objects.Quote();
+        Objects.Quote tempQuote;
         PictureBox authorImage = new PictureBox();
-        Label quoteInfo = new Label();
-        GroupBox gInfo = new GroupBox();
+        Label authorFIO = new Label();
+        TextBox authorAbout = new TextBox();
         private TabControlPrototype tabcontrol;
         ToolStripButtonPrototype editQuote;
-        ToolStripButtonPrototype infoAuthor;
+        //ToolStripButtonPrototype infoAuthor;
         ToolStripButtonPrototype deleteQuote;
         ToolStripButtonPrototype prevQuote;
         ToolStripButtonPrototype nextQuote;
+        SplitContainer s;
 
         public pageQuoteView(TabControlPrototype tabControl, int displayQuote = -1)
         {
             tabcontrol = tabControl;
             this.Text = "Просмотр";            
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
-            gInfo.Text = " Информация ";
-            gInfo.Dock = DockStyle.Right;
-            gInfo.Width = 250;
+            rtfed.RtfTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            rtfed.RtfTextBox.BackColor = authorFIO.BackColor;
             authorImage.SizeMode = PictureBoxSizeMode.Zoom;
-            authorImage.Size = new System.Drawing.Size(250,250);
-            quoteInfo.AutoSize = false;
-            quoteInfo.Bounds = new System.Drawing.Rectangle(0, 250, 250, 500);
-            quoteInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            gInfo.Controls.Add(authorImage);
-            gInfo.Controls.Add(quoteInfo);
+            authorImage.Dock = DockStyle.Fill;
+            //authorFIO.AutoSize = false;
+            authorFIO.Dock = DockStyle.Fill;
+            authorFIO.Bounds = new System.Drawing.Rectangle(0, 250, 250, 500);
+            authorFIO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            authorAbout.ReadOnly = true;
+            authorAbout.BackColor = authorFIO.BackColor;
+            authorAbout.Multiline = true;
+            authorAbout.ScrollBars = ScrollBars.Vertical;
+            authorAbout.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            authorAbout.Dock = DockStyle.Fill;
+
+            TableLayoutPanel p = new TableLayoutPanel();
+            p.Dock = DockStyle.Fill;
+            p.ColumnCount = 1;
+            p.RowCount = 3;
+            p.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            p.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            p.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            p.Controls.Add(authorImage, 0, 0);
+            p.Controls.Add(authorFIO, 0, 1);
+            p.Controls.Add(authorAbout, 0, 2);
 
             editQuote = new ToolStripButtonPrototype("Редактировать цитату", Resources.edit_64);
             editQuote.Enabled = false;
@@ -41,12 +58,12 @@ namespace QuotePad
             editQuote.Click += new EventHandler(editQuote_Click);
             this.AddToolStripItem(editQuote);
 
-            infoAuthor = new ToolStripButtonPrototype("Информация", Resources.info_64);
-            infoAuthor.CheckOnClick = true;
-            infoAuthor.Checked = true;
-            infoAuthor.Enabled = false;
-            infoAuthor.Click += new EventHandler(infoAuthor_Click);
-            this.AddToolStripItem(infoAuthor);
+            //infoAuthor = new ToolStripButtonPrototype("Информация", Resources.info_64);
+            //infoAuthor.CheckOnClick = true;
+            //infoAuthor.Checked = true;
+            //infoAuthor.Enabled = false;
+            //infoAuthor.Click += new EventHandler(infoAuthor_Click);
+            //this.AddToolStripItem(infoAuthor);
 
             deleteQuote = new ToolStripButtonPrototype("Удалить цитату", Resources.delete_64);
             deleteQuote.Enabled = false;
@@ -68,8 +85,13 @@ namespace QuotePad
             this.AddToolStripItem(nextQuote);
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
             rtfed.RtfTextBox.ReadOnly = true;
-            this.Controls.Add(rtfed.RtfTextBox);
-            this.Controls.Add(gInfo);
+
+            s = new SplitContainer();
+            s.SplitterDistance = (s.Width / 2) + (s.Width / 2) / 2;
+            s.Dock = DockStyle.Fill;
+            s.Panel1.Controls.Add(rtfed.RtfTextBox);
+            s.Panel2.Controls.Add(p);
+            this.Controls.Add(s);
             if (displayQuote == -1)
             {
                 randomQuote_Click(this, null);
@@ -93,10 +115,10 @@ namespace QuotePad
             }
         }
 
-        void infoAuthor_Click(object sender, EventArgs e)
-        {
-            gInfo.Visible = !gInfo.Visible;
-        }
+        //void infoAuthor_Click(object sender, EventArgs e)
+        //{
+        //    gInfo.Visible = !gInfo.Visible;
+        //}
 
         void editQuote_Click(object sender, EventArgs e)
         {
@@ -108,53 +130,64 @@ namespace QuotePad
 
         void nextQuote_Click(object sender, EventArgs e)
         {
-            currentQuote = Database.Quote_ReadNext(currentQuote.ID);
-            if (currentQuote.ID == 0) nextQuote.Enabled = false;
-            qRefresh();
+            tempQuote = Database.Quote_ReadNext(currentQuote.ID);
+            if (tempQuote.ID == 0)
+            {
+                nextQuote.Enabled = false;
+                MessageBox.Show("Следующая цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
+                     MessageBoxIcon.Information);
+            }
+            else
+            {
+                currentQuote = tempQuote;
+                qRefresh();
+            }
         }
 
         void randomQuote_Click(object sender, EventArgs e)
         {
-            currentQuote = Database.Quote_RandomRead();
-            qRefresh();
+            tempQuote = Database.Quote_RandomRead();
+            if (tempQuote.ID != 0)
+            {
+                currentQuote = tempQuote;
+                qRefresh();
+            }
+            else
+            {
+                MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
+                     MessageBoxIcon.Information);
+            }
         }
 
         void prevQuote_Click(object sender, EventArgs e)
         {
-            currentQuote = Database.Quote_ReadPrevious(currentQuote.ID);
-            if (currentQuote.ID == 0) prevQuote.Enabled = false;
-            qRefresh();
+            tempQuote = Database.Quote_ReadPrevious(currentQuote.ID);
+            if (tempQuote.ID == 0)
+            {
+                prevQuote.Enabled = false;
+                MessageBox.Show("Предыдущая цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
+                     MessageBoxIcon.Information);
+            }
+            else
+            {
+                currentQuote = tempQuote;
+                qRefresh();
+            }
         }
 
         private void qRefresh()
         {
-            if (currentQuote.ID != 0)
-            {
-                prevQuote.Enabled = true;
-                nextQuote.Enabled = true;
-                editQuote.Enabled = true;
-                infoAuthor.Enabled = true;
-                deleteQuote.Enabled = true;
-                rtfed.RtfTextBox.Rtf = currentQuote.RTF;
-                //g.Text = " Текст цитаты №" + currentQuote.ID.ToString();
-                authorImage.Image = currentQuote.QuoteAuthor.Photo;
-                quoteInfo.Text = currentQuote.QuoteAuthor.FIO + Environment.NewLine + Environment.NewLine
-                    + currentQuote.QuoteAuthor.About + Environment.NewLine + Environment.NewLine
-                    + "Дата модификации: " + currentQuote.WhenCreated.ToShortDateString() + " "
-                    + currentQuote.WhenCreated.ToShortTimeString();
-            }
-            else
-            {
-                editQuote.Enabled = false;
-                infoAuthor.Enabled = false;
-                deleteQuote.Enabled = false;
-                rtfed.RtfTextBox.Rtf = "";
-                //g.Text = " Текст цитаты ";
-                authorImage.Image = null;
-                quoteInfo.Text = "";
-                MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
-                     MessageBoxIcon.Information);
-            }
+            prevQuote.Enabled = true;
+            nextQuote.Enabled = true;
+            editQuote.Enabled = true;
+            //infoAuthor.Enabled = true;
+            deleteQuote.Enabled = true;
+            rtfed.RtfTextBox.Rtf = currentQuote.RTF;
+            //g.Text = " Текст цитаты №" + currentQuote.ID.ToString();
+            authorImage.Image = currentQuote.QuoteAuthor.Photo;
+            if (authorImage.Image == null) authorImage.Image = Resources.noPhoto_128;
+            authorFIO.Text = currentQuote.QuoteAuthor.FIO.TrimEnd(new char[] { ' ' });
+            authorAbout.Text = currentQuote.QuoteAuthor.About;
         }
     }
 }
