@@ -15,9 +15,10 @@ namespace QuotePad
 
     class Authorization
     {
-        private string PasswordRegistryPath = "Software\\ItWorks\\QuotePad";
+        private string PasswordRegistryPath = "Software\\ItWorksTeam\\QuotePad";
         private string PasswordRegistryKey = "Password";
         public static UserType userType = UserType.Viewer;
+        ItWorks.Registry regedit = new ItWorks.Registry();
 
         public void SetNewPassword(string NewPassword)
         {
@@ -28,9 +29,8 @@ namespace QuotePad
             string passHashPass = Convert.ToBase64String(Myhash.Hash);
             //MessageBox.Show("HASH: " + passHashPass);
 
-            RegistryKey saveKey = Registry.LocalMachine.CreateSubKey(PasswordRegistryPath);
-            saveKey.SetValue(PasswordRegistryKey, passHashPass);
-            saveKey.Close();
+            regedit.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+                PasswordRegistryPath, PasswordRegistryKey, passHashPass);
         }
 
         public bool ChangeExistingPassword(string OldPassword, string NewPassword)
@@ -52,9 +52,8 @@ namespace QuotePad
 
             if (GetPasswordFromRegistry() == hashPass_old)
             {
-                RegistryOperations r1 = new RegistryOperations();
-                r1.SaveKeyToRegistry(PasswordRegistryPath, PasswordRegistryKey, hashPass_new);
-                return true;
+                return regedit.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+                    PasswordRegistryPath, PasswordRegistryKey, hashPass_new);
             }
             else
             { 
@@ -66,9 +65,8 @@ namespace QuotePad
         private string GetPasswordFromRegistry()
         {
             //getting hash value of password from registry
-            RegistryOperations r1 = new RegistryOperations();
-            string passwordFromRegistry = r1.ReadKeyFromRegistry(PasswordRegistryPath, PasswordRegistryKey);
-            return passwordFromRegistry;
+            return regedit.ReadKey<string>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+                PasswordRegistryPath, PasswordRegistryKey, "");
         }
 
         public UserType CheckCredentials(string EnteredPassword)
@@ -86,8 +84,7 @@ namespace QuotePad
             }
             else
             {
-                //return UserType.Viewer; // if entered password is not correct
-                return UserType.Editor;
+                return UserType.Viewer; // if entered password is not correct
             }
         }
     }

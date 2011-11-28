@@ -25,6 +25,7 @@ Source: ".\bin\Release\QuotePad.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\bin\Release\db.mdb"; DestDir: "{app}"; Flags: confirmoverwrite
 Source: ".\bin\Release\ItWorks.OleDb.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\bin\Release\ItWorks.RTFed.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\bin\Release\ItWorks.Registry.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
