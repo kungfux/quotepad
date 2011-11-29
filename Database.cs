@@ -505,8 +505,8 @@ namespace QuotePad
 
         public static Objects.Quote[] Quote_FindByText(string Text)
         {
-            DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE ucase(ptxtQUOTE) LIKE \"*@text*\"",
-                new OleDbParameter("@text", Text));
+            DataTable found = connector.SelectTable("SELECT * FROM tQUOTES WHERE ptxtQUOTE LIKE @text",
+                new OleDbParameter("@text", "%" + Text + "%"));
             if (found != null)
             {
                 Objects.Quote[] result = new Objects.Quote[found.Rows.Count];

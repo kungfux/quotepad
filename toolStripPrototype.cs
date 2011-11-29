@@ -31,7 +31,7 @@ namespace QuotePad
             this.Items.Add(auth);
 
             searchQuote = new ToolStripTextBox();
-            searchQuote.Visible = false;
+            searchQuote.Visible = true;
             searchQuote.Width = 220;
             searchQuote.Text = defSearchText;
             searchQuote.Font = new System.Drawing.Font(searchQuote.Font.FontFamily, 14, System.Drawing.FontStyle.Italic);
@@ -59,8 +59,17 @@ namespace QuotePad
                     else MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct,
                         MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
-                else MessageBox.Show("Поиск по тексту цитаты не реализован в данной версии программы!", new assembly().AssemblyProduct,
-                    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                else
+                {
+                    Objects.Quote[] foundQuotes = Database.Quote_FindByText(searchQuote.Text);
+                    if (foundQuotes.Length > 0)
+                    {
+                        tabControl.AddPage(new pageQuoteView(tabControl, foundQuotes[0].ID));
+                        searchQuote.Text = defSearchText;
+                    }
+                    else MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct,
+                           MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
             }
         }
 
