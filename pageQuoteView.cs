@@ -15,11 +15,12 @@ namespace QuotePad
         TextBox authorAbout = new TextBox();
         private TabControlPrototype tabcontrol;
         ToolStripButtonPrototype editQuote;
-        //ToolStripButtonPrototype infoAuthor;
+        ToolStripButtonPrototype infoAuthor;
         ToolStripButtonPrototype deleteQuote;
         ToolStripButtonPrototype prevQuote;
         ToolStripButtonPrototype nextQuote;
         SplitContainer s;
+        TableLayoutPanel backpanel; // back panel for displaying info about author
 
         public pageQuoteView(TabControlPrototype tabControl, int displayQuote = -1)
         {
@@ -41,29 +42,29 @@ namespace QuotePad
             authorAbout.BorderStyle = System.Windows.Forms.BorderStyle.None;
             authorAbout.Dock = DockStyle.Fill;
 
-            TableLayoutPanel p = new TableLayoutPanel();
-            p.Dock = DockStyle.Fill;
-            p.ColumnCount = 1;
-            p.RowCount = 3;
-            p.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            p.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            p.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            p.Controls.Add(authorImage, 0, 0);
-            p.Controls.Add(authorFIO, 0, 1);
-            p.Controls.Add(authorAbout, 0, 2);
+            backpanel = new TableLayoutPanel();
+            backpanel.Dock = DockStyle.Fill;
+            backpanel.ColumnCount = 1;
+            backpanel.RowCount = 3;
+            backpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            backpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            backpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            backpanel.Controls.Add(authorImage, 0, 0);
+            backpanel.Controls.Add(authorFIO, 0, 1);
+            backpanel.Controls.Add(authorAbout, 0, 2);
+
+            infoAuthor = new ToolStripButtonPrototype("Информация", Resources.info_64);
+            infoAuthor.CheckOnClick = true;
+            infoAuthor.Checked = true;
+            //infoAuthor.Enabled = false;
+            infoAuthor.Click += new EventHandler(infoAuthor_Click);
+            this.AddToolStripItem(infoAuthor);
 
             editQuote = new ToolStripButtonPrototype("Редактировать цитату", Resources.edit_64);
             editQuote.Enabled = false;
             editQuote.isForSupervisorOnly = true;
             editQuote.Click += new EventHandler(editQuote_Click);
             this.AddToolStripItem(editQuote);
-
-            //infoAuthor = new ToolStripButtonPrototype("Информация", Resources.info_64);
-            //infoAuthor.CheckOnClick = true;
-            //infoAuthor.Checked = true;
-            //infoAuthor.Enabled = false;
-            //infoAuthor.Click += new EventHandler(infoAuthor_Click);
-            //this.AddToolStripItem(infoAuthor);
 
             deleteQuote = new ToolStripButtonPrototype("Удалить цитату", Resources.delete_64);
             deleteQuote.Enabled = false;
@@ -90,7 +91,7 @@ namespace QuotePad
             s.SplitterDistance = (s.Width / 2) + (s.Width / 2) / 2;
             s.Dock = DockStyle.Fill;
             s.Panel1.Controls.Add(rtfed.RtfTextBox);
-            s.Panel2.Controls.Add(p);
+            s.Panel2.Controls.Add(backpanel);
             this.Controls.Add(s);
             if (displayQuote == -1)
             {
@@ -115,10 +116,10 @@ namespace QuotePad
             }
         }
 
-        //void infoAuthor_Click(object sender, EventArgs e)
-        //{
-        //    gInfo.Visible = !gInfo.Visible;
-        //}
+        void infoAuthor_Click(object sender, EventArgs e)
+        {
+            backpanel.Visible = !backpanel.Visible;
+        }
 
         void editQuote_Click(object sender, EventArgs e)
         {
