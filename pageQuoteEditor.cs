@@ -20,6 +20,7 @@ namespace QuotePad
         {
             this.Text = "Редактор";
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
+            this.BeforeDestroy += new Delete(pageQuoteEditor_BeforeDestroy);
 
             confToolStrip = new ConfigToolStrip(ConfigToolStrip.toolStripButtons.Add | ConfigToolStrip.toolStripButtons.Save);
             confToolStrip.textboxesParent = this;
@@ -57,6 +58,30 @@ namespace QuotePad
                     cAuthors.Text = quote.QuoteAuthor.FIO;
                     cThemes.Text = quote.QuoteTheme.Name;
                     rtfed.RtfTextBox.Rtf = quote.RTF;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ask for saving changes before tab will be closed
+        /// </summary>
+        void pageQuoteEditor_BeforeDestroy()
+        {
+            this.cancelClosing = false;
+            if (confToolStrip.toolStripSave.Enabled && rtfed.RtfTextBox.Text != "")
+            {
+                DialogResult question = MessageBox.Show("Сохранить изменения перед закрытием?",
+                    "Редактор цитат", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                switch (question)
+                {
+                    case DialogResult.Yes:
+                        toolStripSave_Click(this, null);
+                        break;
+                    case DialogResult.No:
+                        break;
+                    case DialogResult.Cancel:
+                        this.cancelClosing = true;
+                        break;
                 }
             }
         }
@@ -109,17 +134,26 @@ namespace QuotePad
                             }
                         }
                         else
-                        if (Database.Quote_Create(autors_ids[cAuthors.SelectedIndex], theme_ids[cThemes.SelectedIndex],
-                            rtfed.RtfTextBox.Rtf, rtfed.RtfTextBox.Text, false))
-                        {
-                            confToolStrip.SaveExternalMethod();
-                        }
+                            if (Database.Quote_Create(autors_ids[cAuthors.SelectedIndex], theme_ids[cThemes.SelectedIndex],
+                                rtfed.RtfTextBox.Rtf, rtfed.RtfTextBox.Text, false))
+                            {
+                                confToolStrip.SaveExternalMethod();
+                            }
                     }
                 }
-                else MessageBox.Show("define theme");
+                else
+                {
+                    MessageBox.Show("Укажите тему цитаты!", "Редактор цитат", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cancelClosing = true;
+                }
             }
             else
-                MessageBox.Show("define author");
+            {
+                MessageBox.Show("Укажите автора цитаты!", "Редактор цитат",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cancelClosing = true;
+            }
         }
     }
 }

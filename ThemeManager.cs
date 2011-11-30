@@ -15,6 +15,7 @@ namespace QuotePad
         public ThemeManager()
         {
             this.Text = "Темы";
+            this.BeforeDestroy += new Delete(ThemeManager_BeforeDestroy);
             GroupBox g = new GroupBox();
             g.Text = " Имя темы ";
             g.Dock = DockStyle.Fill;
@@ -45,6 +46,30 @@ namespace QuotePad
             //this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные темы:"));
             g.Controls.Add(theme);
             this.Controls.Add(g);
+        }
+
+        /// <summary>
+        /// Ask for saving changes before tab will be closed
+        /// </summary>
+        void ThemeManager_BeforeDestroy()
+        {
+            this.cancelClosing = false;
+            if (confToolStrip.toolStripSave.Enabled && theme.Text != "")
+            {
+                DialogResult question = MessageBox.Show("Сохранить изменения перед закрытием?",
+                    "Редактор тем", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                switch (question)
+                {
+                    case DialogResult.Yes:
+                        toolStripSave_Click(this, null);
+                        break;
+                    case DialogResult.No:
+                        break;
+                    case DialogResult.Cancel:
+                        this.cancelClosing = true;
+                        break;
+                }
+            }
         }
 
         void toolStripDelete_Click(object sender, EventArgs e)

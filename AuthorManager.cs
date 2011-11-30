@@ -22,6 +22,7 @@ namespace QuotePad
         public AuthorManager()
         {
             this.Text = "Авторы";
+            this.BeforeDestroy += new Delete(AuthorManager_BeforeDestroy);
             GroupBox g1 = new GroupBox();
             GroupBox g2 = new GroupBox();
             GroupBox g3 = new GroupBox();
@@ -112,6 +113,30 @@ namespace QuotePad
             //this.Controls.Add(about);
             //this.Controls.Add(photo);
             this.Controls.Add(s1);
+        }
+
+        /// <summary>
+        /// Ask for saving changes before tab will be closed
+        /// </summary>
+        void AuthorManager_BeforeDestroy()
+        {
+            this.cancelClosing = false;
+            if (confToolStrip.toolStripSave.Enabled && author.Text != "")
+            {
+                DialogResult question = MessageBox.Show("Сохранить изменения перед закрытием?",
+                    "Редактор авторов", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                switch (question)
+                {
+                    case DialogResult.Yes:
+                        toolStripSave_Click(this, null);
+                        break;
+                    case DialogResult.No:
+                        break;
+                    case DialogResult.Cancel:
+                        this.cancelClosing = true;
+                        break;
+                }
+            }
         }
 
         void clear_photo_Click(object sender, EventArgs e)
