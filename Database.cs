@@ -344,7 +344,8 @@ namespace QuotePad
 
         #region Random Read
 
-        public static double BufferSize = 0.2; // In persents
+        public static double BufferSize = 0.99; // In persents
+        public static int BufferSizeLimit = 200; // In number
 
         private static bool IsReady = false; // Is Buffer has been initialized and etc.
         private static Random rnd = new Random();
@@ -361,7 +362,14 @@ namespace QuotePad
         private static void RandomInit()
         {
             Int32 RecordsCount = connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
-            Buffer = new Int32[(Int32)(RecordsCount * BufferSize)];
+            if (RecordsCount * BufferSize < BufferSizeLimit)
+            {
+                Buffer = new Int32[(Int32)(RecordsCount * BufferSize)];
+            }
+            else
+            {
+                Buffer = new Int32[BufferSizeLimit];
+            }
             if (RecordsCount > 0)
             {
                 Max = connector.SelectCell<Int32>("SELECT MAX(pID) FROM tQUOTES");
