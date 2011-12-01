@@ -21,6 +21,7 @@ namespace QuotePad
         ToolStripButtonPrototype nextQuote;
         SplitContainer s;
         TableLayoutPanel backpanel; // back panel for displaying info about author
+        ItWorks.Registry regValue = new ItWorks.Registry();
 
         public pageQuoteView(TabControlPrototype tabControl, int displayQuote = -1)
         {
@@ -52,10 +53,12 @@ namespace QuotePad
             backpanel.Controls.Add(authorImage, 0, 0);
             backpanel.Controls.Add(authorFIO, 0, 1);
             backpanel.Controls.Add(authorAbout, 0, 2);
+            backpanel.Visible = regValue.ReadKey<bool>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+                "BackPanelVisible", true);
 
             infoAuthor = new ToolStripButtonPrototype("Информация", Resources.info_64);
             infoAuthor.CheckOnClick = true;
-            infoAuthor.Checked = true;
+            infoAuthor.Checked = backpanel.Visible;
             //infoAuthor.Enabled = false;
             infoAuthor.Click += new EventHandler(infoAuthor_Click);
             this.AddToolStripItem(infoAuthor);
@@ -90,8 +93,15 @@ namespace QuotePad
             s = new SplitContainer();
             s.SplitterDistance = (s.Width / 2) + (s.Width / 2) / 2;
             s.Dock = DockStyle.Fill;
+            int x = regValue.ReadKey<int>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+                "BackPanelWidth", -1);
+            if (x >= 0)
+            {
+                s.SplitterDistance = s.Width - x;
+            }
             s.Panel1.Controls.Add(rtfed.RtfTextBox);
             s.Panel2.Controls.Add(backpanel);
+            s.SplitterMoved += new SplitterEventHandler(s_SplitterMoved);
             this.Controls.Add(s);
             if (displayQuote == -1)
             {
@@ -104,6 +114,12 @@ namespace QuotePad
             }
         }
 
+        void s_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            regValue.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+               "BackPanelWidth", s.Panel2.Width);
+        }
+   
         void deleteQuote_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Удалить цитату?", new assembly().AssemblyProduct, MessageBoxButtons.YesNo,
@@ -119,6 +135,8 @@ namespace QuotePad
         void infoAuthor_Click(object sender, EventArgs e)
         {
             backpanel.Visible = !backpanel.Visible;
+            regValue.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+                "BackPanelVisible", backpanel.Visible);
         }
 
         void editQuote_Click(object sender, EventArgs e)
