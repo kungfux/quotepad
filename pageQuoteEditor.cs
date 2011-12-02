@@ -11,14 +11,17 @@ namespace QuotePad
         ConfigToolStrip confToolStrip;
         ToolStripComboBoxPrototype cAuthors;
         ToolStripComboBoxPrototype cThemes;
+        TabControlPrototype tabcontrol;
         int[] theme_ids;
         int[] autors_ids;
         bool editMode = false;
         int quoteID = 0;
 
-        public pageQuoteEditor(int editQuote = -1)
+        public pageQuoteEditor(TabControlPrototype tabControl,int editQuote = -1)
         {
+            tabcontrol = tabControl;
             this.Text = "Редактор";
+            this.captionText = "Новая цитата";
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
             this.BeforeDestroy += new Delete(pageQuoteEditor_BeforeDestroy);
 
@@ -58,6 +61,7 @@ namespace QuotePad
                     cAuthors.Text = quote.QuoteAuthor.FIO;
                     cThemes.Text = quote.QuoteTheme.Name;
                     rtfed.RtfTextBox.Rtf = quote.RTF;
+                    this.captionText = "Редактирование цитаты #" + quote.ID.ToString();
                 }
             }
         }
@@ -89,6 +93,8 @@ namespace QuotePad
         void toolStripAdd_Click(object sender, EventArgs e)
         {
             //confToolStrip
+            this.captionText = "Новая цитата";
+            tabcontrol.UpdateCaption();
         }
 
         void cThemes_DropDown(object sender, EventArgs e)

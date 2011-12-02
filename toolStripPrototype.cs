@@ -93,7 +93,7 @@ namespace QuotePad
 
         void addQuote_Click(object sender, EventArgs e)
         {
-            tabControl.AddPage(new pageQuoteEditor());
+            tabControl.AddPage(new pageQuoteEditor(tabControl));
         }
 
         void searchQuote_LostFocus(object sender, EventArgs e)

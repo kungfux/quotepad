@@ -26,7 +26,8 @@ namespace QuotePad
         public pageQuoteView(TabControlPrototype tabControl, int displayQuote = -1)
         {
             tabcontrol = tabControl;
-            this.Text = "Просмотр";            
+            this.Text = "Просмотр";
+            this.captionText = "Просмотр цитат";
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
             rtfed.RtfTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             rtfed.RtfTextBox.BackColor = authorFIO.BackColor;
@@ -155,7 +156,7 @@ namespace QuotePad
         {
             if (currentQuote.ID != 0)
             {
-                tabcontrol.AddPage(new pageQuoteEditor(currentQuote.ID));
+                tabcontrol.AddPage(new pageQuoteEditor(tabcontrol, currentQuote.ID));
             }
         }
 
@@ -215,6 +216,8 @@ namespace QuotePad
             deleteQuote.Enabled = true;
             rtfed.RtfTextBox.Rtf = currentQuote.RTF;
             //g.Text = " Текст цитаты №" + currentQuote.ID.ToString();
+            this.captionText = "Просмотр цитаты #" + currentQuote.ID.ToString();
+            tabcontrol.UpdateCaption("Просмотр цитаты #" + currentQuote.ID.ToString());
             authorImage.Image = currentQuote.QuoteAuthor.Photo;
             if (authorImage.Image == null) authorImage.Image = Resources.noPhoto_128;
             authorFIO.Text = currentQuote.QuoteAuthor.FIO.TrimEnd(new char[] { ' ' });

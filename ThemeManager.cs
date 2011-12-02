@@ -9,12 +9,15 @@ namespace QuotePad
     {
         ConfigToolStrip confToolStrip;
         ToolStripComboBoxPrototype comboBox;
+        TabControlPrototype tabcontrol;
         int[] theme_ids;
         TextBox theme = new TextBox();
 
-        public ThemeManager()
+        public ThemeManager(TabControlPrototype tabControl)
         {
+            tabcontrol = tabControl;
             this.Text = "Темы";
+            this.captionText = "Редактор тем";
             this.BeforeDestroy += new Delete(ThemeManager_BeforeDestroy);
             GroupBox g = new GroupBox();
             g.Text = " Имя темы ";
@@ -37,6 +40,7 @@ namespace QuotePad
             confToolStrip.toolStripSave.Click += new EventHandler(toolStripSave_Click);
             confToolStrip.toolStripAdd.Click += new EventHandler(toolStripAdd_Click);
             confToolStrip.toolStripDelete.Click += new EventHandler(toolStripDelete_Click);
+            confToolStrip.toolStripEdit.Click += new EventHandler(toolStripEdit_Click);
             this.AddToolStripItem(confToolStrip.toolStripAdd);
             this.AddToolStripItem(confToolStrip.toolStripEdit);
             this.AddToolStripItem(confToolStrip.toolStripSave);
@@ -46,6 +50,12 @@ namespace QuotePad
             //this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные темы:"));
             g.Controls.Add(theme);
             this.Controls.Add(g);
+        }
+
+        void toolStripEdit_Click(object sender, EventArgs e)
+        {
+            this.captionText = "Редактирование темы";
+            tabcontrol.UpdateCaption();
         }
 
         /// <summary>
@@ -81,12 +91,16 @@ namespace QuotePad
                     confToolStrip.DeleteExternalMethod();
                 }
                 else MessageBox.Show("Нельзя удалить тему!", "Удаление темы", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.captionText = "Редактор тем";
+                tabcontrol.UpdateCaption();
             }
         }
 
         void toolStripAdd_Click(object sender, EventArgs e)
         {
             comboBox.SelectedIndex = -1;
+            this.captionText = "Новая тема";
+            tabcontrol.UpdateCaption();
         }
 
         void toolStripSave_Click(object sender, EventArgs e)
@@ -95,14 +109,24 @@ namespace QuotePad
             {
                 if (confToolStrip.IsRequiredFilled())
                 {
-                    if (Database.Theme_Create(theme.Text)) confToolStrip.SaveExternalMethod();
+                    if (Database.Theme_Create(theme.Text))
+                    {
+                        confToolStrip.SaveExternalMethod();
+                        this.captionText = "Редактор тем";
+                        tabcontrol.UpdateCaption();
+                    }
                 }
             }
             else
             {
                 if (confToolStrip.IsRequiredFilled())
                 {
-                    if (Database.Theme_Modify(theme_ids[comboBox.SelectedIndex], theme.Text)) confToolStrip.SaveExternalMethod();
+                    if (Database.Theme_Modify(theme_ids[comboBox.SelectedIndex], theme.Text))
+                    {
+                        confToolStrip.SaveExternalMethod();
+                        this.captionText = "Редактор тем";
+                        tabcontrol.UpdateCaption();
+                    }
                 }
             }
         }
@@ -113,6 +137,8 @@ namespace QuotePad
             {
                 confToolStrip.OpenExternalMethod();
                 theme.Text = comboBox.Text;
+                this.captionText = "Просмотр темы";
+                tabcontrol.UpdateCaption();
             }
         }
 

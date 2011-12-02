@@ -91,12 +91,12 @@ namespace QuotePad
 
         void edit_author_Click(object sender, EventArgs e)
         {
-            tabcontrol.AddPage(new AuthorManager());
+            tabcontrol.AddPage(new AuthorManager(tabcontrol));
         }
 
         void edit_theme_Click(object sender, EventArgs e)
         {
-            tabcontrol.AddPage(new ThemeManager());
+            tabcontrol.AddPage(new ThemeManager(tabcontrol));
         }
 
         void quote_quit_Click(object sender, EventArgs e)
@@ -107,7 +107,7 @@ namespace QuotePad
 
         void quote_add_Click(object sender, EventArgs e)
         {
-            tabcontrol.AddPage(new pageQuoteEditor());
+            tabcontrol.AddPage(new pageQuoteEditor(tabcontrol));
         }
 
         private void quote_view_Click(object sender, EventArgs e)

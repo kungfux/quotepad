@@ -19,7 +19,7 @@ namespace QuotePad
         public AskPassword(TabControlPrototype tabcontrol)
         {
             tabControl = tabcontrol;
-
+            tabcontrol.UpdateCaption("Авторизация");
             GroupBox g = new GroupBox();
             password = new MaskedTextBox();
             bOk = new Button();

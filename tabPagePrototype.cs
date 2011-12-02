@@ -15,6 +15,7 @@ namespace QuotePad
         public readonly List<ToolStripLabelPrototype> toolStripItemsL = new List<ToolStripLabelPrototype>();
         public readonly List<ToolStripSeparatorPrototype> toolStripItemsS = new List<ToolStripSeparatorPrototype>();
         public bool cancelClosing = false; // Flag which disable Dispose() method once
+        public string captionText = "";
         private string tagText = "text";
 
         /// <summary>

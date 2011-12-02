@@ -18,10 +18,13 @@ namespace QuotePad
         //ToolStripButtonPrototype clear_photo;
         Button change_photo;
         Button clear_photo;
+        TabControlPrototype tabcontrol;
 
-        public AuthorManager()
+        public AuthorManager(TabControlPrototype tabControl)
         {
+            tabcontrol = tabControl;
             this.Text = "Авторы";
+            this.captionText = "Редактор авторов";
             this.BeforeDestroy += new Delete(AuthorManager_BeforeDestroy);
             GroupBox g1 = new GroupBox();
             GroupBox g2 = new GroupBox();
@@ -64,6 +67,7 @@ namespace QuotePad
             confToolStrip.toolStripSave.Click += new EventHandler(toolStripSave_Click);
             confToolStrip.toolStripAdd.Click += new EventHandler(toolStripAdd_Click);
             confToolStrip.toolStripDelete.Click += new EventHandler(toolStripDelete_Click);
+            confToolStrip.toolStripEdit.Click += new EventHandler(toolStripEdit_Click);
             this.AddToolStripItem(confToolStrip.toolStripAdd);
             this.AddToolStripItem(confToolStrip.toolStripEdit);
             this.AddToolStripItem(confToolStrip.toolStripSave);
@@ -113,6 +117,12 @@ namespace QuotePad
             //this.Controls.Add(about);
             //this.Controls.Add(photo);
             this.Controls.Add(s1);
+        }
+
+        void toolStripEdit_Click(object sender, EventArgs e)
+        {
+            this.captionText = "Редактирование автора";
+            tabcontrol.UpdateCaption();
         }
 
         /// <summary>
@@ -202,12 +212,16 @@ namespace QuotePad
                     confToolStrip.DeleteExternalMethod();
                 }
                 else MessageBox.Show("Нельзя удалить автора!", "Удаление автора", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.captionText = "Редактор авторов";
+                tabcontrol.UpdateCaption();
             }
         }
 
         void toolStripAdd_Click(object sender, EventArgs e)
         {
             comboBox.SelectedIndex = -1;
+            this.captionText = "Новый автор";
+            tabcontrol.UpdateCaption();
         }
 
         void toolStripSave_Click(object sender, EventArgs e)
@@ -216,14 +230,24 @@ namespace QuotePad
             {
                 if (confToolStrip.IsRequiredFilled())
                 {
-                    if (Database.Author_Create(author.Text, about.Text)) confToolStrip.SaveExternalMethod();
+                    if (Database.Author_Create(author.Text, about.Text))
+                    {
+                        confToolStrip.SaveExternalMethod();
+                        this.captionText = "Редактор авторов";
+                        tabcontrol.UpdateCaption();
+                    }
                 }
             }
             else
             {
                 if (confToolStrip.IsRequiredFilled())
                 {
-                    if (Database.Author_Modify(autors_ids[comboBox.SelectedIndex], author.Text, about.Text)) confToolStrip.SaveExternalMethod();
+                    if (Database.Author_Modify(autors_ids[comboBox.SelectedIndex], author.Text, about.Text))
+                    {
+                        confToolStrip.SaveExternalMethod();
+                        this.captionText = "Редактор авторов";
+                        tabcontrol.UpdateCaption();
+                    }
                 }
             }
         }
@@ -239,12 +263,16 @@ namespace QuotePad
                 change_photo.Visible = true;
                 if (photo.Image != null) clear_photo.Visible = true;
                 else clear_photo.Visible = false;
+                this.captionText = "Просмотр автора";
+                tabcontrol.UpdateCaption();
             }
             else
             {
                 photo.Image = null;
                 change_photo.Visible = false;
                 clear_photo.Visible = false;
+                this.captionText = "Редактор авторов";
+                tabcontrol.UpdateCaption();
             }
         }
 

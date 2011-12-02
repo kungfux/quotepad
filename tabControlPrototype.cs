@@ -7,13 +7,18 @@ using System.Drawing;
 namespace QuotePad
 {
     /// <summary>
-    /// TabControl with predefined methods
+    /// Prototype of extended TabControl
+    /// 
+    /// List of definitions:
+    /// 1. Only TabPagePrototypes can be added as TabPages to TabControlPrototype;
+    /// 2. TabPage which is going to be added should has empty Tag;
+    /// 
     /// </summary>
     public class TabControlPrototype : TabControl
     {
-        public ToolStripPrototype toolStrip;
-        private List<TabPagePrototype> tabPages = new List<TabPagePrototype>(); // List of TabPages (prototypes)
-        private int sequenceNumber = 1; // sequence number
+        public ToolStripPrototype toolStrip; // Associated ToolStrip element
+        private List<TabPagePrototype> tabPages = new List<TabPagePrototype>(); // List of opened TabPages
+        private int sequenceNumber = 1; // Unique sequence number of TabPage
 
         /// <summary>
         /// Init new instance of TabControl
@@ -26,6 +31,9 @@ namespace QuotePad
             this.Selected += new TabControlEventHandler(TabControlPrototype_Selected);
         }
 
+        /// <summary>
+        /// Re-fill associated ToolStrip with associated buttons when some TabPage is selected
+        /// </summary>
         private void TabControlPrototype_Selected(object sender, EventArgs e)
         {
             if (toolStrip != null)
@@ -55,11 +63,15 @@ namespace QuotePad
                     foreach (ToolStripComboBoxPrototype item in page.toolStripItemsC)
                     {
                         toolStrip.Items.Add(item);
-                    }                   
+                    }
+                    UpdateCaption();
                 }
             }
         }
 
+        /// <summary>
+        /// Remove all elements from ToolStrip which are marked as associated
+        /// </summary>
         private void RemoveRedundantItems()
         {
             bool done = false;
@@ -81,7 +93,7 @@ namespace QuotePad
         }
 
         /// <summary>
-        /// Add new TabPage to List and to TabControl
+        /// Add new TabPage (to List and to TabControl)
         /// </summary>
         public void AddPage(TabPagePrototype Page)
         {
@@ -107,10 +119,38 @@ namespace QuotePad
                     if (r.Contains(e.Location))
                     {
                         tabPages.Find(p => p.Tag == this.TabPages[i].Tag).Destroy();
+                        if (this.SelectedTab == null)
+                        {
+                            this.Parent.Text = new assembly().AssemblyProduct;
+                        }
                         break;
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Set caption for main form
+        /// </summary>
+        /// <param name="text"></param>
+        public void UpdateCaption(string text = "")
+        {
+            if (text == "")
+            {
+                if (tabPages.Find(p => p.Tag == this.SelectedTab.Tag).captionText != "")
+                {
+                    this.Parent.Text = new assembly().AssemblyProduct + " - " + tabPages.Find(p => p.Tag == this.SelectedTab.Tag).captionText;
+                }
+                else
+                {
+                    this.Parent.Text = new assembly().AssemblyProduct;
+                }
+            }
+            else
+            {
+                this.Parent.Text = new assembly().AssemblyProduct + " - " + text;
+            }
+            
         }
     }
 }
