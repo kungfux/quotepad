@@ -15,7 +15,7 @@ namespace QuotePad
         TextBox authorAbout = new TextBox();
         private TabControlPrototype tabcontrol;
         ToolStripButtonPrototype editQuote;
-        ToolStripButtonPrototype infoAuthor;
+        //ToolStripButtonPrototype infoAuthor;
         ToolStripButtonPrototype deleteQuote;
         ToolStripButtonPrototype prevQuote;
         ToolStripButtonPrototype nextQuote;
@@ -56,12 +56,14 @@ namespace QuotePad
             backpanel.Visible = regValue.ReadKey<bool>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
                 "BackPanelVisible", true);
 
+			/*	
             infoAuthor = new ToolStripButtonPrototype("Информация", Resources.info_64);
             infoAuthor.CheckOnClick = true;
             infoAuthor.Checked = backpanel.Visible;
             //infoAuthor.Enabled = false;
             infoAuthor.Click += new EventHandler(infoAuthor_Click);
             this.AddToolStripItem(infoAuthor);
+			*/
 
             editQuote = new ToolStripButtonPrototype("Редактировать цитату", Resources.edit_64);
             editQuote.Enabled = false;
@@ -91,18 +93,23 @@ namespace QuotePad
             rtfed.RtfTextBox.ReadOnly = true;
 
             s = new SplitContainer();
-            s.SplitterDistance = (s.Width / 2) + (s.Width / 2) / 2;
+            s.Panel1MinSize = 0;
+            s.Panel2MinSize = 0;
             s.Dock = DockStyle.Fill;
-            int x = regValue.ReadKey<int>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
-                "BackPanelWidth", -1);
-            if (x >= 0)
-            {
-                s.SplitterDistance = s.Width - x;
-            }
             s.Panel1.Controls.Add(rtfed.RtfTextBox);
             s.Panel2.Controls.Add(backpanel);
-            s.SplitterMoved += new SplitterEventHandler(s_SplitterMoved);
             this.Controls.Add(s);
+            int x = regValue.ReadKey<int>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+                "BackPanelWidth", -1);
+            if (x >= 0 && x <= 100)
+            {
+                s.SplitterDistance = (s.Width - s.SplitterWidth) * x / 100;
+            } 
+            else 
+            {
+                s.SplitterDistance = (s.Width - s.SplitterWidth) * 75 / 100; // Default position is 75%
+            }
+            s.SplitterMoved += new SplitterEventHandler(s_SplitterMoved);
             if (displayQuote == -1)
             {
                 randomQuote_Click(this, null);
@@ -116,8 +123,11 @@ namespace QuotePad
 
         void s_SplitterMoved(object sender, SplitterEventArgs e)
         {
-            regValue.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
-               "BackPanelWidth", s.Panel2.Width);
+            if (s.Focused)
+            {
+               regValue.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+                   "BackPanelWidth", s.SplitterDistance * 100 / (s.Width - s.SplitterWidth));
+            }
         }
    
         void deleteQuote_Click(object sender, EventArgs e)
@@ -132,12 +142,14 @@ namespace QuotePad
             }
         }
 
-        void infoAuthor_Click(object sender, EventArgs e)
+        /*
+		void infoAuthor_Click(object sender, EventArgs e)
         {
             backpanel.Visible = !backpanel.Visible;
             regValue.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
                 "BackPanelVisible", backpanel.Visible);
         }
+		*/
 
         void editQuote_Click(object sender, EventArgs e)
         {
