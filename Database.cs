@@ -294,12 +294,12 @@ namespace QuotePad
             DataRow row;
             if (!FavoriteOnly)
             {
-                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID > @id", 0,
+                row = connector.SelectRow("SELECT TOP 1 * FROM tQUOTES WHERE pID > @id", 0,
                   new OleDbParameter("@id", QuoteID));
             }
             else
             {
-                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID > @id AND pFAVORITE = TRUE", 0,
+                row = connector.SelectRow("SELECT TOP 1 * FROM tQUOTES WHERE pID > @id AND pFAVORITE = TRUE", 0,
                   new OleDbParameter("@id", QuoteID));
             }
             if (row != null)
@@ -321,12 +321,12 @@ namespace QuotePad
             DataRow row;
             if (!FavoriteOnly)
             {
-                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID < @id ORDER BY pID DESC", 0,
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID = (SELECT MAX(pID) FROM tQUOTES WHERE pID < @id)", 0,
                   new OleDbParameter("@id", QuoteID));
             }
             else
             {
-                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID < @id AND pFAVORITE = TRUE ORDER BY pID DESC", 0,
+                row = connector.SelectRow("SELECT * FROM tQUOTES WHERE pID = (SELECT MAX(pID) FROM tQUOTES WHERE pID < @id AND pFAVORITE = TRUE)", 0,
                   new OleDbParameter("@id", QuoteID));
             }
             if (row != null)
