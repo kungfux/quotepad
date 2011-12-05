@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<gadget>
+  <name>Цитатник</name>
+  <version>0.1.0.41</version>
+  <author name="IT WORKS Team">
+    <info url="http://itworks.sytes.net" />
+    <logo src="images\logo.png" />
+  </author>
+  <copyright>© 2010-2011</copyright>
+  <description>Гаджет для отображения ваших цитат на рабочем столе прямо из базы данных Цитатника.</description>
+  <icons>
+    <icon height="118" width="128" src="images\icon.png" />
+  </icons>
+  <hosts>
+    <host name="sidebar">
+      <base type="HTML" apiVersion="1.0.0" src="QuotePad.html" />
+      <permissions>Full</permissions>
+      <platform minPlatformVersion="1.0" />
+      <defaultImage src="images\icon.png" />
+    </host>
+  </hosts>
+</gadget>
