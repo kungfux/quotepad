@@ -16,3 +16,7 @@ body
  text-align: center;
  overflow: hidden;
 }
+#imgBackground
+{
+	background-image: url("images/background.png");
+}
