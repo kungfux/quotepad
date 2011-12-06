@@ -87,5 +87,11 @@ namespace QuotePad
                 return UserType.Viewer; // if entered password is not correct
             }
         }
+
+        // Perform auto-authorization if default password is set up
+        public void AutoAuthorization()
+        {
+            userType = CheckCredentials("password");
+        }
     }
 }

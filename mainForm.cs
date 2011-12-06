@@ -21,8 +21,10 @@ namespace QuotePad
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            assembly about = new assembly();
-            this.Text = about.AssemblyProduct;
+            // set form's caption
+            this.Text = new assembly().AssemblyProduct;
+            // check if default password is set
+            new Authorization().AutoAuthorization();
 
             tabControl = new TabControlPrototype();
             toolBar = new ToolStripPrototype(tabControl);
