@@ -1,43 +1,32 @@
-﻿//
-// Global variables
-//
+﻿//////////////////////
+// Global variables //
+//////////////////////
 
-var TimeToUpdate = 5000; // How often random quote should be updated
-var pathToDb = ""; // Path to database
+var TimeToUpdate = 5000;   // How often random quote should be updated
+var pathToDb = "";         // Path to database
 
+var BufferSize = 0.99;     // BufferSize in persents
+var BufferSizeLimit = 200; // Max allowed buffer size
+var IsReady = false;       // Is Buffer initialized?
+var Buffer;                // Buffer
+var Max;                   // Max ID of quote in DB
+var RandomValue;           // Random number
+var RandomQuote;           // Random Quote
+var MaxFailedAttempts = 20;// Max failed queries to reinit random
 
+//////////////////////
+// System functions //
+//////////////////////
 
-
-
-
-
-
-
-
-//
-// System functions
-//
-
-// Read key value from Registry
-function ReadRegistry(key)
+function ReadRegistry(key) // Read key value from Registry
 {
 	var wsh = new ActiveXObject("WScript.Shell");
 	return wsh.RegRead(key);
 }
 
-
-
-
-
-
-
-
-
-
-
-//
-// Internal Gadget functions
-// 
+///////////////////////////////
+// Internal Gadget functions //
+///////////////////////////////
 
 function InitGadget()
 {
@@ -64,29 +53,25 @@ function settingsClosed(e)
 	} 
 }
 
-
-
-
-
-
-
-
-
-//
-// DataBase functions
-//
+////////////////////////
+// DataBase functions //
+////////////////////////
 
 function PerformQuery(query, tagName)
 {
 	var db = new ACCESSdb(pathToDb, {showErrors: true});
 	var result = db.query(query, {xml:{stringOut:true}});
-	var pos1 = result.indexOf("<"+tagName) + tagName.length + 2;
-	var pos2 = result.indexOf("</"+tagName);
-	//alert("Query: "+query+"         Full stack: "+result+"     Clear stack:"+result.substr(pos1, pos2-pos1));
-	return result.substr(pos1, pos2-pos1);
+	if (result)
+	{
+		var pos1 = result.indexOf("<"+tagName) + tagName.length + 2;
+		var pos2 = result.indexOf("</"+tagName);
+		//alert("Query: "+query+"         Full stack: "+result+"     Clear stack:"+result.substr(pos1, pos2-pos1));
+		return result.substr(pos1, pos2-pos1);
+	}
+	else return false;
 }
 
-function IsDatabaseAccessable()
+function IsDatabaseAccessable() // Check connection to database
 {
 	var db = new ACCESSdb(pathToDb, {showErrors: true});
 	if (PerformQuery("SELECT COUNT(*) FROM tQUOTES", "Expr1000"))
@@ -94,34 +79,27 @@ function IsDatabaseAccessable()
 	else return false;
 }
 
-function GetQuotesCount()
+function GetQuotesCount() // Get count of quotes in db
 {
 	if (IsDatabaseAccessable())
 	return PerformQuery("SELECT COUNT(*) FROM tQUOTES", "Expr1000");
 }
 
-function Quote_FindByID(id)
+function Quote_FindByID(id) // Get quote by quote ID
 {
-	return PerformQuery("SELECT prtfQUOTE FROM tQUOTES WHERE pID = "+id, "prtfQUOTE");
-}
-//
-// QuotePad functions
-// 
-var BufferSize = 0.99;
-var BufferSizeLimit = 200;
-var IsReady = false;
-var Buffer;
-var Max;
-var RandomValue;
-var RandomQuote;
-
-function rnd(num)
-{
-	return Math.floor(Math.random()*num);
-	//return Math.round(num*Math.random()+0.50);
+	return PerformQuery("SELECT ptxtQUOTE FROM tQUOTES WHERE pID = "+id, "ptxtQUOTE");
 }
 
-function RandomInit()
+////////////////////////
+// QuotePad functions //
+////////////////////////
+
+function rnd(num) // get random number
+{
+	return Math.floor(Math.random()*num) + 1;
+}
+
+function RandomInit() // init random functionality
 {
 	var RecordsCount = GetQuotesCount();
 	if (RecordsCount * BufferSize < BufferSizeLimit)
@@ -185,29 +163,36 @@ function RandomRead()
 	if (Max > 0)
 	{
 		RandomQuote = false;
+		var FailsWatcher = 0;
 		while (RandomQuote == false)
 		{
 			Random_FindNext();
+			FailsWatcher++;
+			if (FailsWatcher > MaxFailedAttempts) 
+			{
+				RandomQuote = "Загрузка цитат...";
+				IsReady = false;
+				break;
+			}
 		}
 		return RandomQuote;
 	}
-	else return "<font color=red>Нет цитат для отображения.</font>";
+	else return '<font color=red>Нет цитат для отображения.</font><br><a href="#" onClick="ReInitPlease()">Повторить</a>';
 }
 
+function ReInitPlease()
+{
+	IsReady = false;
+}
 
-
-
-
-
-
-//
-// MAIN SECTION
-//
+//////////////////
+// MAIN SECTION //
+//////////////////
 
 function DisplayText(text)
 {
 	var field = document.getElementById('quote');
-	field.innerHTML = "<font color=yellow>"+text+"</font>";
+	field.innerHTML = "<font color=green>"+text+"</font>";
 }
 
 function DisplayError(text)
@@ -221,6 +206,10 @@ function StartGadget()
 	if (InitGadget())
 	{
 		startDisplaying();
+	} 
+	else 
+	{
+		DisplayError("Не удалось прочесть конфигурацию.");
 	}
 }
 
