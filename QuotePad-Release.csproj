@@ -45,7 +45,8 @@
     <Compile Include="AuthorManager.cs">
       <SubType>Component</SubType>
     </Compile>
-	<Compile Include="ConfigToolStrip.cs" />
+    <Compile Include="ClipboardAsync.cs" />
+    <Compile Include="ConfigToolStrip.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Objects.cs" />
     <Compile Include="mainMenu.cs">

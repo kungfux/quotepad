@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace QuotePad
 {
@@ -16,6 +19,14 @@ namespace QuotePad
         int[] autors_ids;
         bool editMode = false;
         int quoteID = 0;
+        // context menu items
+        ToolStripMenuItem cUndo;
+        ToolStripMenuItem cCut;
+        ToolStripMenuItem cCopy;
+        ToolStripMenuItem cPaste;
+        ToolStripMenuItem cDelete;
+        ToolStripMenuItem cSelectAll;
+        ToolStripMenuItem cSaveFormat;
 
         public pageQuoteEditor(TabControlPrototype tabControl,int editQuote = -1)
         {
@@ -38,6 +49,35 @@ namespace QuotePad
             cThemes = new ToolStripComboBoxPrototype();
             cThemes.DropDown += new EventHandler(cThemes_DropDown);
             cThemes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+
+            // Contex menu
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            contextMenu.Opening += new System.ComponentModel.CancelEventHandler(contextMenu_Opening);
+            cUndo = new ToolStripMenuItem("Отменить");
+            cCut = new ToolStripMenuItem("Вырезать");
+            cCopy = new ToolStripMenuItem("Копировать");
+            cPaste = new ToolStripMenuItem("Вставить");
+            cDelete = new ToolStripMenuItem("Удалить");
+            cSelectAll = new ToolStripMenuItem("Выделить всё");
+            cSaveFormat = new ToolStripMenuItem("Сохранить форматирование");
+            cUndo.Click += new EventHandler(cUndo_Click);
+            cCut.Click += new EventHandler(cCut_Click);
+            cCopy.Click += new EventHandler(cCopy_Click);
+            cPaste.Click += new EventHandler(cPaste_Click);
+            cDelete.Click += new EventHandler(cDelete_Click);
+            cSelectAll.Click += new EventHandler(cSelectAll_Click);
+            cSaveFormat.Click += new EventHandler(cSaveFormat_Click);
+            contextMenu.Items.Add(cUndo);
+            contextMenu.Items.Add(new ToolStripSeparator());
+            contextMenu.Items.Add(cCut);
+            contextMenu.Items.Add(cCopy);
+            contextMenu.Items.Add(cPaste);
+            contextMenu.Items.Add(cDelete);
+            contextMenu.Items.Add(new ToolStripSeparator());
+            contextMenu.Items.Add(cSelectAll);
+            contextMenu.Items.Add(new ToolStripSeparator());
+            contextMenu.Items.Add(cSaveFormat);
+            rtfed.RtfTextBox.ContextMenuStrip = contextMenu;
 
             this.Controls.Add(rtfed.RtfTextBox);
             this.Controls.Add(rtfed.RtfToolBar);
@@ -63,8 +103,73 @@ namespace QuotePad
                     rtfed.RtfTextBox.Rtf = quote.RTF;
                     this.captionText = "Редактирование цитаты #" + quote.ID.ToString();
                 }
+            } 
+            else
+            {
+                RtfFormat format = GetFormatting();
+                if (format.FontName != null)
+                {
+                    rtfed.RtfTextBox.SelectionAlignment = format.TextAlign;
+                    rtfed.RtfTextBox.SelectionColor = Color.FromName(format.FontColor);
+                    rtfed.RtfTextBox.SelectionBackColor = Color.FromName(format.TextBackColor);
+                    rtfed.RtfTextBox.SelectionFont = new Font(format.FontName, format.FontSize, format.FontStyle);
+                    rtfed.RefreshToolbar();
+                }
             }
         }
+
+        /////////////////////////
+        // Contex menu methods //
+        /////////////////////////
+        void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            cUndo.Enabled = rtfed.RtfTextBox.CanUndo;
+            cCut.Enabled = (rtfed.RtfTextBox.SelectionLength != 0);
+            cCopy.Enabled = (rtfed.RtfTextBox.SelectionLength != 0);
+            cPaste.Enabled = Clipboard.ContainsText(TextDataFormat.Rtf | TextDataFormat.Text);
+            cDelete.Enabled = (rtfed.RtfTextBox.SelectionLength != 0);
+            cSelectAll.Enabled = (rtfed.RtfTextBox.SelectionLength != rtfed.RtfTextBox.Text.Length);
+        }
+
+        void cUndo_Click(object sender, EventArgs e)
+        {
+            rtfed.RtfTextBox.Undo();
+        }
+
+        void cCut_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(rtfed.RtfTextBox.SelectedRtf, TextDataFormat.Rtf);
+            rtfed.RtfTextBox.SelectedRtf = "";
+        }
+
+        void cCopy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(rtfed.RtfTextBox.SelectedRtf, TextDataFormat.Rtf);
+        }
+
+        void cPaste_Click(object sender, EventArgs e)
+        {
+            ClipboardAsync ca = new ClipboardAsync();
+            rtfed.RtfTextBox.SelectedRtf = ca.GetText(TextDataFormat.Rtf);
+        }
+
+        void cDelete_Click(object sender, EventArgs e)
+        {
+            rtfed.RtfTextBox.SelectedRtf = "";
+        }
+
+        void cSelectAll_Click(object sender, EventArgs e)
+        {
+            rtfed.RtfTextBox.SelectAll();
+        }
+
+        void cSaveFormat_Click(object sender, EventArgs e)
+        {
+            SaveFormatting(new RtfFormat(rtfed.RtfTextBox.SelectionAlignment,
+                rtfed.RtfTextBox.SelectionBackColor, rtfed.RtfTextBox.SelectionColor,
+                rtfed.RtfTextBox.SelectionFont));
+        }
+        /////// end of context menu ////////
 
         /// <summary>
         /// Ask for saving changes before tab will be closed
@@ -159,6 +264,68 @@ namespace QuotePad
                 MessageBox.Show("Укажите автора цитаты!", "Редактор цитат",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cancelClosing = true;
+            }
+        }
+
+        private bool SaveFormatting(RtfFormat format)
+        {
+            XmlSerializer xs = new XmlSerializer(typeof(RtfFormat));
+            ItWorks.Registry r = new ItWorks.Registry();
+            StringWriter sw = new StringWriter();
+            xs.Serialize(sw, format);
+            bool result = r.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+                @"Software\ItWorksTeam\QuotePad", "RtfFormat", sw.ToString());
+            sw.Close();
+            return result;
+        }
+
+        private RtfFormat GetFormatting()
+        {
+            ItWorks.Registry r = new ItWorks.Registry();
+            string savedFormatting = r.ReadKey<string>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, 
+                @"Software\ItWorksTeam\QuotePad", "RtfFormat", null);
+            if (savedFormatting != null)
+            {
+                try
+                {
+                    XmlSerializer xs = new XmlSerializer(typeof(RtfFormat));
+                    StringReader sr = new StringReader(savedFormatting);
+                    RtfFormat restoredFormat = (RtfFormat)xs.Deserialize(sr);
+                    sr.Close();
+                    return restoredFormat;
+                }
+                catch (InvalidOperationException)
+                {
+                    return new RtfFormat();
+                }
+            }
+            else return new RtfFormat();
+
+        }
+
+        [Serializable]
+        public class RtfFormat
+        {
+            public HorizontalAlignment TextAlign;
+            public string TextBackColor;
+            public string FontColor;
+            public string FontName;
+            public float FontSize;
+            public FontStyle FontStyle;
+
+            public RtfFormat(HorizontalAlignment horizontalAlign, Color backColor,
+                Color fontColor, Font font)
+            {
+                TextAlign = horizontalAlign;
+                TextBackColor = backColor.Name;
+                FontColor = fontColor.Name;
+                FontName = font.Name;
+                FontSize = font.Size;
+                FontStyle = font.Style;
+            }
+
+            public RtfFormat()
+            {
             }
         }
     }
