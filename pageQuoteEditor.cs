@@ -243,13 +243,17 @@ namespace QuotePad
                                 editMode = false;
                                 quoteID = 0;
                             }
+                            else MessageBox.Show("Ошибка сохранения!", "Редактор цитат", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else
+                        {
                             if (Database.Quote_Create(autors_ids[cAuthors.SelectedIndex], theme_ids[cThemes.SelectedIndex],
                                 rtfed.RtfTextBox.Rtf, rtfed.RtfTextBox.Text, false))
                             {
                                 confToolStrip.SaveExternalMethod();
                             }
+                            else MessageBox.Show("Ошибка сохранения!", "Редактор цитат", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 else

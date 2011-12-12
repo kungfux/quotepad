@@ -115,6 +115,7 @@ namespace QuotePad
                         this.captionText = "Редактор тем";
                         tabcontrol.UpdateCaption();
                     }
+                    else MessageBox.Show("Ошибка сохранения!", "Редактор тем", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -127,6 +128,7 @@ namespace QuotePad
                         this.captionText = "Редактор тем";
                         tabcontrol.UpdateCaption();
                     }
+                    else MessageBox.Show("Ошибка сохранения!", "Редактор тем", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

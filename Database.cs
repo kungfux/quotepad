@@ -43,7 +43,7 @@ namespace QuotePad
             string tAuthor =
                 "CREATE TABLE tAUTHORS(" +
                 "pID COUNTER CONSTRAINT pkTYPE PRIMARY KEY," +
-                "pNAME CHAR(50) NOT NULL," +
+                "pNAME TEXT(50) NOT NULL," +
                 "pINFO MEMO," +
                 "pPHOTO IMAGE);";
             string tThemes =
@@ -361,26 +361,30 @@ namespace QuotePad
 
         private static void RandomInit()
         {
-            Int32 RecordsCount = connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
-            if (RecordsCount * BufferSize < BufferSizeLimit)
+            if (IsConnected)
             {
-                Buffer = new Int32[(Int32)(RecordsCount * BufferSize)];
-            }
-            else
-            {
-                Buffer = new Int32[BufferSizeLimit];
-            }
-            if (RecordsCount > 0)
-            {
-                Max = connector.SelectCell<Int32>("SELECT MAX(pID) FROM tQUOTES");
-                
-                // Init Buffer
-                for (int a = 0; a < Buffer.Length; a++)
+                Int32 RecordsCount = connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
+                if (RecordsCount > 0)
                 {
-                    Buffer[a] = 0;
+                    if (RecordsCount * BufferSize < BufferSizeLimit)
+                    {
+                        Buffer = new Int32[(Int32)(RecordsCount * BufferSize)];
+                    }
+                    else
+                    {
+                        Buffer = new Int32[BufferSizeLimit];
+                    }
+
+                    Max = connector.SelectCell<Int32>("SELECT MAX(pID) FROM tQUOTES");
+
+                    // Init Buffer
+                    for (int a = 0; a < Buffer.Length; a++)
+                    {
+                        Buffer[a] = 0;
+                    }
                 }
+                else Max = 0;
             }
-            else Max = 0;
         }
 
         private static void UpdateBuffer(Int32 value)

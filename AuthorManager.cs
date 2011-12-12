@@ -236,6 +236,7 @@ namespace QuotePad
                         this.captionText = "Редактор авторов";
                         tabcontrol.UpdateCaption();
                     }
+                    else MessageBox.Show("Ошибка сохранения!", "Редактор авторов", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -248,6 +249,7 @@ namespace QuotePad
                         this.captionText = "Редактор авторов";
                         tabcontrol.UpdateCaption();
                     }
+                    else MessageBox.Show("Ошибка сохранения!", "Редактор авторов", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
