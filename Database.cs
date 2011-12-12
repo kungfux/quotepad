@@ -21,15 +21,20 @@ namespace QuotePad
         //    connector.Disconnect();
         //}
 
+        private static bool UseTracing = new ItWorks.Registry().ReadKey<bool>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+            @"Software\ItWorksTeam\QuotePad", "TraceEnabled", false);
+
         public static ItWorks.OleDb connector = new ItWorks.OleDb();
 
         public static bool IsConnected { get { return connector.IsActiveConnection(); } }
 
         public static bool Connect()
         {
-            if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source="+Application.StartupPath+"\\db.mdb;", true, true))
+            string databaseSource = new ItWorks.Registry().ReadKey<string>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+                @"Software\ItWorksTeam\QuotePad", "Database", null);
+            if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source=" + databaseSource, true, true))
             {
-                connector.SetTrace(true, Application.StartupPath + @"\dberr.log", ItWorks.OleDb.TraceLevel.QueryWithMessage);
+                connector.SetTrace(UseTracing, Application.StartupPath + @"\dberr.log", ItWorks.OleDb.TraceLevel.QueryWithMessage);
                 InitDb();
                 return true;
             }
@@ -65,7 +70,7 @@ namespace QuotePad
             connector.ChangeData(tThemes);
             connector.ChangeData(tQuotes);
 
-            connector.SetTrace(true);
+            connector.SetTrace(UseTracing);
         }
 
         private static void ClearDb()
@@ -152,7 +157,7 @@ namespace QuotePad
                 list[theme].Photo =
                     connector.GetImage("SELECT pPHOTO FROM tAUTHORS WHERE pID = " +
                     themes.Rows[theme].ItemArray[0]);
-                connector.SetTrace(true);
+                connector.SetTrace(UseTracing);
             }
             return list;
         }
@@ -169,7 +174,7 @@ namespace QuotePad
             connector.SetTrace(false);
             item.Photo = connector.GetImage("SELECT pPHOTO FROM tAUTHORS WHERE pID = " +
                     AuthorID);
-            connector.SetTrace(true);
+            connector.SetTrace(UseTracing);
             return item;
         }
 
@@ -227,6 +232,16 @@ namespace QuotePad
         public static Int32 Quote_GetCount()
         {
             return connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
+        }
+
+        public static Int32 Quote_GetMaxID()
+        {
+            return Max;
+        }
+
+        public static Int32 Quote_GetMinID()
+        {
+            return Min;
         }
 
         public static bool Quote_Create(int AuthorID, int ThemeID, string RTFQuote, string TXTQuote, bool IsFavorite)
@@ -350,6 +365,7 @@ namespace QuotePad
         private static bool IsReady = false; // Is Buffer has been initialized and etc.
         private static Random rnd = new Random();
         private static Int32[] Buffer;
+        private static Int32 Min;
         private static Int32 Max;
         private static Int32 RandomValue;
         private static Objects.Quote RandomQuote;
@@ -375,6 +391,7 @@ namespace QuotePad
                         Buffer = new Int32[BufferSizeLimit];
                     }
 
+                    Min = connector.SelectCell<Int32>("SELECT MIN(pID) FROM tQUOTES");
                     Max = connector.SelectCell<Int32>("SELECT MAX(pID) FROM tQUOTES");
 
                     // Init Buffer

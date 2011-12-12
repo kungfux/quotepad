@@ -92,6 +92,7 @@ namespace QuotePad
             this.AddToolStripItem(nextQuote);
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
             rtfed.RtfTextBox.ReadOnly = true;
+            rtfed.RtfTextBox.KeyDown += new KeyEventHandler(RtfTextBox_KeyDown);
 
             s = new SplitContainer();
             s.Panel1MinSize = 0;
@@ -119,6 +120,22 @@ namespace QuotePad
             {
                 currentQuote = Database.Quote_FindByID(displayQuote);
                 qRefresh();
+            }
+        }
+
+        void RtfTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Right:
+                    nextQuote_Click(this, null);
+                    break;
+                case Keys.Left:
+                    prevQuote_Click(this, null);
+                    break;
+                case Keys.Space:
+                    randomQuote_Click(this, null);
+                    break;
             }
         }
 
@@ -188,6 +205,8 @@ namespace QuotePad
             {
                 MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
                      MessageBoxIcon.Information);
+                prevQuote.Enabled = false;
+                nextQuote.Enabled = false;
             }
         }
 
@@ -209,8 +228,8 @@ namespace QuotePad
 
         private void qRefresh()
         {
-            prevQuote.Enabled = true;
-            nextQuote.Enabled = true;
+            prevQuote.Enabled = (Database.Quote_GetMinID() != currentQuote.ID);
+            nextQuote.Enabled = (Database.Quote_GetMaxID() != currentQuote.ID);
             editQuote.Enabled = true;
             //infoAuthor.Enabled = true;
             deleteQuote.Enabled = true;

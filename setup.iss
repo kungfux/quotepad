@@ -39,6 +39,8 @@ Name: "{commondesktop}\Цитатник"; Filename: "{app}\QuotePad.exe"; WorkingDir: "{
 Root: HKLM; SubKey: "Software\ItWorksTeam\Quotepad"; ValueType: string; ValueName: "Database"; ValueData: "{app}\db.mdb"; Flags: uninsdeletekeyifempty
 ; Set default password
 Root: HKLM; SubKey: "Software\ItWorksTeam\Quotepad"; ValueType: string; ValueName: "Password"; ValueData: "sIHb6F4ew//D1OfQInQAzQ=="; Flags: createvalueifdoesntexist uninsdeletekeyifempty
+; Set default TraceEnabled
+Root: HKLM; SubKey: "Software\ItWorksTeam\Quotepad"; ValueType: string; ValueName: "TraceEnabled"; ValueData: "false"; Flags: createvalueifdoesntexist
 
 [Run]
 ; Ask to run QuotePad

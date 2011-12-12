@@ -35,7 +35,10 @@ namespace QuotePad
             this.Controls.Add(tabControl);
             this.Controls.Add(toolBar);
             this.Controls.Add(mainMenu);
+        }
 
+        private void mainForm_Shown(object sender, EventArgs e)
+        {
             tabControl.AddPage(new pageQuoteView(tabControl));
         }
 

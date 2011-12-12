@@ -35,12 +35,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 539);
+            this.ClientSize = new System.Drawing.Size(1066, 539);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "mainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "mainForm";
             this.Load += new System.EventHandler(this.mainForm_Load);
+            this.Shown += new System.EventHandler(this.mainForm_Shown);
             this.ResumeLayout(false);
 
         }
