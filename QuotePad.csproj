@@ -172,6 +172,8 @@
     <Content Include="db.mdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="dep\favorite64.png" />
+    <None Include="dep\nonFavorite64.png" />
     <None Include="dep\viewQuotes.64.png" />
     <None Include="dep\random.64.png" />
     <None Include="dep\previous.64.png" />

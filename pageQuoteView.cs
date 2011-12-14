@@ -19,6 +19,10 @@ namespace QuotePad
         ToolStripButtonPrototype deleteQuote;
         ToolStripButtonPrototype prevQuote;
         ToolStripButtonPrototype nextQuote;
+        Button favoriteQuote;
+        Label favoriteText;
+        string sFavorite = "Цитата отмечена как \"любимая\"";
+        string sNonFavorite = "Цитата не отмечена как \"любимая\"";
         SplitContainer s;
         TableLayoutPanel backpanel; // back panel for displaying info about author
         ItWorks.Registry regValue = new ItWorks.Registry();
@@ -26,34 +30,60 @@ namespace QuotePad
         public pageQuoteView(TabControlPrototype tabControl, int displayQuote = -1)
         {
             tabcontrol = tabControl;
+
             this.Text = "Просмотр";
             this.captionText = "Просмотр цитат";
+
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
             rtfed.RtfTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             rtfed.RtfTextBox.BackColor = authorFIO.BackColor;
+
             authorImage.SizeMode = PictureBoxSizeMode.Zoom;
             authorImage.Dock = DockStyle.Fill;
+
             //authorFIO.AutoSize = false;
             authorFIO.Dock = DockStyle.Fill;
-            authorFIO.Bounds = new System.Drawing.Rectangle(0, 250, 250, 500);
+            authorFIO.Bounds = new System.Drawing.Rectangle(0, 250, 250, authorFIO.Font.Height);
             authorFIO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+
             authorAbout.ReadOnly = true;
             authorAbout.BackColor = authorFIO.BackColor;
             authorAbout.Multiline = true;
             authorAbout.ScrollBars = ScrollBars.Vertical;
             authorAbout.BorderStyle = System.Windows.Forms.BorderStyle.None;
             authorAbout.Dock = DockStyle.Fill;
+            authorAbout.TextAlign = HorizontalAlignment.Center;
+
+            favoriteQuote = new Button();
+            favoriteQuote.Size = new System.Drawing.Size(65, 65);
+            //favoriteQuote.Location = new Point(20, 20);
+            favoriteQuote.Image = Resources.nonFavorite64;
+            favoriteQuote.FlatStyle = FlatStyle.Flat;
+            favoriteQuote.FlatAppearance.BorderSize = 0;
+            favoriteQuote.Click += new EventHandler(favoriteQuote_Click);
+            favoriteText = new Label();
+            favoriteText.Left = favoriteQuote.Left + favoriteQuote.Width + 5;
+            favoriteText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            favoriteText.Bounds = new System.Drawing.Rectangle(favoriteQuote.Left + favoriteQuote.Width + 5, 0, 150, 65);
+            favoriteText.Text = sNonFavorite;
+
+            Panel p = new Panel();
+            p.Dock = DockStyle.Fill;
+            p.Controls.Add(favoriteQuote);
+            p.Controls.Add(favoriteText);
 
             backpanel = new TableLayoutPanel();
             backpanel.Dock = DockStyle.Fill;
             backpanel.ColumnCount = 1;
-            backpanel.RowCount = 3;
-            backpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            backpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            backpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            backpanel.Controls.Add(authorImage, 0, 0);
-            backpanel.Controls.Add(authorFIO, 0, 1);
-            backpanel.Controls.Add(authorAbout, 0, 2);
+            backpanel.RowCount = 4;
+            backpanel.RowStyles.Add(new RowStyle(SizeType.Absolute, favoriteQuote.Height+7));
+            backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, authorFIO.Height));
+            backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
+            backpanel.Controls.Add(p, 0, 0);
+            backpanel.Controls.Add(authorImage, 0, 1);
+            backpanel.Controls.Add(authorFIO, 0, 2);
+            backpanel.Controls.Add(authorAbout, 0, 3);
             backpanel.Visible = regValue.ReadKey<bool>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
                 "BackPanelVisible", true);
 
@@ -119,6 +149,25 @@ namespace QuotePad
             else
             {
                 currentQuote = Database.Quote_FindByID(displayQuote);
+                qRefresh();
+            }
+        }
+
+        void favoriteQuote_Click(object sender, EventArgs e)
+        {
+            if (currentQuote != null)
+            {
+                if (currentQuote.IsFavorite)
+                {
+                    // Unset favorite
+                    Database.Quote_UnsetFavorite(currentQuote.ID);
+                }
+                else
+                {
+                    // Set favorite
+                    Database.Quote_SetAsFavorite(currentQuote.ID);
+                }
+                currentQuote = Database.Quote_FindByID(currentQuote.ID);
                 qRefresh();
             }
         }
@@ -241,6 +290,21 @@ namespace QuotePad
             if (authorImage.Image == null) authorImage.Image = Resources.noPhoto_128;
             authorFIO.Text = currentQuote.QuoteAuthor.FIO.TrimEnd(new char[] { ' ' });
             authorAbout.Text = currentQuote.QuoteAuthor.About;
+            UpdateFavoriteStar(currentQuote.IsFavorite);
+        }
+
+        private void UpdateFavoriteStar(bool isGoldStar)
+        {
+            if (isGoldStar)
+            {
+                favoriteQuote.Image = Resources.favorite64;
+                favoriteText.Text = sFavorite;
+            }
+            else
+            {
+                favoriteQuote.Image = Resources.nonFavorite64;
+                favoriteText.Text = sNonFavorite;
+            }
         }
     }
 }
