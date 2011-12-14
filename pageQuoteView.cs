@@ -21,6 +21,7 @@ namespace QuotePad
         ToolStripButtonPrototype nextQuote;
         Button favoriteQuote;
         Label favoriteText;
+        Panel pFavorite;
         string sFavorite = "Цитата отмечена как \"любимая\"";
         string sNonFavorite = "Цитата не отмечена как \"любимая\"";
         SplitContainer s;
@@ -67,10 +68,11 @@ namespace QuotePad
             favoriteText.Bounds = new System.Drawing.Rectangle(favoriteQuote.Left + favoriteQuote.Width + 5, 0, 150, 65);
             favoriteText.Text = sNonFavorite;
 
-            Panel p = new Panel();
-            p.Dock = DockStyle.Fill;
-            p.Controls.Add(favoriteQuote);
-            p.Controls.Add(favoriteText);
+            pFavorite = new Panel();
+            pFavorite.Visible = false;
+            pFavorite.Dock = DockStyle.Fill;
+            pFavorite.Controls.Add(favoriteQuote);
+            pFavorite.Controls.Add(favoriteText);
 
             backpanel = new TableLayoutPanel();
             backpanel.Dock = DockStyle.Fill;
@@ -80,7 +82,7 @@ namespace QuotePad
             backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, authorFIO.Height));
             backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
-            backpanel.Controls.Add(p, 0, 0);
+            backpanel.Controls.Add(pFavorite, 0, 0);
             backpanel.Controls.Add(authorImage, 0, 1);
             backpanel.Controls.Add(authorFIO, 0, 2);
             backpanel.Controls.Add(authorAbout, 0, 3);
@@ -232,14 +234,15 @@ namespace QuotePad
             if (tempQuote.ID == 0)
             {
                 nextQuote.Enabled = false;
+                currentQuote = new Objects.Quote();
                 MessageBox.Show("Следующая цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
                      MessageBoxIcon.Information);
             }
             else
             {
                 currentQuote = tempQuote;
-                qRefresh();
             }
+            qRefresh();
         }
 
         void randomQuote_Click(object sender, EventArgs e)
@@ -248,15 +251,16 @@ namespace QuotePad
             if (tempQuote.ID != 0)
             {
                 currentQuote = tempQuote;
-                qRefresh();
             }
             else
             {
-                MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
-                     MessageBoxIcon.Information);
                 prevQuote.Enabled = false;
                 nextQuote.Enabled = false;
+                currentQuote = new Objects.Quote();
+                MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
+                     MessageBoxIcon.Information);
             }
+            qRefresh();
         }
 
         void prevQuote_Click(object sender, EventArgs e)
@@ -265,32 +269,52 @@ namespace QuotePad
             if (tempQuote.ID == 0)
             {
                 prevQuote.Enabled = false;
+                currentQuote = new Objects.Quote();
                 MessageBox.Show("Предыдущая цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
                      MessageBoxIcon.Information);
             }
             else
             {
                 currentQuote = tempQuote;
-                qRefresh();
             }
+            qRefresh();
         }
 
         private void qRefresh()
         {
-            prevQuote.Enabled = (Database.Quote_GetMinID() != currentQuote.ID);
-            nextQuote.Enabled = (Database.Quote_GetMaxID() != currentQuote.ID);
-            editQuote.Enabled = true;
-            //infoAuthor.Enabled = true;
-            deleteQuote.Enabled = true;
-            rtfed.RtfTextBox.Rtf = currentQuote.RTF;
-            //g.Text = " Текст цитаты №" + currentQuote.ID.ToString();
-            this.captionText = "Просмотр цитаты #" + currentQuote.ID.ToString();
-            tabcontrol.UpdateCaption("Просмотр цитаты #" + currentQuote.ID.ToString());
-            authorImage.Image = currentQuote.QuoteAuthor.Photo;
-            if (authorImage.Image == null) authorImage.Image = Resources.noPhoto_128;
-            authorFIO.Text = currentQuote.QuoteAuthor.FIO.TrimEnd(new char[] { ' ' });
-            authorAbout.Text = currentQuote.QuoteAuthor.About;
-            UpdateFavoriteStar(currentQuote.IsFavorite);
+            if (currentQuote.ID != 0)
+            {
+                prevQuote.Enabled = (Database.Quote_GetMinID() != currentQuote.ID);
+                nextQuote.Enabled = (Database.Quote_GetMaxID() != currentQuote.ID);
+                editQuote.Enabled = true;
+                //infoAuthor.Enabled = true;
+                deleteQuote.Enabled = true;
+                rtfed.RtfTextBox.Rtf = currentQuote.RTF;
+                //g.Text = " Текст цитаты №" + currentQuote.ID.ToString();
+                this.captionText = "Просмотр цитаты #" + currentQuote.ID.ToString();
+                tabcontrol.UpdateCaption("Просмотр цитаты #" + currentQuote.ID.ToString());
+                authorImage.Image = currentQuote.QuoteAuthor.Photo;
+                if (authorImage.Image == null) authorImage.Image = Resources.noPhoto_128;
+                authorFIO.Text = currentQuote.QuoteAuthor.FIO.TrimEnd(new char[] { ' ' });
+                authorAbout.Text = currentQuote.QuoteAuthor.About;
+                pFavorite.Visible = true;
+                UpdateFavoriteStar(currentQuote.IsFavorite);
+            }
+            else
+            {
+                pFavorite.Visible = false;
+                authorImage.Image = null;
+                authorFIO.Text = "";
+                authorAbout.Text = "";
+                rtfed.RtfTextBox.Text = "";
+                editQuote.Enabled = false;
+                deleteQuote.Enabled = false;
+                if (captionText != "")
+                {
+                    captionText = "";
+                    tabcontrol.UpdateCaption("");
+                }
+            }
         }
 
         private void UpdateFavoriteStar(bool isGoldStar)

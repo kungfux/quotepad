@@ -211,22 +211,24 @@ namespace QuotePad
         /// <param name="text"></param>
         public void UpdateCaption(string text = "")
         {
-            if (text == "")
+            if (this.SelectedTab != null)
             {
-                if (tabPages.Find(p => p.Tag == this.SelectedTab.Tag).captionText != "")
+                if (text == "")
                 {
-                    this.Parent.Text = new assembly().AssemblyProduct + " - " + tabPages.Find(p => p.Tag == this.SelectedTab.Tag).captionText;
+                    if (tabPages.Find(p => p.Tag == this.SelectedTab.Tag).captionText != "")
+                    {
+                        this.Parent.Text = new assembly().AssemblyProduct + " - " + tabPages.Find(p => p.Tag == this.SelectedTab.Tag).captionText;
+                    }
+                    else
+                    {
+                        this.Parent.Text = new assembly().AssemblyProduct;
+                    }
                 }
                 else
                 {
-                    this.Parent.Text = new assembly().AssemblyProduct;
+                    this.Parent.Text = new assembly().AssemblyProduct + " - " + text;
                 }
             }
-            else
-            {
-                this.Parent.Text = new assembly().AssemblyProduct + " - " + text;
-            }
-            
         }
     }
 }
