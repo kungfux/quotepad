@@ -73,6 +73,7 @@
     <Compile Include="AuthorManager.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ClipboardAsync.cs" />
     <Compile Include="ConfigToolStrip.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Objects.cs" />

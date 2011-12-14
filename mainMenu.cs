@@ -60,14 +60,23 @@ namespace QuotePad
             ToolStripMenuItem help_about = new ToolStripMenuItem("О программе");
             help_about.Click += new EventHandler(help_about_Click);
             help.DropDownItems.Add(help_about);
+            ToolStripMenuItem closeTab = new ToolStripMenuItem("X");
+            closeTab.Click += new EventHandler(closeTab_Click);
+            closeTab.Alignment = ToolStripItemAlignment.Right;
 
             this.Items.Add(quote);
             this.Items.Add(edit);
             this.Items.Add(search);
             this.Items.Add(settings);
             this.Items.Add(help);
+            this.Items.Add(closeTab);
 
             tabcontrol.VisibleChanged += new EventHandler(tabcontrol_VisibleChanged);
+        }
+
+        void closeTab_Click(object sender, EventArgs e)
+        {
+            tabcontrol.CloseActiveTab();
         }
 
         void tabcontrol_VisibleChanged(object sender, EventArgs e)

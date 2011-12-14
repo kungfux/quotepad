@@ -19,6 +19,7 @@ namespace QuotePad
         public ToolStripPrototype toolStrip; // Associated ToolStrip element
         private List<TabPagePrototype> tabPages = new List<TabPagePrototype>(); // List of opened TabPages
         private int sequenceNumber = 1; // Unique sequence number of TabPage
+        //private Image closeImage = Resources.close;
 
         /// <summary>
         /// Init new instance of TabControl
@@ -29,7 +30,70 @@ namespace QuotePad
             this.Font = new Font(this.Font.FontFamily, 10);
             this.MouseUp += new MouseEventHandler(tabControl_MouseUp);
             this.Selected += new TabControlEventHandler(TabControlPrototype_Selected);
+            // Close tab func.
+            //this.DrawMode = TabDrawMode.OwnerDrawFixed;
+            //this.DrawItem += new DrawItemEventHandler(TabControlPrototype_DrawItem);
+            //this.MouseClick += new MouseEventHandler(TabControlPrototype_MouseClick);
+            //this.MouseMove += new MouseEventHandler(TabControlPrototype_MouseMove);
         }
+
+        //void TabControlPrototype_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    Point p = e.Location;
+        //    for (int i = 0; i < TabCount; i++)
+        //    {
+        //        Rectangle r = GetTabRect(i);
+        //        r.Offset(2, 2);
+        //        r = new Rectangle(r.X + r.Width - closeImage.Width - 4,
+        //            r.Top + ((r.Height - r.Top) / 2 - closeImage.Height / 2),
+        //            closeImage.Width, 
+        //            closeImage.Height);
+        //        if (r.Contains(p))
+        //        {
+        //            closeImage = Resources.closeActive;
+        //            this.Refresh();
+        //        }
+        //        else
+        //        {
+        //            closeImage = Resources.close;
+        //            this.Refresh();
+        //        }
+        //    }
+        //}
+
+        //void TabControlPrototype_MouseClick(object sender, MouseEventArgs e)
+        //{
+        //    Point p = e.Location;
+        //    for (int i = 0; i < TabCount; i++)
+        //    {
+        //        Rectangle r = GetTabRect(i);
+        //        r.Offset(2, 2);
+        //        r = new Rectangle(r.X + r.Width - closeImage.Width - 4,
+        //            r.Top + ((r.Height - r.Top) / 2 - closeImage.Height / 2),
+        //            closeImage.Width, 
+        //            closeImage.Height);
+        //        if (r.Contains(p))
+        //        {
+        //            tabControl_MouseUp(this, new MouseEventArgs(MouseButtons.Right, 1, p.X, p.Y, 0));
+        //        }
+        //    }
+        //}
+
+        //void TabControlPrototype_DrawItem(object sender, DrawItemEventArgs e)
+        //{
+        //    Rectangle r = e.Bounds;
+        //    r = GetTabRect(e.Index);
+        //    r.Offset(2, 2);
+        //    Pen p = new Pen(Brushes.Red);
+        //    e.Graphics.DrawImage(closeImage,
+        //        r.X + r.Width - closeImage.Width - 4,
+        //        r.Top + ((r.Height - r.Top) / 2 - closeImage.Height / 2),
+        //        closeImage.Width, 
+        //        closeImage.Height);
+        //    e.Graphics.DrawString(this.TabPages[e.Index].Text, this.Font, 
+        //        SystemBrushes.ControlText, new PointF(r.X + 5, r.Y));
+
+        //}
 
         /// <summary>
         /// Re-fill associated ToolStrip with associated buttons when some TabPage is selected
@@ -125,6 +189,18 @@ namespace QuotePad
                         }
                         break;
                     }
+                }
+            }
+        }
+
+        public void CloseActiveTab()
+        {
+            if (SelectedIndex != -1)
+            {
+                tabPages.Find(p => p.Tag == this.TabPages[SelectedIndex].Tag).Destroy();
+                if (this.SelectedTab == null)
+                {
+                    this.Parent.Text = new assembly().AssemblyProduct;
                 }
             }
         }
