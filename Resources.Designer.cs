@@ -165,6 +165,12 @@ namespace QuotePad {
             }
         }
         
+        internal static System.IO.UnmanagedMemoryStream starwars {
+            get {
+                return ResourceManager.GetStream("starwars", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap viewQuotes_64 {
             get {
                 object obj = ResourceManager.GetObject("viewQuotes_64", resourceCulture);

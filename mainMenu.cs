@@ -94,8 +94,7 @@ namespace QuotePad
 
         void help_about_Click(object sender, EventArgs e)
         {
-            assembly a = new assembly();
-            MessageBox.Show(a.AssemblyProduct + " " + a.AssemblyVersion + "\nby " + a.AssemblyCopyright, a.AssemblyProduct);
+            new AboutBox().ShowDialog();
         }
 
         void edit_author_Click(object sender, EventArgs e)
