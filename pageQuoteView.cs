@@ -61,6 +61,11 @@ namespace QuotePad
             favoriteQuote.Image = Resources.nonFavorite64;
             favoriteQuote.FlatStyle = FlatStyle.Flat;
             favoriteQuote.FlatAppearance.BorderSize = 0;
+            favoriteQuote.FlatAppearance.MouseOverBackColor = favoriteQuote.BackColor;
+            favoriteQuote.FlatAppearance.MouseDownBackColor = favoriteQuote.BackColor;
+            favoriteQuote.Cursor = Cursors.Hand;
+
+
             favoriteQuote.Click += new EventHandler(favoriteQuote_Click);
             favoriteText = new Label();
             favoriteText.Left = favoriteQuote.Left + favoriteQuote.Width + 5;
@@ -157,7 +162,7 @@ namespace QuotePad
 
         void favoriteQuote_Click(object sender, EventArgs e)
         {
-            if (currentQuote != null)
+            if (currentQuote != null && Authorization.userType == UserType.Editor)
             {
                 if (currentQuote.IsFavorite)
                 {
@@ -287,10 +292,8 @@ namespace QuotePad
                 prevQuote.Enabled = (Database.Quote_GetMinID() != currentQuote.ID);
                 nextQuote.Enabled = (Database.Quote_GetMaxID() != currentQuote.ID);
                 editQuote.Enabled = true;
-                //infoAuthor.Enabled = true;
                 deleteQuote.Enabled = true;
                 rtfed.RtfTextBox.Rtf = currentQuote.RTF;
-                //g.Text = " Текст цитаты №" + currentQuote.ID.ToString();
                 this.captionText = "Просмотр цитаты #" + currentQuote.ID.ToString();
                 tabcontrol.UpdateCaption("Просмотр цитаты #" + currentQuote.ID.ToString());
                 authorImage.Image = currentQuote.QuoteAuthor.Photo;

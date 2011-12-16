@@ -12,6 +12,7 @@ namespace QuotePad
     {
         assembly a = new assembly();
         PictureBox pic = new PictureBox();
+        //http://www.codeproject.com/KB/GDI-plus/StarWarsStyleTextScroller.aspx
         ExtendedComponents.Scroller scroll = new ExtendedComponents.Scroller();
         System.Media.SoundPlayer snd;
 
@@ -24,32 +25,42 @@ namespace QuotePad
             this.Size = new System.Drawing.Size(400, 400);
 
             scroll.Dock = DockStyle.Top;
+            scroll.Interval = 1;
             scroll.BackColor = Color.Black;
-            scroll.ForeColor = Color.White;
+            scroll.BackgroundImage = Resources.stars;
+            scroll.ForeColor = Color.Orange;
             scroll.TextToScroll = string.Concat(
-                " \n \n \n",
+                " \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n",
                 a.AssemblyProduct, "\n",
                 a.AssemblyVersion, "\n\n",
+
                 "Дизайн и разработка:", "\n",
                 a.AssemblyCompany, "\n\n",
+
                 "Copyright:", "\n",
                 a.AssemblyCopyright, "\n\n",
-                "Заказчик:", "\n",
-                "Стрелкова Татьяна", "\n\n",
-                "Менеджер проекта:", "\n",
-                "Фукс Александр", "\n\n",
-                "Программист:", "\n",
-                "Фукс Александр", "\n\n",
-                "Огромная благодарность:", "\n",
-                "Стрелкова Татьяна", "\n",
-                "Малицкий Андрей", "\n",
-                "Вельма Антон", "\n",
-                "Сержантов Сергей", "\n",
-                "Капшук Александр", "\n",
-                "Малицкий Антон", "\n\n\n",
-                "Программа распрастраняется под\nлицензией GNU/GPL\nПользуйтесь все!", "\n\n",
-                "Отзывы и пожелания\nпишите по адресу:\nkungfux2010@gmail.com", "\n\n",
-                "Приятного пользования!");
+
+                "Заказчик:\n",
+                "Стрелкова Татьяна\n\n",
+
+                "Менеджер проекта:\n",
+                "Фукс Александр\n\n",
+
+                "Программирование:\n",
+                "Фукс Александр\n\n",
+
+                "Принимали участие:\n",
+                "Малицкий Андрей\n",
+                "Сержантов Сергей\n",
+                "Лашин Василий\n\n",
+
+                "Огромная благодарность:\n",
+                "Стрелкова Татьяна\n",
+                "Капшук Александр\n\n\n",
+
+                "Отзывы и пожелания\nпишите по адресу:\nsupport-itworksteam@gmail.com\n\n\n",
+                "Приятного пользования!\n\n",
+                "С уважением,\nкоманда\nIT WORKS Team");
 
             //pic.Image = Resources.logo;
             //pic.SizeMode = PictureBoxSizeMode.AutoSize;

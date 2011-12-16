@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1297098121_notebook_boy.ico" />
+	<None Include="dep\stars.jpg" />
 	<None Include="dep\starwars.wav" />
 	<None Include="dep\favorite64.png" />
     <None Include="dep\nonFavorite64.png" />

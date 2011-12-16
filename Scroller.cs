@@ -124,6 +124,8 @@ namespace ExtendedComponents
 
 			// Prepares background.
 			e.Graphics.FillRectangle(new SolidBrush(this.BackColor), this.ClientRectangle);
+
+            e.Graphics.DrawImage(this.BackgroundImage, new Rectangle(0,0,400,400));
 			
 			// Creates GraphicsPath for text.
 			GraphicsPath path = new GraphicsPath();
