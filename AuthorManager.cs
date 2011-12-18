@@ -35,13 +35,13 @@ namespace QuotePad
             g1.Dock = DockStyle.Fill;
             g2.Dock = DockStyle.Fill;
             g3.Dock = DockStyle.Fill;
-            author.MaxLength = 50;
+            author.MaxLength = 100;
             author.Name = "author";
             author.Multiline = true;
             author.Dock = DockStyle.Fill;
             author.Enabled = false;
             //author.Width = 400;
-            about.MaxLength = 1000;
+            about.MaxLength = 65000;
             about.Multiline = true;
             about.ScrollBars = ScrollBars.Vertical;
             about.Dock = DockStyle.Fill;

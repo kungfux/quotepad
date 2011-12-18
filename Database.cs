@@ -48,13 +48,13 @@ namespace QuotePad
             string tAuthor =
                 "CREATE TABLE tAUTHORS(" +
                 "pID COUNTER CONSTRAINT pkTYPE PRIMARY KEY," +
-                "pNAME TEXT(50) NOT NULL," +
+                "pNAME TEXT(100) NOT NULL," +
                 "pINFO MEMO," +
                 "pPHOTO IMAGE);";
             string tThemes =
                 "CREATE TABLE tTHEMES (" +
                 "pID COUNTER CONSTRAINT pkTYPE PRIMARY KEY," +
-                "pNAME TEXT(15) NOT NULL)";
+                "pNAME TEXT(50) NOT NULL)";
             string tQuotes =
                 "CREATE TABLE tQUOTES (" +
                 "pID COUNTER PRIMARY KEY," +

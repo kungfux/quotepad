@@ -24,7 +24,7 @@ namespace QuotePad
             g.Dock = DockStyle.Fill;
             theme.Multiline = true;
             theme.Dock = DockStyle.Fill;
-            theme.MaxLength = 15;
+            theme.MaxLength = 50;
             theme.Name = "theme";
             theme.Enabled = false;
             comboBox = new ToolStripComboBoxPrototype();
