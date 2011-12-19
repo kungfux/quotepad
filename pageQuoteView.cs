@@ -186,15 +186,18 @@ namespace QuotePad
             switch (e.KeyCode)
             {
                 case Keys.Right:
-                    nextQuote_Click(this, null);
+                    if (nextQuote.Enabled)
+                        nextQuote_Click(this, null);
                     break;
                 case Keys.Left:
-                    prevQuote_Click(this, null);
+                    if (prevQuote.Enabled)
+                        prevQuote_Click(this, null);
                     break;
                 case Keys.Space:
                     randomQuote_Click(this, null);
                     break;
             }
+            e.SuppressKeyPress = true;
         }
 
         void s_SplitterMoved(object sender, SplitterEventArgs e)
