@@ -134,6 +134,8 @@ namespace QuotePad
             rtfed.RtfTextBox.KeyDown += new KeyEventHandler(RtfTextBox_KeyDown);
 
             s = new SplitContainer();
+            s.SplitterWidth = 1;
+            s.SplitterIncrement = 1;
             s.Panel1MinSize = 0;
             s.Panel2MinSize = 0;
             s.Dock = DockStyle.Fill;
@@ -144,7 +146,8 @@ namespace QuotePad
                 "BackPanelWidth", -1);
             if (x >= 0 && x <= 100)
             {
-                s.SplitterDistance = (s.Width - s.SplitterWidth) * x / 100;
+                //s.SplitterDistance = (s.Width - s.SplitterWidth) * x / 100;
+                s.SplitterDistance = s.Width * (x / 100);
             } 
             else 
             {
