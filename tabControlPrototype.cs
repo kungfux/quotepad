@@ -230,5 +230,27 @@ namespace QuotePad
                 }
             }
         }
+
+        /// <summary>
+        /// This methods close page by page and provide answer is all tabs are closed
+        /// </summary>
+        public bool CloseAllTabs()
+        {
+            int a = this.TabPages.Count;
+            while (a > 0)
+            {
+                tabPages.Find(p => p.Tag == this.TabPages[0].Tag).Destroy();
+                if (a == this.TabPages.Count)
+                {
+                    return false;
+                }
+                else
+                {
+                    a = this.TabPages.Count;
+                }
+                
+            }
+            return true;
+        }
     }
 }

@@ -44,6 +44,8 @@ namespace QuotePad
 
             //authorFIO.AutoSize = false;
             authorFIO.Dock = DockStyle.Fill;
+            authorFIO.Font = new System.Drawing.Font(authorFIO.Font.FontFamily, authorFIO.Font.Size,
+                System.Drawing.FontStyle.Bold);
             authorFIO.Bounds = new System.Drawing.Rectangle(0, 250, 250, authorFIO.Font.Height);
             authorFIO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 

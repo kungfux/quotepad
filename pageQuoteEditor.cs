@@ -44,9 +44,11 @@ namespace QuotePad
             confToolStrip.toolStripAdd.Click += new EventHandler(toolStripAdd_Click);
 
             cAuthors = new ToolStripComboBoxPrototype();
+            cAuthors.Width = 220;
             cAuthors.DropDown += new EventHandler(cAuthors_DropDown);
             cAuthors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cThemes = new ToolStripComboBoxPrototype();
+            cThemes.Width = 220;
             cThemes.DropDown += new EventHandler(cThemes_DropDown);
             cThemes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 

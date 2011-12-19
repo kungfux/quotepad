@@ -27,6 +27,7 @@ namespace QuotePad
             this.Items.Add(addQuote);
 
             ToolStripButtonPrototype auth = new ToolStripButtonPrototype("Авторизоваться", Resources.authorize_64);
+            auth.Visible = Authorization.userType == UserType.Viewer;
             auth.Click += new EventHandler(auth_Click);
             this.Items.Add(auth);
 

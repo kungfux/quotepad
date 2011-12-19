@@ -21,6 +21,7 @@ namespace QuotePad
 
         private void mainForm_Load(object sender, EventArgs e)
         {
+            this.FormClosing += new FormClosingEventHandler(mainForm_FormClosing);
             // set form's caption
             this.Text = new assembly().AssemblyProduct;
             // check if default password is set
@@ -35,6 +36,14 @@ namespace QuotePad
             this.Controls.Add(tabControl);
             this.Controls.Add(toolBar);
             this.Controls.Add(mainMenu);
+        }
+
+        void mainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!tabControl.CloseAllTabs())
+            {
+                e.Cancel = true;
+            }
         }
 
         private void mainForm_Shown(object sender, EventArgs e)

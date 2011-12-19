@@ -28,6 +28,7 @@ namespace QuotePad
             theme.Name = "theme";
             theme.Enabled = false;
             comboBox = new ToolStripComboBoxPrototype();
+            comboBox.Width = 320;
             comboBox.DropDown += new EventHandler(comboBox_DropDown);
             comboBox.SelectedIndexChanged += new EventHandler(comboBox_SelectedIndexChanged);
             comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;

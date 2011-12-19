@@ -25,7 +25,7 @@ namespace QuotePad
             this.Size = new System.Drawing.Size(400, 400);
 
             scroll.Dock = DockStyle.Top;
-            scroll.Interval = 1;
+            scroll.Interval = 10;
             scroll.BackColor = Color.Black;
             scroll.BackgroundImage = Resources.stars;
             scroll.ForeColor = Color.Orange;
