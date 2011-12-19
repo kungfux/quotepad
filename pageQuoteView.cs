@@ -44,7 +44,7 @@ namespace QuotePad
 
             //authorFIO.AutoSize = false;
             authorFIO.Dock = DockStyle.Fill;
-            authorFIO.Font = new System.Drawing.Font(authorFIO.Font.FontFamily, authorFIO.Font.Size,
+            authorFIO.Font = new System.Drawing.Font(authorFIO.Font.FontFamily, authorFIO.Font.Size+3,
                 System.Drawing.FontStyle.Bold);
             authorFIO.Bounds = new System.Drawing.Rectangle(0, 250, 250, authorFIO.Font.Height);
             authorFIO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -232,9 +232,14 @@ namespace QuotePad
 
         void editQuote_Click(object sender, EventArgs e)
         {
-            if (currentQuote.ID != 0)
+            if (currentQuote.ID != 0 && Database.Quote_FindByID_IsExist(currentQuote.ID))
             {
                 tabcontrol.AddPage(new pageQuoteEditor(tabcontrol, currentQuote.ID));
+            }
+            else
+            {
+                MessageBox.Show("Цитата не найдена!\nВозможно цитата уже была удалена?", "Редактирование цитаты",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -267,7 +272,7 @@ namespace QuotePad
                 prevQuote.Enabled = false;
                 nextQuote.Enabled = false;
                 currentQuote = new Objects.Quote();
-                MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
+                MessageBox.Show("Не найдено ни одной цитаты!", new assembly().AssemblyProduct, MessageBoxButtons.OK,
                      MessageBoxIcon.Information);
             }
             qRefresh();
