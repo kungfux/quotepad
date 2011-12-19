@@ -15,13 +15,17 @@ namespace QuotePad
         public mainMenu(TabControlPrototype tabControl)
         {
             tabcontrol = tabControl;
+            this.ShowItemToolTips = true;
             ToolStripMenuItem quote = new ToolStripMenuItem("Цитата");
             ToolStripMenuItem quote_view = new ToolStripMenuItem("Просмотр");
+            quote_view.ToolTipText = "Открыть вкладку просмотра цитат";
             quote_view.Click += new EventHandler(quote_view_Click);
             ToolStripMenuItem quote_add = new ToolStripMenuItem("Добавить");
+            quote_add.ToolTipText = "Создать новую цитату";
             quote_add.Click += new EventHandler(quote_add_Click);
             quote_add.Tag = this.adminTag;
             ToolStripMenuItem quote_quit = new ToolStripMenuItem("Выход");
+            quote_quit.ToolTipText = "Закрыть Цитатник";
             quote_quit.Click += new EventHandler(quote_quit_Click);
             quote.DropDownItems.Add(quote_view);
             quote.DropDownItems.Add(quote_add);
@@ -29,8 +33,10 @@ namespace QuotePad
             ToolStripMenuItem edit = new ToolStripMenuItem("Правка");
             edit.Tag = this.adminTag;
             ToolStripMenuItem edit_theme = new ToolStripMenuItem("Темы");
+            edit_theme.ToolTipText = "Открыть редактор тем";
             edit_theme.Click += new EventHandler(edit_theme_Click);
             ToolStripMenuItem edit_author = new ToolStripMenuItem("Авторы");
+            edit_author.ToolTipText = "Открыть редактор авторов";
             edit_author.Click += new EventHandler(edit_author_Click);
             ToolStripMenuItem edit_quote = new ToolStripMenuItem("Цитаты");
             edit_quote.Visible = false; //// TEMPORARY
@@ -58,9 +64,11 @@ namespace QuotePad
             settings.DropDownItems.Add(settings_login);
             ToolStripMenuItem help = new ToolStripMenuItem("Справка");
             ToolStripMenuItem help_about = new ToolStripMenuItem("О программе");
+            help_about.ToolTipText = "Посмотреть информацию о программе";
             help_about.Click += new EventHandler(help_about_Click);
             help.DropDownItems.Add(help_about);
             ToolStripMenuItem closeTab = new ToolStripMenuItem("X");
+            closeTab.ToolTipText = "Закрыть вкладку";
             closeTab.Click += new EventHandler(closeTab_Click);
             closeTab.Alignment = ToolStripItemAlignment.Right;
 

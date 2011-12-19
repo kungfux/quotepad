@@ -32,6 +32,8 @@ namespace QuotePad
             this.Items.Add(auth);
 
             searchQuote = new ToolStripTextBox();
+            searchQuote.ToolTipText = "Выполнить поиск цитаты.\nДля просмотра цитаты №1, введите в поле "+
+                "поиска единицу;\nДля поиска цитаты по тексту введите уникальное словосочетание.";
             searchQuote.Visible = true;
             searchQuote.Width = 220;
             searchQuote.Text = defSearchText;
