@@ -147,7 +147,7 @@ namespace QuotePad
             if (x >= 0 && x <= 100)
             {
                 //s.SplitterDistance = (s.Width - s.SplitterWidth) * x / 100;
-                s.SplitterDistance = s.Width * (x / 100);
+                s.SplitterDistance = Convert.ToInt32(Convert.ToDouble(s.Width) * (x / 100.0));
             } 
             else 
             {
