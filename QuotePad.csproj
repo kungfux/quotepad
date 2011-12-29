@@ -184,15 +184,14 @@
     <Content Include="db.mdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="dep\favoriteUnfavorite.png" />
     <None Include="dep\stars.jpg" />
     <None Include="dep\starwars.wav" />
     <None Include="dep\favorite64.png" />
-    <None Include="dep\nonFavorite64.png" />
     <None Include="dep\viewQuotes.64.png" />
     <None Include="dep\random.64.png" />
     <None Include="dep\previous.64.png" />
     <None Include="dep\next.64.png" />
-    <None Include="dep\info.64.png" />
     <None Include="dep\edit.64.png" />
     <None Include="dep\delete.64.png" />
     <None Include="dep\createNew.64.png" />

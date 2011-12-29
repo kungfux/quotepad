@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace QuotePad
 {
@@ -11,19 +12,15 @@ namespace QuotePad
         Objects.Quote currentQuote = new Objects.Quote();
         Objects.Quote tempQuote;
         PictureBox authorImage = new PictureBox();
+        PictureBox goldStar = new PictureBox();
         Label authorFIO = new Label();
         TextBox authorAbout = new TextBox();
         private TabControlPrototype tabcontrol;
         ToolStripButtonPrototype editQuote;
-        //ToolStripButtonPrototype infoAuthor;
         ToolStripButtonPrototype deleteQuote;
         ToolStripButtonPrototype prevQuote;
         ToolStripButtonPrototype nextQuote;
-        Button favoriteQuote;
-        Label favoriteText;
-        Panel pFavorite;
-        string sFavorite = "Цитата отмечена как \"любимая\"";
-        string sNonFavorite = "Цитата не отмечена как \"любимая\"";
+        ToolStripButtonPrototype favoriteUnfavorite;
         SplitContainer s;
         TableLayoutPanel backpanel; // back panel for displaying info about author
         ItWorks.Registry regValue = new ItWorks.Registry();
@@ -42,7 +39,12 @@ namespace QuotePad
             authorImage.SizeMode = PictureBoxSizeMode.Zoom;
             authorImage.Dock = DockStyle.Fill;
 
-            //authorFIO.AutoSize = false;
+            goldStar.SizeMode = PictureBoxSizeMode.Zoom;
+            goldStar.Size = new System.Drawing.Size(32, 32);
+            goldStar.Location = new System.Drawing.Point(0, 0);
+            goldStar.BackColor = Color.Transparent;
+            authorImage.Controls.Add(goldStar);
+
             authorFIO.Dock = DockStyle.Fill;
             authorFIO.Font = new System.Drawing.Font(authorFIO.Font.FontFamily, authorFIO.Font.Size+3,
                 System.Drawing.FontStyle.Bold);
@@ -57,53 +59,18 @@ namespace QuotePad
             authorAbout.Dock = DockStyle.Fill;
             authorAbout.TextAlign = HorizontalAlignment.Center;
 
-            favoriteQuote = new Button();
-            favoriteQuote.Size = new System.Drawing.Size(65, 65);
-            //favoriteQuote.Location = new Point(20, 20);
-            favoriteQuote.Image = Resources.nonFavorite64;
-            favoriteQuote.FlatStyle = FlatStyle.Flat;
-            favoriteQuote.FlatAppearance.BorderSize = 0;
-            favoriteQuote.FlatAppearance.MouseOverBackColor = favoriteQuote.BackColor;
-            favoriteQuote.FlatAppearance.MouseDownBackColor = favoriteQuote.BackColor;
-            favoriteQuote.Cursor = Cursors.Hand;
-
-
-            favoriteQuote.Click += new EventHandler(favoriteQuote_Click);
-            favoriteText = new Label();
-            favoriteText.Left = favoriteQuote.Left + favoriteQuote.Width + 5;
-            favoriteText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            favoriteText.Bounds = new System.Drawing.Rectangle(favoriteQuote.Left + favoriteQuote.Width + 5, 0, 150, 65);
-            favoriteText.Text = sNonFavorite;
-
-            pFavorite = new Panel();
-            pFavorite.Visible = false;
-            pFavorite.Dock = DockStyle.Fill;
-            pFavorite.Controls.Add(favoriteQuote);
-            pFavorite.Controls.Add(favoriteText);
-
             backpanel = new TableLayoutPanel();
             backpanel.Dock = DockStyle.Fill;
             backpanel.ColumnCount = 1;
-            backpanel.RowCount = 4;
-            backpanel.RowStyles.Add(new RowStyle(SizeType.Absolute, favoriteQuote.Height+7));
+            backpanel.RowCount = 3;
             backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, authorFIO.Height));
-            backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
-            backpanel.Controls.Add(pFavorite, 0, 0);
-            backpanel.Controls.Add(authorImage, 0, 1);
-            backpanel.Controls.Add(authorFIO, 0, 2);
-            backpanel.Controls.Add(authorAbout, 0, 3);
+            backpanel.RowStyles.Add(new RowStyle(SizeType.Absolute, authorFIO.Height));
+            backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            backpanel.Controls.Add(authorImage, 0, 0);
+            backpanel.Controls.Add(authorFIO, 0, 1);
+            backpanel.Controls.Add(authorAbout, 0, 2);
             backpanel.Visible = regValue.ReadKey<bool>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
                 "BackPanelVisible", true);
-
-			/*	
-            infoAuthor = new ToolStripButtonPrototype("Информация", Resources.info_64);
-            infoAuthor.CheckOnClick = true;
-            infoAuthor.Checked = backpanel.Visible;
-            //infoAuthor.Enabled = false;
-            infoAuthor.Click += new EventHandler(infoAuthor_Click);
-            this.AddToolStripItem(infoAuthor);
-			*/
 
             editQuote = new ToolStripButtonPrototype("Редактировать цитату", Resources.edit_64);
             editQuote.Enabled = false;
@@ -126,6 +93,12 @@ namespace QuotePad
             nextQuote = new ToolStripButtonPrototype("Следующая цитата", Resources.next_64);
             nextQuote.Click += new EventHandler(nextQuote_Click);
 
+            favoriteUnfavorite = new ToolStripButtonPrototype("Отметить как \"любимую\"", Resources.favoriteUnfavorite);
+            favoriteUnfavorite.Enabled = false;
+            favoriteUnfavorite.isForSupervisorOnly = true;
+            favoriteUnfavorite.Click += new EventHandler(favoriteUnfavorite_Click);
+            this.AddToolStripItem(favoriteUnfavorite);
+
             this.AddToolStripItem(prevQuote);
             this.AddToolStripItem(randomQuote);
             this.AddToolStripItem(nextQuote);
@@ -146,7 +119,6 @@ namespace QuotePad
                 "BackPanelWidth", -1);
             if (x >= 0 && x <= 100)
             {
-                //s.SplitterDistance = (s.Width - s.SplitterWidth) * x / 100;
                 s.SplitterDistance = Convert.ToInt32(Convert.ToDouble(s.Width) * (x / 100.0));
             } 
             else 
@@ -165,7 +137,7 @@ namespace QuotePad
             }
         }
 
-        void favoriteQuote_Click(object sender, EventArgs e)
+        void favoriteUnfavorite_Click(object sender, EventArgs e)
         {
             if (currentQuote != null && Authorization.userType == UserType.Editor)
             {
@@ -223,15 +195,6 @@ namespace QuotePad
                 }
             }
         }
-
-        /*
-		void infoAuthor_Click(object sender, EventArgs e)
-        {
-            backpanel.Visible = !backpanel.Visible;
-            regValue.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
-                "BackPanelVisible", backpanel.Visible);
-        }
-		*/
 
         void editQuote_Click(object sender, EventArgs e)
         {
@@ -313,12 +276,12 @@ namespace QuotePad
                 if (authorImage.Image == null) authorImage.Image = Resources.noPhoto_128;
                 authorFIO.Text = currentQuote.QuoteAuthor.FIO.TrimEnd(new char[] { ' ' });
                 authorAbout.Text = currentQuote.QuoteAuthor.About;
-                pFavorite.Visible = true;
+                favoriteUnfavorite.Enabled = true;
                 UpdateFavoriteStar(currentQuote.IsFavorite);
             }
             else
             {
-                pFavorite.Visible = false;
+                favoriteUnfavorite.Enabled = false;
                 authorImage.Image = null;
                 authorFIO.Text = "";
                 authorAbout.Text = "";
@@ -337,13 +300,13 @@ namespace QuotePad
         {
             if (isGoldStar)
             {
-                favoriteQuote.Image = Resources.favorite64;
-                favoriteText.Text = sFavorite;
+                favoriteUnfavorite.Text = "Убрать отметку \"любимая\"";
+                goldStar.Image = Resources.favorite64;
             }
             else
             {
-                favoriteQuote.Image = Resources.nonFavorite64;
-                favoriteText.Text = sNonFavorite;
+                favoriteUnfavorite.Text = "Отметить как \"любимую\"";
+                goldStar.Image = null;
             }
         }
     }

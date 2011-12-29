@@ -123,9 +123,9 @@ namespace QuotePad {
             }
         }
         
-        internal static System.Drawing.Bitmap info_64 {
+        internal static System.Drawing.Bitmap favoriteUnfavorite {
             get {
-                object obj = ResourceManager.GetObject("info_64", resourceCulture);
+                object obj = ResourceManager.GetObject("favoriteUnfavorite", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,13 +133,6 @@ namespace QuotePad {
         internal static System.Drawing.Bitmap next_64 {
             get {
                 object obj = ResourceManager.GetObject("next_64", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap nonFavorite64 {
-            get {
-                object obj = ResourceManager.GetObject("nonFavorite64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

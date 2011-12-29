@@ -145,14 +145,8 @@
   <data name="favorite64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>dep\favorite64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="info_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\info.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="next_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>dep\next.64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="nonFavorite64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dep\nonFavorite64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="noPhoto_128" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>dep\noPhoto.128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -171,5 +165,8 @@
   </data>
   <data name="stars" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>dep\stars.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="favoriteUnfavorite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>dep\favoriteUnfavorite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
