@@ -24,10 +24,15 @@ namespace QuotePad
         SplitContainer s;
         TableLayoutPanel backpanel; // back panel for displaying info about author
         ItWorks.Registry regValue = new ItWorks.Registry();
+        Objects.Quote[] displayOnly;
 
-        public pageQuoteView(TabControlPrototype tabControl, int displayQuote = -1)
+        public pageQuoteView(TabControlPrototype tabControl, params Objects.Quote[] displayOnlyQuotes)
         {
             tabcontrol = tabControl;
+            if (displayOnlyQuotes != null && displayOnlyQuotes.Length > 0)
+            {
+                displayOnly = displayOnlyQuotes;
+            }
 
             this.Text = "Просмотр";
             this.captionText = "Просмотр цитат";
@@ -100,7 +105,10 @@ namespace QuotePad
             this.AddToolStripItem(favoriteUnfavorite);
 
             this.AddToolStripItem(prevQuote);
-            this.AddToolStripItem(randomQuote);
+            if (displayOnly == null)
+            {
+                this.AddToolStripItem(randomQuote);
+            }
             this.AddToolStripItem(nextQuote);
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
             rtfed.RtfTextBox.ReadOnly = true;
@@ -126,13 +134,13 @@ namespace QuotePad
                 s.SplitterDistance = (s.Width - s.SplitterWidth) * 75 / 100; // Default position is 75%
             }
             s.SplitterMoved += new SplitterEventHandler(s_SplitterMoved);
-            if (displayQuote == -1)
+            if (displayOnly == null)
             {
                 randomQuote_Click(this, null);
             }
             else
             {
-                currentQuote = Database.Quote_FindByID(displayQuote);
+                currentQuote = displayOnly[0];
                 qRefresh();
             }
         }
@@ -211,7 +219,14 @@ namespace QuotePad
 
         void nextQuote_Click(object sender, EventArgs e)
         {
-            tempQuote = Database.Quote_ReadNext(currentQuote.ID);
+            if (displayOnly == null)
+            {
+                tempQuote = Database.Quote_ReadNext(currentQuote.ID);
+            }
+            else
+            {
+                tempQuote = Database.Quote_FindByID(currentQuote.ID + 1);
+            }
             if (tempQuote.ID == 0)
             {
                 nextQuote.Enabled = false;
@@ -246,7 +261,14 @@ namespace QuotePad
 
         void prevQuote_Click(object sender, EventArgs e)
         {
-            tempQuote = Database.Quote_ReadPrevious(currentQuote.ID);
+            if (displayOnly == null)
+            {
+                tempQuote = Database.Quote_ReadPrevious(currentQuote.ID);
+            }
+            else
+            {
+                tempQuote = Database.Quote_FindByID(currentQuote.ID - 1);
+            }
             if (tempQuote.ID == 0)
             {
                 prevQuote.Enabled = false;
@@ -265,13 +287,25 @@ namespace QuotePad
         {
             if (currentQuote.ID != 0)
             {
-                prevQuote.Enabled = (Database.Quote_GetMinID() != currentQuote.ID);
-                nextQuote.Enabled = (Database.Quote_GetMaxID() != currentQuote.ID);
+                if (displayOnly == null)
+                {
+                    prevQuote.Enabled = (Database.Quote_GetMinID() != currentQuote.ID);
+                    nextQuote.Enabled = (Database.Quote_GetMaxID() != currentQuote.ID);
+                    this.captionText = "Просмотр цитаты #" + currentQuote.ID.ToString();
+                    tabcontrol.UpdateCaption("Просмотр цитаты #" + currentQuote.ID.ToString());
+                }
+                else
+                {
+                    prevQuote.Enabled = (displayOnly[0].ID != currentQuote.ID);
+                    nextQuote.Enabled = (displayOnly[displayOnly.Length - 1].ID != currentQuote.ID);
+                    this.captionText = string.Format("Просмотр цитаты #{0} [Просмотр найденных {1} цитат]",
+                        currentQuote.ID.ToString(), displayOnly.Length.ToString());
+                    tabcontrol.UpdateCaption(string.Format("Просмотр цитаты #{0} [Просмотр найденных {1} цитат]",
+                        currentQuote.ID.ToString(), displayOnly.Length.ToString()));
+                }
                 editQuote.Enabled = true;
                 deleteQuote.Enabled = true;
                 rtfed.RtfTextBox.Rtf = currentQuote.RTF;
-                this.captionText = "Просмотр цитаты #" + currentQuote.ID.ToString();
-                tabcontrol.UpdateCaption("Просмотр цитаты #" + currentQuote.ID.ToString());
                 authorImage.Image = currentQuote.QuoteAuthor.Photo;
                 if (authorImage.Image == null) authorImage.Image = Resources.noPhoto_128;
                 authorFIO.Text = currentQuote.QuoteAuthor.FIO.TrimEnd(new char[] { ' ' });
@@ -288,6 +322,7 @@ namespace QuotePad
                 rtfed.RtfTextBox.Text = "";
                 editQuote.Enabled = false;
                 deleteQuote.Enabled = false;
+                goldStar.Image = null;
                 if (captionText != "")
                 {
                     captionText = "";

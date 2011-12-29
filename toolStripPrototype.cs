@@ -56,7 +56,7 @@ namespace QuotePad
                 {
                     if (Database.Quote_FindByID_IsExist(quoteId))
                     {
-                        tabControl.AddPage(new pageQuoteView(tabControl, quoteId));
+                        tabControl.AddPage(new pageQuoteView(tabControl, Database.Quote_FindByID(quoteId)));
                         searchQuote.Text = defSearchText;
                     }
                     else MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct,
@@ -67,7 +67,7 @@ namespace QuotePad
                     Objects.Quote[] foundQuotes = Database.Quote_FindByText(searchQuote.Text);
                     if (foundQuotes.Length > 0)
                     {
-                        tabControl.AddPage(new pageQuoteView(tabControl, foundQuotes[0].ID));
+                        tabControl.AddPage(new pageQuoteView(tabControl, foundQuotes));
                         searchQuote.Text = defSearchText;
                     }
                     else MessageBox.Show("Цитата не найдена!", new assembly().AssemblyProduct,
