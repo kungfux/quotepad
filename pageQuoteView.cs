@@ -25,6 +25,7 @@ namespace QuotePad
         TableLayoutPanel backpanel; // back panel for displaying info about author
         ItWorks.Registry regValue = new ItWorks.Registry();
         Objects.Quote[] displayOnly;
+        int displayOnlyCurrent;
 
         public pageQuoteView(TabControlPrototype tabControl, params Objects.Quote[] displayOnlyQuotes)
         {
@@ -141,6 +142,7 @@ namespace QuotePad
             else
             {
                 currentQuote = displayOnly[0];
+                displayOnlyCurrent = 0;
                 qRefresh();
             }
         }
@@ -225,7 +227,8 @@ namespace QuotePad
             }
             else
             {
-                tempQuote = Database.Quote_FindByID(currentQuote.ID + 1);
+                displayOnlyCurrent++;
+                tempQuote = displayOnly[displayOnlyCurrent];
             }
             if (tempQuote.ID == 0)
             {
@@ -267,7 +270,8 @@ namespace QuotePad
             }
             else
             {
-                tempQuote = Database.Quote_FindByID(currentQuote.ID - 1);
+                displayOnlyCurrent--;
+                tempQuote = displayOnly[displayOnlyCurrent];
             }
             if (tempQuote.ID == 0)
             {
@@ -298,10 +302,10 @@ namespace QuotePad
                 {
                     prevQuote.Enabled = (displayOnly[0].ID != currentQuote.ID);
                     nextQuote.Enabled = (displayOnly[displayOnly.Length - 1].ID != currentQuote.ID);
-                    this.captionText = string.Format("Просмотр цитаты #{0} [Просмотр найденных {1} цитат]",
-                        currentQuote.ID.ToString(), displayOnly.Length.ToString());
-                    tabcontrol.UpdateCaption(string.Format("Просмотр цитаты #{0} [Просмотр найденных {1} цитат]",
-                        currentQuote.ID.ToString(), displayOnly.Length.ToString()));
+                    this.captionText = string.Format("Просмотр цитаты #{0} [Просмотр цитаты {1} из найденных {2} цитат]",
+                        currentQuote.ID.ToString(), (displayOnlyCurrent + 1).ToString(), displayOnly.Length.ToString());
+                    tabcontrol.UpdateCaption(string.Format("Просмотр цитаты #{0} [Просмотр цитаты {1} из найденных {2} цитат]",
+                        currentQuote.ID.ToString(), (displayOnlyCurrent + 1).ToString(), displayOnly.Length.ToString()));
                 }
                 editQuote.Enabled = true;
                 deleteQuote.Enabled = true;
