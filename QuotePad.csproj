@@ -70,7 +70,6 @@
     <Compile Include="AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AskPassword.cs" />
     <Compile Include="assembly.cs" />
     <Compile Include="Authorization.cs" />
     <Compile Include="AuthorManager.cs">

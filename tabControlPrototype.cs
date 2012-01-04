@@ -252,5 +252,10 @@ namespace QuotePad
             }
             return true;
         }
+
+        public void RefreshItems()
+        {
+            TabControlPrototype_Selected(this, null);
+        }
     }
 }

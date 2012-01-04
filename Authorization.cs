@@ -18,6 +18,7 @@ namespace QuotePad
         private string PasswordRegistryPath = "Software\\ItWorksTeam\\QuotePad";
         private string PasswordRegistryKey = "Password";
         public static UserType userType = UserType.Viewer;
+        public bool IsDefaultPasswordSet { get { return CheckCredentials("password") == UserType.Editor; } }
         ItWorksTeam.Utils.Registry regedit = new ItWorksTeam.Utils.Registry();
 
         public void SetNewPassword(string NewPassword)

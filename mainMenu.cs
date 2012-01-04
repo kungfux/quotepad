@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using ItWorksTeam.UI;
 
 namespace QuotePad
 {
@@ -57,8 +58,19 @@ namespace QuotePad
             settings.Visible = false; //// TEMPORARY
             ToolStripMenuItem settings_config = new ToolStripMenuItem("Настройка");
             settings_config.Tag = this.adminTag;
+            Authorization auth = new Authorization();
+            ToolStripMenuItem settings_config_setpassword = new ToolStripMenuItem("Установить пароль...");
+            settings_config_setpassword.Click += new EventHandler(settings_config_setpassword_Click);
+            settings_config_setpassword.Visible = auth.IsDefaultPasswordSet;
+            ToolStripMenuItem settings_config_changepassword = new ToolStripMenuItem("Сменить пароль...");
+            settings_config_changepassword.Click += new EventHandler(settings_config_changepassword_Click);
+            settings_config_changepassword.Visible = !auth.IsDefaultPasswordSet;
+            settings_config.DropDownItems.Add(settings_config_setpassword);
+            settings_config.DropDownItems.Add(settings_config_changepassword);
             ToolStripMenuItem settings_export = new ToolStripMenuItem("Экспорт");
+            settings_export.Visible = false; // TEMPORARY
             ToolStripMenuItem settings_login = new ToolStripMenuItem("Авторизоваться");
+            settings_login.Visible = false; // NO LONGER NEEDED?
             settings.DropDownItems.Add(settings_config);
             settings.DropDownItems.Add(settings_export);
             settings.DropDownItems.Add(settings_login);
@@ -75,11 +87,35 @@ namespace QuotePad
             this.Items.Add(quote);
             this.Items.Add(edit);
             this.Items.Add(search);
-            this.Items.Add(settings);
+            this.Items.Add(settings_config);
             this.Items.Add(help);
             this.Items.Add(closeTab);
 
             tabcontrol.VisibleChanged += new EventHandler(tabcontrol_VisibleChanged);
+        }
+
+        void settings_config_changepassword_Click(object sender, EventArgs e)
+        {
+            PasswordDialog pass = new PasswordDialog(true, 4, 0, 3, 1, 0, PasswordDialog.DialogType.ChangePassword);
+            pass.AskPassword();
+            if (pass.EnteredNewPassword.Length > 0 && new Authorization().ChangeExistingPassword(pass.EnteredOldPassword, pass.EnteredNewPassword))
+            {
+                MessageBox.Show("Пароль установлен", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Не удалось установить пароль!", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void settings_config_setpassword_Click(object sender, EventArgs e)
+        {
+            PasswordDialog pass = new PasswordDialog(true, 4, 0, 3, 1, 0, PasswordDialog.DialogType.SetPassword);
+            pass.AskPassword();
+            if (pass.EnteredNewPassword.Length > 0)
+            {
+                new Authorization().SetNewPassword(pass.EnteredNewPassword);
+            }
         }
 
         void closeTab_Click(object sender, EventArgs e)

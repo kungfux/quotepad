@@ -27,23 +27,23 @@ namespace QuotePad
         [STAThread]
         public static void Main(string[] args)
         {
-            if (args != null && args.Length > 0)
-            {
-                string argument = args[0].ToString();
-                if (argument.Contains("="))
-                {
-                    if (argument.Split('=').GetValue(0).ToString().ToLower() == "/setpassword")
-                    {
-                        if (argument.Split('=').GetValue(1).ToString().Length > 0)
-                        {
-                            new Authorization().SetNewPassword(argument.Split('=').GetValue(1).ToString());
-                            MessageBox.Show("Пароль установлен", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                }
-            }
-            else
-            {
+            //if (args != null && args.Length > 0)
+            //{
+            //    string argument = args[0].ToString();
+            //    if (argument.Contains("="))
+            //    {
+            //        if (argument.Split('=').GetValue(0).ToString().ToLower() == "/setpassword")
+            //        {
+            //            if (argument.Split('=').GetValue(1).ToString().Length > 0)
+            //            {
+            //                new Authorization().SetNewPassword(argument.Split('=').GetValue(1).ToString());
+            //                MessageBox.Show("Пароль установлен", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //            }
+            //        }
+            //    }
+            //}
+            //else
+            //{
                 if (IsNew())
                 {
                     Application.EnableVisualStyles();
@@ -58,7 +58,7 @@ namespace QuotePad
                     Application.Exit();
                     Application.ExitThread();
                 }
-            }
+            //}
         }
     }
 }
