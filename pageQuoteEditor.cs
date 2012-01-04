@@ -5,12 +5,13 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Xml.Serialization;
 using System.IO;
+using ItWorksTeam.UI;
 
 namespace QuotePad
 {
     public class pageQuoteEditor: TabPagePrototype
     {
-        ItWorks.RTFed rtfed = new ItWorks.RTFed();
+        RTFEditor rtfed = new RTFEditor();
         ConfigToolStrip confToolStrip;
         ToolStripComboBoxPrototype cAuthors;
         ToolStripComboBoxPrototype cThemes;
@@ -276,10 +277,10 @@ namespace QuotePad
         private bool SaveFormatting(RtfFormat format)
         {
             XmlSerializer xs = new XmlSerializer(typeof(RtfFormat));
-            ItWorks.Registry r = new ItWorks.Registry();
+            ItWorksTeam.Utils.Registry r = new ItWorksTeam.Utils.Registry();
             StringWriter sw = new StringWriter();
             xs.Serialize(sw, format);
-            bool result = r.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+            bool result = r.SaveKey(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
                 @"Software\ItWorksTeam\QuotePad", "RtfFormat", sw.ToString());
             sw.Close();
             return result;
@@ -287,8 +288,8 @@ namespace QuotePad
 
         private RtfFormat GetFormatting()
         {
-            ItWorks.Registry r = new ItWorks.Registry();
-            string savedFormatting = r.ReadKey<string>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, 
+            ItWorksTeam.Utils.Registry r = new ItWorksTeam.Utils.Registry();
+            string savedFormatting = r.ReadKey<string>(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE, 
                 @"Software\ItWorksTeam\QuotePad", "RtfFormat", null);
             if (savedFormatting != null)
             {

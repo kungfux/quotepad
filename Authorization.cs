@@ -18,7 +18,7 @@ namespace QuotePad
         private string PasswordRegistryPath = "Software\\ItWorksTeam\\QuotePad";
         private string PasswordRegistryKey = "Password";
         public static UserType userType = UserType.Viewer;
-        ItWorks.Registry regedit = new ItWorks.Registry();
+        ItWorksTeam.Utils.Registry regedit = new ItWorksTeam.Utils.Registry();
 
         public void SetNewPassword(string NewPassword)
         {
@@ -29,7 +29,7 @@ namespace QuotePad
             string passHashPass = Convert.ToBase64String(Myhash.Hash);
             //MessageBox.Show("HASH: " + passHashPass);
 
-            regedit.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+            regedit.SaveKey(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
                 PasswordRegistryPath, PasswordRegistryKey, passHashPass);
         }
 
@@ -52,7 +52,7 @@ namespace QuotePad
 
             if (GetPasswordFromRegistry() == hashPass_old)
             {
-                return regedit.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+                return regedit.SaveKey(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
                     PasswordRegistryPath, PasswordRegistryKey, hashPass_new);
             }
             else
@@ -65,7 +65,7 @@ namespace QuotePad
         private string GetPasswordFromRegistry()
         {
             //getting hash value of password from registry
-            return regedit.ReadKey<string>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+            return regedit.ReadKey<string>(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
                 PasswordRegistryPath, PasswordRegistryKey, "");
         }
 

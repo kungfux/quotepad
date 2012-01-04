@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using ItWorksTeam.UI;
 
 namespace QuotePad
 {
     public class pageQuoteView : TabPagePrototype
     {
-        ItWorks.RTFed rtfed = new ItWorks.RTFed();
+        RTFEditor rtfed = new RTFEditor();
         Objects.Quote currentQuote = new Objects.Quote();
         Objects.Quote tempQuote;
         PictureBox authorImage = new PictureBox();
@@ -23,7 +24,7 @@ namespace QuotePad
         ToolStripButtonPrototype favoriteUnfavorite;
         SplitContainer s;
         TableLayoutPanel backpanel; // back panel for displaying info about author
-        ItWorks.Registry regValue = new ItWorks.Registry();
+        ItWorksTeam.Utils.Registry regValue = new ItWorksTeam.Utils.Registry();
         Objects.Quote[] displayOnly;
         int displayOnlyCurrent;
 
@@ -75,7 +76,7 @@ namespace QuotePad
             backpanel.Controls.Add(authorImage, 0, 0);
             backpanel.Controls.Add(authorFIO, 0, 1);
             backpanel.Controls.Add(authorAbout, 0, 2);
-            backpanel.Visible = regValue.ReadKey<bool>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+            backpanel.Visible = regValue.ReadKey<bool>(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
                 "BackPanelVisible", true);
 
             editQuote = new ToolStripButtonPrototype("Редактировать цитату", Resources.edit_64);
@@ -124,7 +125,7 @@ namespace QuotePad
             s.Panel1.Controls.Add(rtfed.RtfTextBox);
             s.Panel2.Controls.Add(backpanel);
             this.Controls.Add(s);
-            int x = regValue.ReadKey<int>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+            int x = regValue.ReadKey<int>(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
                 "BackPanelWidth", -1);
             if (x >= 0 && x <= 100)
             {
@@ -189,7 +190,7 @@ namespace QuotePad
         {
             if (s.Focused)
             {
-               regValue.SaveKey(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
+                regValue.SaveKey(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
                    "BackPanelWidth", s.SplitterDistance * 100 / (s.Width - s.SplitterWidth));
             }
         }

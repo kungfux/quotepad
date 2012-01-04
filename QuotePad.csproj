@@ -128,16 +128,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ItWorks.OleDb, Version=1.0.1.2, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="ItWorksTeam.NET, Version=1.0.4.15, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>dep\ItWorks.OleDb.dll</HintPath>
+      <HintPath>dep\ItWorksTeam.NET.dll</HintPath>
     </Reference>
-    <Reference Include="ItWorks.Registry">
-      <HintPath>dep\ItWorks.Registry.dll</HintPath>
+    <Reference Include="ItWorksTeam.UI">
+      <HintPath>dep\ItWorksTeam.UI.dll</HintPath>
     </Reference>
-    <Reference Include="ItWorks.RTFed, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>dep\ItWorks.RTFed.dll</HintPath>
+    <Reference Include="ItWorksTeam.Utils">
+      <HintPath>dep\ItWorksTeam.Utils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

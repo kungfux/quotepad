@@ -25,9 +25,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "dep\license.txt";                  DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\QuotePad.exe";         DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\db.mdb";               DestDir: "{app}"; Flags: onlyifdoesntexist uninsneveruninstall  
-Source: "bin\Release\ItWorks.OleDb.dll";    DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\ItWorks.RTFed.dll";    DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\ItWorks.Registry.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Release\ItWorksTeam.NET.dll";    DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Release\ItWorksTeam.UI.dll";    DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Release\ItWorksTeam.Utils.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

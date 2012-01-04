@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data;
 using System.Data.OleDb;
+using ItWorksTeam.NET;
 
 namespace QuotePad
 {
@@ -21,20 +22,20 @@ namespace QuotePad
         //    connector.Disconnect();
         //}
 
-        private static bool UseTracing = new ItWorks.Registry().ReadKey<bool>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+        private static bool UseTracing = new ItWorksTeam.Utils.Registry().ReadKey<bool>(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
             @"Software\ItWorksTeam\QuotePad", "TraceEnabled", false);
 
-        public static ItWorks.OleDb connector = new ItWorks.OleDb();
+        public static OleDb connector = new OleDb();
 
         public static bool IsConnected { get { return connector.IsActiveConnection(); } }
 
         public static bool Connect()
         {
-            string databaseSource = new ItWorks.Registry().ReadKey<string>(ItWorks.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+            string databaseSource = new ItWorksTeam.Utils.Registry().ReadKey<string>(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
                 @"Software\ItWorksTeam\QuotePad", "Database", null);
             if (connector.TestConnection("Provider=Microsoft.Jet.OleDb.4.0;Data Source=" + databaseSource, true, true))
             {
-                connector.SetTrace(UseTracing, Application.StartupPath + @"\dberr.log", ItWorks.OleDb.TraceLevel.QueryWithMessage);
+                connector.SetTrace(UseTracing, Application.StartupPath + @"\dberr.log", OleDb.TraceLevel.QueryWithMessage);
                 InitDb();
                 return true;
             }
@@ -108,7 +109,7 @@ namespace QuotePad
             try
             {
                 tname = connector.SelectCell<string>("SELECT pNAME FROM tTHEMES WHERE pID = @id",
-                     new OleDbParameter("@id", ThemeID));
+                    new OleDbParameter("@id", ThemeID));
                 theme.ID = ThemeID;
                 theme.Name = tname;
             }
@@ -379,7 +380,7 @@ namespace QuotePad
         {
             if (IsConnected)
             {
-                Int32 RecordsCount = connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES");
+                Int32 RecordsCount = connector.SelectCell<Int32>("SELECT COUNT(*) FROM tQUOTES", 0);
                 if (RecordsCount > 0)
                 {
                     if (RecordsCount * BufferSize < BufferSizeLimit)
