@@ -21,7 +21,7 @@ namespace QuotePad
         public bool IsDefaultPasswordSet { get { return CheckCredentials("password") == UserType.Editor; } }
         ItWorksTeam.Utils.Registry regedit = new ItWorksTeam.Utils.Registry();
 
-        public void SetNewPassword(string NewPassword)
+        public bool SetNewPassword(string NewPassword)
         {
             string password = NewPassword;
             MD5CryptoServiceProvider Myhash = new MD5CryptoServiceProvider();
@@ -30,7 +30,7 @@ namespace QuotePad
             string passHashPass = Convert.ToBase64String(Myhash.Hash);
             //MessageBox.Show("HASH: " + passHashPass);
 
-            regedit.SaveKey(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
+            return regedit.SaveKey(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE,
                 PasswordRegistryPath, PasswordRegistryKey, passHashPass);
         }
 

@@ -193,7 +193,7 @@ namespace QuotePad
         public static int Author_GetID(string AuthorFIO)
         {
             return connector.SelectCell<int>("SELECT pID FROM tAUTHORS WHERE pNAME = @fio",
-                new OleDbParameter("@fio", AuthorFIO));
+                0, new OleDbParameter("@fio", AuthorFIO));
         }
 
         public static bool Author_Create(string FIO, string About)

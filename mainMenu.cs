@@ -12,6 +12,8 @@ namespace QuotePad
     public class mainMenu : menuStripPrototype
     {
         private TabControlPrototype tabcontrol;
+        ToolStripMenuItem settings_config_setpassword;
+        ToolStripMenuItem settings_config_changepassword;
 
         public mainMenu(TabControlPrototype tabControl)
         {
@@ -58,13 +60,11 @@ namespace QuotePad
             settings.Visible = false; //// TEMPORARY
             ToolStripMenuItem settings_config = new ToolStripMenuItem("Настройка");
             settings_config.Tag = this.adminTag;
-            Authorization auth = new Authorization();
-            ToolStripMenuItem settings_config_setpassword = new ToolStripMenuItem("Установить пароль...");
+            settings_config_setpassword = new ToolStripMenuItem("Установить пароль...");
             settings_config_setpassword.Click += new EventHandler(settings_config_setpassword_Click);
-            settings_config_setpassword.Visible = auth.IsDefaultPasswordSet;
-            ToolStripMenuItem settings_config_changepassword = new ToolStripMenuItem("Сменить пароль...");
+            settings_config_changepassword = new ToolStripMenuItem("Сменить пароль...");
             settings_config_changepassword.Click += new EventHandler(settings_config_changepassword_Click);
-            settings_config_changepassword.Visible = !auth.IsDefaultPasswordSet;
+            ChangePasswordOptionsVisibility();
             settings_config.DropDownItems.Add(settings_config_setpassword);
             settings_config.DropDownItems.Add(settings_config_changepassword);
             ToolStripMenuItem settings_export = new ToolStripMenuItem("Экспорт");
@@ -94,9 +94,17 @@ namespace QuotePad
             tabcontrol.VisibleChanged += new EventHandler(tabcontrol_VisibleChanged);
         }
 
+        private void ChangePasswordOptionsVisibility()
+        {
+            Authorization auth = new Authorization();
+            bool IsDefaultPasswordSet = auth.IsDefaultPasswordSet;
+            settings_config_setpassword.Visible = IsDefaultPasswordSet;
+            settings_config_changepassword.Visible = !IsDefaultPasswordSet;
+        }
+
         void settings_config_changepassword_Click(object sender, EventArgs e)
         {
-            PasswordDialog pass = new PasswordDialog(true, 4, 0, 3, 1, 0, PasswordDialog.DialogType.ChangePassword);
+            PasswordDialog pass = new PasswordDialog(true, 4, 0, 0, 1, 0, PasswordDialog.DialogType.ChangePassword);
             pass.AskPassword();
             if (pass.EnteredOldPassword.Length > 0 && pass.EnteredNewPassword.Length > 0)
             {
@@ -106,18 +114,26 @@ namespace QuotePad
                 }
                 else
                 {
-                    MessageBox.Show("Не удалось установить пароль!", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось сменить пароль!", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         void settings_config_setpassword_Click(object sender, EventArgs e)
         {
-            PasswordDialog pass = new PasswordDialog(true, 4, 0, 3, 1, 0, PasswordDialog.DialogType.SetPassword);
+            PasswordDialog pass = new PasswordDialog(true, 4, 0, 0, 1, 0, PasswordDialog.DialogType.SetPassword);
             pass.AskPassword();
             if (pass.EnteredNewPassword.Length > 0)
             {
-                new Authorization().SetNewPassword(pass.EnteredNewPassword);
+                if (new Authorization().SetNewPassword(pass.EnteredNewPassword))
+                {
+                    MessageBox.Show("Пароль установлен", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось установить пароль!", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                ChangePasswordOptionsVisibility();
             }
         }
 

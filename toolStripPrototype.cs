@@ -107,6 +107,14 @@ namespace QuotePad
                         auth_Click(this, null);
                     }
                 }
+                else
+                {
+                    if (sender is ToolStripButtonPrototype)
+                    {
+                        ToolStripButtonPrototype button = (ToolStripButtonPrototype)sender;
+                        button.Dispose();
+                    }
+                }
                 tabControl.RefreshItems();
                 mainMenu.SetVisibility();
             }
