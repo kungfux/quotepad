@@ -28,8 +28,8 @@ namespace QuotePad
             new Authorization().AutoAuthorization();
 
             tabControl = new TabControlPrototype();
-            toolBar = new ToolStripPrototype(tabControl);
             mainMenu = new mainMenu(tabControl);
+            toolBar = new ToolStripPrototype(tabControl, mainMenu);
             tabControl.toolStrip = toolBar;
 
             tabControl.Dock = DockStyle.Fill;

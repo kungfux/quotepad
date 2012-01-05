@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("IT WORKS Team")]
 [assembly: AssemblyProduct("Цитатник")]
-[assembly: AssemblyCopyright("IT WORKS Team, 2010-2011")]
+[assembly: AssemblyCopyright("IT WORKS Team, 2010-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Номер построения
 //      Редакция
 //
-[assembly: AssemblyVersion("0.1.0.67")]
-[assembly: AssemblyFileVersion("0.1.0.67")]
+[assembly: AssemblyVersion("0.1.0.68")]
+[assembly: AssemblyFileVersion("0.1.0.68")]

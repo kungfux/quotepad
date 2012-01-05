@@ -98,13 +98,16 @@ namespace QuotePad
         {
             PasswordDialog pass = new PasswordDialog(true, 4, 0, 3, 1, 0, PasswordDialog.DialogType.ChangePassword);
             pass.AskPassword();
-            if (pass.EnteredNewPassword.Length > 0 && new Authorization().ChangeExistingPassword(pass.EnteredOldPassword, pass.EnteredNewPassword))
+            if (pass.EnteredOldPassword.Length > 0 && pass.EnteredNewPassword.Length > 0)
             {
-                MessageBox.Show("Пароль установлен", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Не удалось установить пароль!", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (new Authorization().ChangeExistingPassword(pass.EnteredOldPassword, pass.EnteredNewPassword))
+                {
+                    MessageBox.Show("Пароль установлен", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось установить пароль!", new assembly().AssemblyProduct, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

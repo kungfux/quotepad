@@ -11,12 +11,14 @@ namespace QuotePad
         private TabControlPrototype tabControl;
         private string defSearchText = "Найти цитату?";
         ToolStripTextBox searchQuote;
+        mainMenu mainMenu;
 
-        public ToolStripPrototype(TabControlPrototype tabcontrol)
+        public ToolStripPrototype(TabControlPrototype tabcontrol, mainMenu MainMenu)
         {
             this.AutoSize = false;
             this.Height = 68;
             tabControl = tabcontrol;
+            mainMenu = MainMenu;
 
             ToolStripButtonPrototype viewQuote = new ToolStripButtonPrototype("Просмотр цитат", Resources.viewQuotes_64);
             viewQuote.Click += new EventHandler(viewQuote_Click);
@@ -104,6 +106,7 @@ namespace QuotePad
                 }
             }
             tabControl.RefreshItems();
+            mainMenu.SetVisibility();
         }
 
         void addQuote_Click(object sender, EventArgs e)
