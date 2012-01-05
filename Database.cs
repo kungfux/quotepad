@@ -190,6 +190,12 @@ namespace QuotePad
             return null;
         }
 
+        public static int Author_GetID(string AuthorFIO)
+        {
+            return connector.SelectCell<int>("SELECT pID FROM tAUTHORS WHERE pNAME = @fio",
+                new OleDbParameter("@fio", AuthorFIO));
+        }
+
         public static bool Author_Create(string FIO, string About)
         {
             if (connector.ChangeData("INSERT INTO tAUTHORS (pNAME, pINFO) VALUES (@name, @info)",

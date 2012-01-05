@@ -19,6 +19,7 @@ namespace QuotePad
         Button change_photo;
         Button clear_photo;
         TabControlPrototype tabcontrol;
+        string photoSelected = "";
 
         public AuthorManager(TabControlPrototype tabControl)
         {
@@ -57,9 +58,9 @@ namespace QuotePad
             comboBox.DropDown += new EventHandler(comboBox_DropDown);
             comboBox.SelectedIndexChanged += new EventHandler(comboBox_SelectedIndexChanged);
             comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            confToolStrip = new ConfigToolStrip(ConfigToolStrip.toolStripButtons.Add | 
-                ConfigToolStrip.toolStripButtons.Edit | 
-                ConfigToolStrip.toolStripButtons.Save | 
+            confToolStrip = new ConfigToolStrip(ConfigToolStrip.toolStripButtons.Add |
+                ConfigToolStrip.toolStripButtons.Edit |
+                ConfigToolStrip.toolStripButtons.Save |
                 ConfigToolStrip.toolStripButtons.Delete);
             confToolStrip.textboxesParent = this;
             confToolStrip.RequiredFields = new Control[] { author };
@@ -181,6 +182,19 @@ namespace QuotePad
                     }
                 }
             }
+            else if (confToolStrip.toolStripSave.Enabled)
+            {
+                OpenFileDialog of = new OpenFileDialog();
+                of.ShowDialog();
+                if (of.FileName != "")
+                {
+                    if (TestImage(of.FileName))
+                    {
+                        photoSelected = of.FileName;
+                        photo.Image = Image.FromFile(photoSelected);
+                    }
+                }
+            }
         }
 
         private bool TestImage(string file)
@@ -205,11 +219,12 @@ namespace QuotePad
 
         void toolStripDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(string.Format("Удалить автора {0}?", comboBox.Text),"Удаление автора", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(string.Format("Удалить автора {0}?", comboBox.Text), "Удаление автора", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (Database.Author_Remove(autors_ids[comboBox.SelectedIndex]))
                 {
                     confToolStrip.DeleteExternalMethod();
+                    comboBox.SelectedIndex = -1;
                 }
                 else MessageBox.Show("Нельзя удалить автора!", "Удаление автора", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.captionText = "Редактор авторов";
@@ -219,6 +234,8 @@ namespace QuotePad
 
         void toolStripAdd_Click(object sender, EventArgs e)
         {
+            change_photo.Visible = true;
+            photo.Image = null;
             comboBox.SelectedIndex = -1;
             this.captionText = "Новый автор";
             tabcontrol.UpdateCaption();
@@ -232,6 +249,15 @@ namespace QuotePad
                 {
                     if (Database.Author_Create(author.Text, about.Text))
                     {
+                        if (photoSelected != "")
+                        {
+                            if (!Database.Author_SetImage(Database.Author_GetID(author.Text), photoSelected))
+                            {
+                                MessageBox.Show("Ошибка сохранения фото!", "Редактор авторов", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        change_photo.Visible = false;
+                        photo.Image = null;
                         confToolStrip.SaveExternalMethod();
                         this.captionText = "Редактор авторов";
                         tabcontrol.UpdateCaption();
@@ -265,13 +291,14 @@ namespace QuotePad
                 change_photo.Visible = true;
                 if (photo.Image != null) clear_photo.Visible = true;
                 else clear_photo.Visible = false;
+                photoSelected = "";
                 this.captionText = "Просмотр автора";
                 tabcontrol.UpdateCaption();
             }
             else
             {
                 photo.Image = null;
-                change_photo.Visible = false;
+                change_photo.Visible = !confToolStrip.toolStripAdd.Enabled;
                 clear_photo.Visible = false;
                 this.captionText = "Редактор авторов";
                 tabcontrol.UpdateCaption();
@@ -285,7 +312,7 @@ namespace QuotePad
             comboBox.Items.Clear();
             autorsFound = Database.Author_GetList();
             autors_ids = new int[autorsFound.Length];
-            for (int a=0;a<autorsFound.Length;a++)
+            for (int a = 0; a < autorsFound.Length; a++)
             {
                 comboBox.Items.Add(autorsFound[a].FIO);
                 autors_ids[a] = autorsFound[a].ID;
