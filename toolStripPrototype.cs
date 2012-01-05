@@ -96,17 +96,20 @@ namespace QuotePad
         {
             PasswordDialog pass = new PasswordDialog(true, 4, 0, 3, 1, 0, PasswordDialog.DialogType.AskPassword);
             pass.AskPassword();
-            Authorization.userType = new Authorization().CheckCredentials(pass.EnteredOldPassword);
-            if (Authorization.userType == UserType.Viewer)
+            if (pass.EnteredOldPassword.Length > 0)
             {
-                if (MessageBox.Show("Вы указали неверный пароль!\rПопробовать еще раз?", new assembly().AssemblyProduct,
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                Authorization.userType = new Authorization().CheckCredentials(pass.EnteredOldPassword);
+                if (Authorization.userType == UserType.Viewer)
                 {
-                    auth_Click(this, null);
+                    if (MessageBox.Show("Вы указали неверный пароль!\rПопробовать еще раз?", new assembly().AssemblyProduct,
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        auth_Click(this, null);
+                    }
                 }
+                tabControl.RefreshItems();
+                mainMenu.SetVisibility();
             }
-            tabControl.RefreshItems();
-            mainMenu.SetVisibility();
         }
 
         void addQuote_Click(object sender, EventArgs e)
