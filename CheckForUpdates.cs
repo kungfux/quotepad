@@ -20,7 +20,7 @@ namespace QuotePad
             HTTP request = new HTTP();
             request.Encoding = "UTF-8";
             request.ContentType = "text/xml";
-            request.Timeout = 5000;
+            request.Timeout = 5; // 5 seconds timeout
             request.Method = HTTP.HttpMethod.GET;
             Response = request.CreateRequest(HostURL);
 
@@ -44,7 +44,7 @@ namespace QuotePad
             updates.CheckUpdates();
             assembly ass = new assembly();
             Update update = updates.CheckUpdates();
-            if (update != null && update.ProductName == ass.AssemblyProduct && update.ProductVersion != ass.AssemblyVersion)
+            if (update != null && update.ProductName == ass.AssemblyProduct && update.ProductVersion.CompareTo(ass.AssemblyVersion) > 0)
             {
                 if (MessageBox.Show(string.Format("Доступна свежая версия программы {0}. Не желаете ли скачать её сейчас? \n\nЗаметки к выпуску:\n{1}",
                     update.ProductVersion, update.ReleaseNotes), "Доступно обновление", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)

@@ -49,8 +49,13 @@ namespace QuotePad
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     //Database.InitDb();
-                    new CheckUpdate().CheckForUpdates();
+                    Thread t = new Thread(new CheckUpdate().CheckForUpdates);
+                    t.Start();
                     Application.Run(new QuotePad.mainForm());
+                    if (t.IsAlive)
+                    {
+                        t.Abort();
+                    }
                     //Database.Disconnect();
                 }
                 else
