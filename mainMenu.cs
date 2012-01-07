@@ -14,6 +14,7 @@ namespace QuotePad
         private TabControlPrototype tabcontrol;
         ToolStripMenuItem settings_config_setpassword;
         ToolStripMenuItem settings_config_changepassword;
+        ToolStripMenuItem settings_config_clearpassword;
 
         public mainMenu(TabControlPrototype tabControl)
         {
@@ -64,9 +65,12 @@ namespace QuotePad
             settings_config_setpassword.Click += new EventHandler(settings_config_setpassword_Click);
             settings_config_changepassword = new ToolStripMenuItem("Сменить пароль...");
             settings_config_changepassword.Click += new EventHandler(settings_config_changepassword_Click);
+            settings_config_clearpassword = new ToolStripMenuItem("Удалить пароль...");
+            settings_config_clearpassword.Click += new EventHandler(settings_config_clearpassword_Click);
             ChangePasswordOptionsVisibility();
             settings_config.DropDownItems.Add(settings_config_setpassword);
             settings_config.DropDownItems.Add(settings_config_changepassword);
+            settings_config.DropDownItems.Add(settings_config_clearpassword);
             ToolStripMenuItem settings_export = new ToolStripMenuItem("Экспорт");
             settings_export.Visible = false; // TEMPORARY
             ToolStripMenuItem settings_login = new ToolStripMenuItem("Авторизоваться");
@@ -100,6 +104,32 @@ namespace QuotePad
             bool IsDefaultPasswordSet = auth.IsDefaultPasswordSet;
             settings_config_setpassword.Visible = IsDefaultPasswordSet;
             settings_config_changepassword.Visible = !IsDefaultPasswordSet;
+            settings_config_clearpassword.Visible = !IsDefaultPasswordSet;
+        }
+
+        void settings_config_clearpassword_Click(object sender, EventArgs e)
+        {
+            PasswordDialog pass = new PasswordDialog(true, 4, 0, 3, 1, 0, PasswordDialog.DialogType.AskPassword);
+            pass.AskPassword();
+            if (pass.EnteredOldPassword.Length > 0)
+            {
+                UserType utype= new Authorization().CheckCredentials(pass.EnteredOldPassword);
+                if (utype == UserType.Viewer)
+                {
+                    if (MessageBox.Show("Вы указали неверный пароль!\rПопробовать еще раз?", new assembly().AssemblyProduct,
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        settings_config_clearpassword_Click(this, null);
+                    }
+                }
+                else
+                {
+                    new Authorization().SetNewPassword("password");
+                    MessageBox.Show("Пароль был удалён", new assembly().AssemblyProduct, MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+            ChangePasswordOptionsVisibility();
         }
 
         void settings_config_changepassword_Click(object sender, EventArgs e)
