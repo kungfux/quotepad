@@ -183,7 +183,6 @@
     <Content Include="db.mdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="dep\favoriteUnfavorite.png" />
     <None Include="dep\stars.jpg" />
     <None Include="dep\starwars.wav" />
     <None Include="dep\favorite64.png" />

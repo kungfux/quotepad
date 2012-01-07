@@ -100,7 +100,7 @@ namespace QuotePad
             nextQuote = new ToolStripButtonPrototype("Следующая цитата", Resources.next_64);
             nextQuote.Click += new EventHandler(nextQuote_Click);
 
-            favoriteUnfavorite = new ToolStripButtonPrototype("Отметить как \"любимую\"", Resources.favoriteUnfavorite);
+            favoriteUnfavorite = new ToolStripButtonPrototype("Отметить как \"любимую\"", Resources.favorite64);
             favoriteUnfavorite.Enabled = false;
             favoriteUnfavorite.isForSupervisorOnly = true;
             favoriteUnfavorite.Click += new EventHandler(favoriteUnfavorite_Click);
