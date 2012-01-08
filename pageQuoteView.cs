@@ -27,6 +27,9 @@ namespace QuotePad
         ItWorksTeam.Utils.Registry regValue = new ItWorksTeam.Utils.Registry();
         Objects.Quote[] displayOnly;
         int displayOnlyCurrent;
+        // context menu items
+        ToolStripMenuItem cCopy;
+        ToolStripMenuItem cSelectAll;
 
         public pageQuoteView(TabControlPrototype tabControl, params Objects.Quote[] displayOnlyQuotes)
         {
@@ -42,6 +45,18 @@ namespace QuotePad
             rtfed.RtfTextBox.Dock = DockStyle.Fill;
             rtfed.RtfTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             rtfed.RtfTextBox.BackColor = authorFIO.BackColor;
+
+            // Contex menu
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            contextMenu.Opening += new System.ComponentModel.CancelEventHandler(contextMenu_Opening);
+            cCopy = new ToolStripMenuItem("Копировать");
+            cSelectAll = new ToolStripMenuItem("Выделить всё");
+            cCopy.Click += new EventHandler(cCopy_Click);
+            cSelectAll.Click += new EventHandler(cSelectAll_Click);
+            contextMenu.Items.Add(cCopy);
+            contextMenu.Items.Add(new ToolStripSeparator());
+            contextMenu.Items.Add(cSelectAll);
+            rtfed.RtfTextBox.ContextMenuStrip = contextMenu;
 
             authorImage.SizeMode = PictureBoxSizeMode.Zoom;
             authorImage.Dock = DockStyle.Fill;
@@ -148,6 +163,25 @@ namespace QuotePad
             }
         }
 
+        /////////////////////////
+        // Contex menu methods //
+        /////////////////////////
+        void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            cCopy.Enabled = (rtfed.RtfTextBox.SelectionLength != 0);
+            cSelectAll.Enabled = (rtfed.RtfTextBox.SelectionLength != rtfed.RtfTextBox.Text.Length);
+        }
+
+        void cCopy_Click(object sender, EventArgs e)
+        {
+            rtfed.RtfTextBox.Copy();
+        }
+
+        void cSelectAll_Click(object sender, EventArgs e)
+        {
+            rtfed.RtfTextBox.SelectAll();
+        }
+
         void favoriteUnfavorite_Click(object sender, EventArgs e)
         {
             if (currentQuote != null && Authorization.userType == UserType.Editor)
@@ -181,6 +215,18 @@ namespace QuotePad
                     break;
                 case Keys.Space:
                     randomQuote_Click(this, null);
+                    break;
+                case Keys.C:
+                    if (ModifierKeys == Keys.Control)
+                    {
+                        rtfed.RtfTextBox.Copy();
+                    }
+                    break;
+                case Keys.A:
+                    if (ModifierKeys == Keys.Control)
+                    {
+                        rtfed.RtfTextBox.SelectAll();
+                    }
                     break;
             }
             e.SuppressKeyPress = true;
