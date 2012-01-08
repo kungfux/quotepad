@@ -88,7 +88,7 @@ namespace QuotePad
             this.AddToolStripItem(confToolStrip.toolStripAdd);
             this.AddToolStripItem(confToolStrip.toolStripSave);
             this.AddToolStripItem(new ToolStripSeparatorPrototype());
-            //this.AddToolStripItem(new ToolStripLabelPrototype("Укажите автора и тему"));
+            this.AddToolStripItem(new ToolStripLabelPrototype("Автор и тема:"));
             this.AddToolStripItem(cAuthors);
             this.AddToolStripItem(cThemes);
 
@@ -264,6 +264,8 @@ namespace QuotePad
                     MessageBox.Show("Укажите тему цитаты!", "Редактор цитат", 
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     cancelClosing = true;
+                    cThemes.Focus();
+                    cThemes.DroppedDown = true;
                 }
             }
             else
@@ -271,6 +273,8 @@ namespace QuotePad
                 MessageBox.Show("Укажите автора цитаты!", "Редактор цитат",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cancelClosing = true;
+                cAuthors.Focus();
+                cAuthors.DroppedDown = true;
             }
         }
 

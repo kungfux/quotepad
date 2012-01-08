@@ -75,7 +75,7 @@ namespace QuotePad
             this.AddToolStripItem(confToolStrip.toolStripDelete);
             this.AddToolStripItem(new ToolStripSeparatorPrototype());
 
-            //this.AddToolStripItem(new ToolStripLabelPrototype("Сохраненные авторы:"));
+            this.AddToolStripItem(new ToolStripLabelPrototype("Авторы:"));
             //change_photo = new ToolStripButtonPrototype("Изменить фото", Resources.addPhoto_64);
             //change_photo.Click += new EventHandler(change_photo_Click);
             //this.AddToolStripItem(change_photo);

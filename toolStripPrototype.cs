@@ -48,6 +48,13 @@ namespace QuotePad
             this.Items.Add(searchQuote);
 
             tabControl.VisibleChanged += new EventHandler(tabControl_VisibleChanged);
+            tabControl.Selected += new TabControlEventHandler(tabControl_Selected);
+        }
+
+        void tabControl_Selected(object sender, TabControlEventArgs e)
+        {
+            searchQuote.Visible = tabControl.TabPages.Count > 0 && tabControl.SelectedTab != null &&
+            tabControl.SelectedTab.Text == "Просмотр";
         }
 
         void searchQuote_KeyDown(object sender, KeyEventArgs e)
