@@ -79,9 +79,13 @@ namespace QuotePad
             settings.DropDownItems.Add(settings_export);
             settings.DropDownItems.Add(settings_login);
             ToolStripMenuItem help = new ToolStripMenuItem("Справка");
+            ToolStripMenuItem help_greetings = new ToolStripMenuItem("Приветствие");
+            help_greetings.ToolTipText = "Открыть вкладку приветствия";
+            help_greetings.Click += new EventHandler(help_greetings_Click);
             ToolStripMenuItem help_about = new ToolStripMenuItem("О программе");
             help_about.ToolTipText = "Посмотреть информацию о программе";
             help_about.Click += new EventHandler(help_about_Click);
+            help.DropDownItems.Add(help_greetings);
             help.DropDownItems.Add(help_about);
             ToolStripMenuItem closeTab = new ToolStripMenuItem("X");
             closeTab.ToolTipText = "Закрыть вкладку";
@@ -188,6 +192,11 @@ namespace QuotePad
         void help_about_Click(object sender, EventArgs e)
         {
             new AboutBox().ShowDialog();
+        }
+
+        void help_greetings_Click(object sender, EventArgs e)
+        {
+            tabcontrol.AddPage(new pageGreetings());
         }
 
         void edit_author_Click(object sender, EventArgs e)

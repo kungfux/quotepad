@@ -1,7 +1,7 @@
 [Setup]
 AppId={{7032E130-8F44-49F5-92C0-3443CE581AB5}}
-AppName=Цитатник 0.1 DEV
-AppVerName=Цитатник 0.1 DEV
+AppName=Цитатник 0.1 BETA
+AppVerName=Цитатник 0.1 BETA
 AppVersion=0.1
 AppPublisher=IT WORKS Team
 DefaultDirName={pf}\QuotePad
@@ -23,6 +23,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "dep\license.txt";                  DestDir: "{app}"; Flags: ignoreversion
+Source: "dep\readme.rtf";                  DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\QuotePad.exe";         DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\db.mdb";               DestDir: "{app}"; Flags: onlyifdoesntexist uninsneveruninstall  
 Source: "bin\Release\ItWorksTeam.NET.dll";    DestDir: "{app}"; Flags: ignoreversion

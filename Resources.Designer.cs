@@ -123,6 +123,18 @@ namespace QuotePad {
             }
         }
         
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на {\rtf1\ansi\ansicpg1251\deff0\deflang1049{\fonttbl{\f0\fswiss\fprq2\fcharset204 Trebuchet MS;}{\f1\fswiss\fprq2\fcharset0 Trebuchet MS;}{\f2\fswiss\fcharset204{\*\fname Arial;}Arial CYR;}}
+        ///{\*\generator Msftedit 5.41.15.1515;}\viewkind4\uc1\pard\f0\fs24\par
+        ///\b\&apos;d7\&apos;f2\&apos;ee \&apos;f2\&apos;e0\&apos;ea\&apos;ee\&apos;e5 &quot;\&apos;d6\&apos;e8\&apos;f2\&apos;e0\&apos;f2\&apos;ed\&apos;e8\&apos;ea&quot;?\b0\par
+        ///\&apos;d6\&apos;e8\&apos;f2\&apos;e0\&apos;f2\&apos;ed\&apos;e8\&apos;ea - \&apos;fd\&apos;f2\&apos;ee \&apos;f1\&apos;e2\&apos;ee\&apos;e1\&apos;ee\&apos;e4\&apos;ed\&apos;ee \&apos;f0\&apos;e0\&apos;f1\&apos;ef\&apos;f0\&apos;ee\&apos;f1\&apos;f2\&apos;f0\&apos;e0\&apos;ed\&apos;ff\&apos;e5\&apos;ec\&apos;e0\&apos;ff \&apos;ef\&apos;f0\&apos;ee\&apos;e3\&apos;f0\&apos;e0\&apos; [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string Greetings {
+            get {
+                return ResourceManager.GetString("Greetings", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap next_64 {
             get {
                 object obj = ResourceManager.GetObject("next_64", resourceCulture);

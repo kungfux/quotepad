@@ -81,16 +81,25 @@ namespace QuotePad
             authorAbout.Dock = DockStyle.Fill;
             authorAbout.TextAlign = HorizontalAlignment.Center;
 
+            LinkLabel findAllByAuthor = new LinkLabel();
+            findAllByAuthor.Text = "Найти все цитаты автора";
+            findAllByAuthor.Dock = DockStyle.Top;
+            findAllByAuthor.AutoSize = true;
+            findAllByAuthor.TextAlign = ContentAlignment.MiddleCenter;
+            findAllByAuthor.Click += new EventHandler(findAllByAuthor_Click);
+
             backpanel = new TableLayoutPanel();
             backpanel.Dock = DockStyle.Fill;
             backpanel.ColumnCount = 1;
-            backpanel.RowCount = 3;
+            backpanel.RowCount = 4;
             backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             backpanel.RowStyles.Add(new RowStyle(SizeType.Absolute, authorFIO.Height));
             backpanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            backpanel.RowStyles.Add(new RowStyle(SizeType.Absolute, findAllByAuthor.Height));
             backpanel.Controls.Add(authorImage, 0, 0);
             backpanel.Controls.Add(authorFIO, 0, 1);
             backpanel.Controls.Add(authorAbout, 0, 2);
+            backpanel.Controls.Add(findAllByAuthor, 0, 3);
             backpanel.Visible = regValue.ReadKey<bool>(ItWorksTeam.Utils.Registry.BaseKeys.HKEY_LOCAL_MACHINE, "Software\\ItWorksTeam\\QuotePad",
                 "BackPanelVisible", true);
 
@@ -161,6 +170,11 @@ namespace QuotePad
                 displayOnlyCurrent = 0;
                 qRefresh();
             }
+        }
+
+        void findAllByAuthor_Click(object sender, EventArgs e)
+        {
+            tabcontrol.AddPage(new pageQuoteView(tabcontrol, Database.Quote_FindByAuthor(currentQuote.QuoteAuthor.ID)));
         }
 
         /////////////////////////

@@ -90,7 +90,7 @@ namespace QuotePad
 
         public static Objects.Theme[] Theme_GetList()
         {
-            DataTable themes = connector.SelectTable("SELECT * FROM tTHEMES");
+            DataTable themes = connector.SelectTable("SELECT * FROM tTHEMES ORDER BY pNAME");
             if (themes == null) return new Objects.Theme[0];
             Objects.Theme[] list = new Objects.Theme[themes.Rows.Count];
             for (int theme = 0; theme < themes.Rows.Count; theme++)
@@ -145,7 +145,7 @@ namespace QuotePad
 
         public static Objects.Author[] Author_GetList()
         {
-            DataTable themes = connector.SelectTable("SELECT * FROM tAUTHORS");
+            DataTable themes = connector.SelectTable("SELECT * FROM tAUTHORS ORDER BY pNAME");
             if (themes == null) return new Objects.Author[0];
             Objects.Author[] list = new Objects.Author[themes.Rows.Count];
             for (int theme = 0; theme < themes.Rows.Count; theme++)

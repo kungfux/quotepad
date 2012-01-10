@@ -58,6 +58,9 @@
     <Compile Include="menuStripPrototype.cs">
       <SubType>Component</SubType>
     </Compile>
+	<Compile Include="pageGreetings.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="pageQuoteEditor.cs">
       <SubType>Component</SubType>
     </Compile>

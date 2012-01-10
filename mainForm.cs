@@ -48,7 +48,14 @@ namespace QuotePad
 
         private void mainForm_Shown(object sender, EventArgs e)
         {
-            tabControl.AddPage(new pageQuoteView(tabControl));
+            if (Database.Quote_GetCount() > 10)
+            {
+                tabControl.AddPage(new pageQuoteView(tabControl));
+            }
+            else
+            {
+                tabControl.AddPage(new pageGreetings());
+            }
         }
 
     }

@@ -58,7 +58,7 @@ namespace QuotePad
                 "Стрелкова Татьяна\n",
                 "Капшук Александр\n\n\n",
 
-                "Отзывы и пожелания\nпишите по адресу:\nsupport-itworksteam@gmail.com\n\n\n",
+                "Отзывы и пожелания\nпишите по адресу:\nhelpme.itworksteam@gmail.com\n\n\n",
                 "Приятного пользования!\n\n",
                 "С уважением,\nкоманда\nIT WORKS Team");
 
