@@ -1,7 +1,7 @@
 [Setup]
 AppId={{7032E130-8F44-49F5-92C0-3443CE581AB5}}
-AppName=Цитатник 0.1 BETA
-AppVerName=Цитатник 0.1 BETA
+AppName=Цитатник 1.0 BETA
+AppVerName=Цитатник 1.0 BETA
 AppVersion=0.1
 AppPublisher=IT WORKS Team
 DefaultDirName={pf}\QuotePad
