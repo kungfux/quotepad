@@ -12,7 +12,7 @@ namespace QuotePad
 {
     public class CheckUpdate
     {
-        private string HostURL = "http://itworks.sytes.net/support.php?";
+        private string HostURL = "http://itworksteam.com.ua/download.php?";
 
         private UpdateInformation CheckUpdates()
         {
@@ -58,7 +58,7 @@ namespace QuotePad
                         update.Released.ToShortTimeString()), "Доступно обновление", 
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                     {
-                        Process.Start("http://itworks.sytes.net/support.php?" +
+                        Process.Start(HostURL +
                             "product=quotepad&action=Download" +
                             "&myversion=" + ass.AssemblyVersion + 
                             "&username=" + Environment.UserName);
@@ -73,7 +73,7 @@ namespace QuotePad
                         "Доступна новая версия программы", MessageBoxButtons.YesNo, 
                         MessageBoxIcon.Information) == DialogResult.Yes)
                     {
-                        Process.Start("http://itworks.sytes.net/support.php?" +
+                        Process.Start(HostURL +
                             "product=quotepad&action=Download" +
                             "&myversion=" + ass.AssemblyVersion +
                             "&username=" + Environment.UserName);
