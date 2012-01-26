@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{14BDDA03-5886-4880-B653-0426E99119D9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QuotePad</RootNamespace>
+    <AssemblyName>QuotePad</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4">
+      <HintPath>..\..\Libs\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF4">
+      <HintPath>..\..\Libs\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\..\Libs\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.77.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\sqlite\x86\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\..\Libs\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Data\DataAccess\DataProvider.cs" />
+    <Compile Include="Data\DataAccess\IDataProvider.cs" />
+    <Compile Include="Data\PetaPoco.cs" />
+    <Compile Include="Infrastructure\Interfaces\IModule.cs" />
+    <Compile Include="Infrastructure\Interfaces\IEditableItem.cs" />
+    <Compile Include="Infrastructure\Interfaces\IEditableModule.cs" />
+    <Compile Include="Infrastructure\Messages\DataSourceChangedMessage.cs" />
+    <Compile Include="Infrastructure\Messages\PropertyChangedMessageAction.cs" />
+    <Compile Include="Infrastructure\Messages\SelectionChangedMessage.cs" />
+    <Compile Include="Infrastructure\Names\DataSourceNames.cs" />
+    <Compile Include="Infrastructure\Services\FileService.cs" />
+    <Compile Include="Infrastructure\Services\IFileService.cs" />
+    <Compile Include="Infrastructure\Services\IMessageService.cs" />
+    <Compile Include="Infrastructure\Services\MessageService.cs" />
+    <Compile Include="Utils\NotificationObject.cs" />
+    <Compile Include="Utils\ObjectCopier.cs" />
+    <Compile Include="ViewModel\AuthorSetup\AuthorListViewModel.cs" />
+    <Compile Include="ViewModel\AuthorSetup\AuthorSetupViewModel.cs" />
+    <Compile Include="ViewModel\AuthorSetup\AuthorViewModel.cs" />
+    <Compile Include="ViewModel\Base\EditableItemViewModelBase.cs" />
+    <Compile Include="ViewModel\Base\EditableModuleViewModelBase.cs" />
+    <Compile Include="ViewModel\Base\ItemListViewModelBase.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ThemeSetup\ThemeListViewModel.cs" />
+    <Compile Include="ViewModel\ThemeSetup\ThemeSetupViewModel.cs" />
+    <Compile Include="ViewModel\ThemeSetup\ThemeViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\AuthorSetup\AuthorListView.xaml.cs">
+      <DependentUpon>AuthorListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AuthorSetup\AuthorSetupView.xaml.cs">
+      <DependentUpon>AuthorSetupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AuthorSetup\AuthorView.xaml.cs">
+      <DependentUpon>AuthorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\Converters\ImageToByteArrayConverter.cs" />
+    <Compile Include="Infrastructure\Converters\InverseBooleanConverter.cs" />
+    <Compile Include="View\EditableView.cs" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\AuthorSetup\AuthorListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AuthorSetup\AuthorSetupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AuthorSetup\AuthorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\Model\Author.cs" />
+    <Compile Include="Data\Model\Quote.cs" />
+    <Compile Include="Data\Model\Theme.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtraControlsLib\ExtraControlsLib.csproj">
+      <Project>{BC65B45F-6A21-4E38-8FE4-DA1B70F91465}</Project>
+      <Name>ExtraControlsLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\add.64.png" />
+    <Resource Include="Resources\Icons\addPhoto.64.png" />
+    <Resource Include="Resources\Icons\apply.64.png" />
+    <Resource Include="Resources\Icons\authorize.64.png" />
+    <Resource Include="Resources\Icons\clearPhoto.64.png" />
+    <Resource Include="Resources\Icons\createNew.64.png" />
+    <Resource Include="Resources\Icons\delete.64.png" />
+    <Resource Include="Resources\Icons\edit.64.png" />
+    <Resource Include="Resources\Icons\favorite64.png" />
+    <Resource Include="Resources\Icons\next.64.png" />
+    <Resource Include="Resources\Icons\noPhoto.128.png" />
+    <Resource Include="Resources\Icons\previous.64.png" />
+    <Resource Include="Resources\Icons\random.64.png" />
+    <Resource Include="Resources\Icons\viewQuotes.64.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

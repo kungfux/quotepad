@@ -1,0 +1,139 @@
+﻿<Window x:Class="QuotePad.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:QuotePad.ViewModel"
+        xmlns:view="clr-namespace:QuotePad.View"
+        xmlns:converter="clr-namespace:QuotePad.Infrastructure.Converters"
+        xmlns:interface="clr-namespace:QuotePad.Infrastructure.Interfaces"
+        xmlns:ui="clr-namespace:ExtraControlsLib;assembly=ExtraControlsLib"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        Height="450" Width="880">
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Title" Value="{Binding Path=SelectedApplication.HeaderExtended,StringFormat=Цитатник - {0}}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedApplication}" Value="{x:Null}">
+                    <Setter Property="Title" Value="Цитатник" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" VerticalAlignment="Top" Height="22">
+            <MenuItem Header="Цитата">
+                <MenuItem Header="Просмотр" />
+                <MenuItem Header="Добавить" />
+                <MenuItem Header="Выход" />
+            </MenuItem>
+            <MenuItem Header="Установки" >
+                <MenuItem Header="Темы" />
+                <MenuItem Header="Авторы" Command="{Binding ShowAuthorSetupCommand}" />
+            </MenuItem>
+            <MenuItem Header="Настройка">
+                <MenuItem Header="Установить пароль" />
+            </MenuItem>
+        </Menu>
+        <ToolBarTray IsLocked="True" DockPanel.Dock="Top" VerticalAlignment="Top" Height="64">
+            <ToolBarTray.Resources>
+                <Style TargetType="{x:Type Image}">
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Image.Effect">
+                                <Setter.Value>
+                                    <ui:GreyscaleEffect />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="{x:Type ToolBar}">
+                    <Setter Property="Height" Value="64" />
+                    <Setter Property="FocusManager.IsFocusScope" Value="False" />
+                </Style>
+                <Style x:Key="EditableToolbarStyle" TargetType="{x:Type ToolBar}" BasedOn="{StaticResource {x:Type ToolBar}}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ToolBarTray}},
+                                                             Path=DataContext.IsAdminMode}" Value="True" />
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ToolBarTray}},
+                                                             Path=DataContext.IsSelectedApplicationEditable}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Visible" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="NavigatableToolbarStyle" TargetType="{x:Type ToolBar}" BasedOn="{StaticResource {x:Type ToolBar}}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ToolBarTray}},
+                                                       Path=DataContext.IsSelectedApplicationNavigatable}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToolBarTray.Resources>
+            <ToolBar>
+                <Button ToolBar.OverflowMode="Never">
+                    <Image Source="/QuotePad;component/Resources/Icons/viewQuotes.64.png" />
+                </Button>
+                <Button ToolBar.OverflowMode="Never" Visibility="{Binding IsAdminMode,Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Image Source="/QuotePad;component/Resources/Icons/createNew.64.png" />
+                </Button>
+            </ToolBar>
+            <ToolBar DataContext="{Binding SelectedApplication}" Style="{StaticResource EditableToolbarStyle}">
+                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                        Command="{Binding AddItemCommand}">
+                    <Image Source="/QuotePad;component/Resources/Icons/add.64.png" />
+                </Button>
+                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" ToolBar.OverflowMode="Never"
+                        Command="{Binding EditSaveItemCommand}">
+                    <Image>
+                        <Image.Style>
+                            <Style TargetType="{x:Type Image}" BasedOn="{StaticResource {x:Type Image}}">
+                                <Setter Property="Image.Source" Value="/QuotePad;component/Resources/Icons/edit.64.png" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEditMode}" Value="True">
+                                        <Setter Property="Source" Value="/QuotePad;component/Resources/Icons/apply.64.png" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </Button>
+                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" ToolBar.OverflowMode="Never"
+                        Command="{Binding RemoveItemCommand}">
+                    <Image Source="/QuotePad;component/Resources/Icons/delete.64.png" />
+                </Button>
+            </ToolBar>
+            <ToolBar Style="{StaticResource NavigatableToolbarStyle}">
+                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" ToolBar.OverflowMode="Never">
+                    <Image Source="/QuotePad;component/Resources/Icons/favorite64.png" />
+                </Button>
+                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" ToolBar.OverflowMode="Never">
+                    <Image Source="/QuotePad;component/Resources/Icons/previous.64.png" />
+                </Button>
+                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" ToolBar.OverflowMode="Never">
+                    <Image Source="/QuotePad;component/Resources/Icons/random.64.png" />
+                </Button>
+                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" ToolBar.OverflowMode="Never">
+                    <Image Source="/QuotePad;component/Resources/Icons/next.64.png" />
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <TabControl ItemsSource="{Binding Applications}" IsSynchronizedWithCurrentItem="True"
+                    SelectedItem="{Binding SelectedApplication, Mode=TwoWay}" DisplayMemberPath="Header">
+            <TabControl.Resources>
+                <DataTemplate DataType="{x:Type vm:AuthorSetupViewModel}">
+                    <view:AuthorSetupView />
+                </DataTemplate>
+            </TabControl.Resources>
+        </TabControl>
+    </DockPanel>
+</Window>
